@@ -33,17 +33,18 @@ body{
 /* ===== 상단 로고 ===== */
 header{
   width:100%;
-  text-align:left; 
+  text-align:left;
   position:relative;
   z-index:2;
-  padding-left:1cm;
+  padding-left:0; /* 왼쪽 끝으로 */
+  margin-top:0; /* 상단과 맞닿게 */
 }
 
 header a{
   display:inline-block;
 }
 header img{
-  width:300px; /* 1444.png 절반 */
+  width:450px; /* 1444.png 1.5배 */
   max-width:90%;
   height:auto;
   cursor:pointer;
@@ -52,7 +53,7 @@ header img{
 /* ===== SEARCH 오른쪽 상단 ===== */
 .search-bar{
   position:absolute;
-  right:1cm;
+  right:3cm; /* 오른쪽 3cm 여유 */
   top:0.7cm;
   font-size:13px;
   font-weight:400;
@@ -86,7 +87,7 @@ nav{
 nav ul{
   list-style:none;
   display:flex;
-  gap:12px;
+  gap:8px; /* 글자 간격 줄임 */
   padding:2px 0;
 }
 
@@ -94,7 +95,7 @@ nav a{
   text-decoration:none;
   color:var(--brand);
   font-size:13px;
-  letter-spacing:0.6px;
+  letter-spacing:0.4px; /* 글자 자체 간격 조금 줄임 */
   font-weight:500;
   line-height:1.1;
 }
@@ -127,6 +128,8 @@ nav a.underline-effect:hover::after{
   background-size:cover;
   background-position:center;
   z-index:-1;
+  opacity:0;
+  transition: opacity 2s ease-in;
 }
 
 /* ===== 푸터 ===== */
@@ -143,8 +146,8 @@ footer{
 @media(max-width:768px){
   header img{width:80%}
   .main-banner{height:500px;width:180%}
-  nav ul{gap:8px}
-  .search-bar{top:0.7cm; right:0.5cm}
+  nav ul{gap:6px}
+  .search-bar{top:0.7cm; right:1.5cm}
 }
 </style>
 </head>
@@ -194,6 +197,13 @@ footer{
   <p>🕓 MON-FRI : 11:00 - 20:00 | SAT-SUN : 12:00 - 19:00</p>
   <p>© 2025 HYPERDRAMA</p>
 </footer>
+
+<script>
+window.addEventListener('load', () => {
+  const banner = document.querySelector('.main-banner');
+  banner.style.opacity = '1'; // 0000.png 페이드 인
+});
+</script>
 
 </body>
 </html>
