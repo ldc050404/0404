@@ -55,7 +55,7 @@ header img{
 /* ===== SEARCH & CART 오른쪽 상단 ===== */
 .search-bar{
   position:absolute;
-  right:3cm; /* 장바구니 기준 오른쪽 위치 유지 */
+  right:3cm; 
   top:0.7cm;
   font-size:13px;
   font-weight:400;
@@ -73,11 +73,9 @@ header img{
   display:inline-block;
   position:relative;
   transition: color 0.3s ease;
-  text-align:left; /* 밑줄 기준 왼쪽 정렬 */
-  margin-left:-6cm; /* 기존 4cm + 2cm 추가 이동 = 6cm 왼쪽 이동 */
+  text-align:left;
 }
 
-/* 밑줄 기준으로 길이 3cm 늘리기 */
 .search-bar a.text-link::after{
   content:"";
   position:absolute;
@@ -96,6 +94,7 @@ header img{
   width:24px;
   height:24px;
   cursor:pointer;
+  margin-left:3.5cm; /* 장바구니 오른쪽으로 3.5cm 이동 */
 }
 
 /* ===== 네비게이션 ===== */
@@ -197,7 +196,7 @@ footer{
   </a>
   <div class="search-bar">
     <a href="search.html" class="text-link">SEARCH</a>
-    <a href="cart.html" class="cart-link" style="margin-left:1cm;"><img src="1234.png" alt="장바구니"></a>
+    <a href="cart.html" class="cart-link"><img src="1234.png" alt="장바구니"></a>
   </div>
 </header>
 
