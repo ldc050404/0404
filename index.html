@@ -3,24 +3,36 @@
 <head>
   <meta charset="UTF-8">
   <title>My Photo</title>
+
+  <!-- 파비콘 설정 (같은 폴더 안의 1502.png 사용) -->
+  <link rel="icon" type="image/png" href="1502.png">
+
   <style>
     body {
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       height: 100vh;
       margin: 0;
       background-color: #f0f0f0;
+      font-family: Arial, sans-serif;
     }
     img {
       max-width: 90%;
-      max-height: 90%;
+      max-height: 80vh;
       border: 2px solid #ccc;
       border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      margin-bottom: 20px;
+      color: #333;
     }
   </style>
 </head>
 <body>
+  <h1>My Photo</h1>
   <img src="1502.png" alt="My Photo">
 </body>
 </html>
