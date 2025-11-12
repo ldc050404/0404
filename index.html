@@ -10,68 +10,139 @@
   <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css" rel="stylesheet">
 
   <style>
-    /* 전역 폰트 적용 — Pretendard 우선 */
     :root {
-      --brand:#111;
-      --muted:#777;
-      --accent:#d90000;
+      --brand: #111;
+      --muted: #777;
+      --accent: #d90000;
     }
-    *{box-sizing:border-box;margin:0;padding:0}
-    html,body{height:100%}
-    body{
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+
+    body {
       font-family: 'Pretendard', system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans KR', 'Helvetica Neue', Arial;
-      color:var(--brand);
-      background:#fff;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
+      color: var(--brand);
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
-    header{
-      width:100%;
-      text-align:center;
-      padding:40px 0 10px;
-      font-size:36px;
-      font-weight:700;
-      letter-spacing:3px;
+    /* ===== 로고 영역 ===== */
+    header {
+      width: 100%;
+      text-align: center;
+      padding: 10px 0 5px; /* 상단 여백 최소화 */
+      font-size: 64px; /* 기존보다 약 2배 확대 */
+      font-weight: 700;
+      letter-spacing: 2px;
+      font-family: 'Bahnschrift', 'Arial Narrow', sans-serif;
+      position: relative;
     }
 
-    nav{width:100%;display:flex;justify-content:center;align-items:center;flex-wrap:wrap}
-    nav ul{list-style:none;display:flex;gap:36px;padding:8px 0}
-    nav a{
-      text-decoration:none;
-      color:var(--brand);
-      font-size:14px;
-      letter-spacing:1px;
-      transition:color .15s;
-    }
-    nav a:hover{color:var(--muted)}
-
-    .search-bar{display:flex;align-items:center;gap:8px}
-    .search-bar input{
-      border:1px solid #ddd;border-radius:20px;padding:6px 12px;font-size:13px;width:160px;
-      outline:none;background:#fff;
-    }
-    .search-bar button{background:none;border:0;cursor:pointer;font-size:16px}
-
-    .main-banner{
-      margin:50px 0;width:90%;max-width:1200px;height:600px;border-radius:8px;
-      background-image:url('mainphoto.png');background-size:cover;background-position:center;
+    header sup {
+      font-size: 0.25em;
+      position: relative;
+      top: -1.6em;
+      margin-left: 0.25em;
+      opacity: 0.8;
     }
 
-    footer{width:100%;text-align:center;padding:40px 0;border-top:1px solid #eee;font-size:13px;color:#666}
+    /* ===== 네비게이션 ===== */
+    nav {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+    }
 
-    @media(max-width:768px){
-      .main-banner{height:320px}
-      header{font-size:24px}
-      nav ul{gap:20px}
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 36px;
+      padding: 6px 0;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--brand);
+      font-size: 14px;
+      letter-spacing: 1px;
+      transition: color 0.15s;
+    }
+
+    nav a:hover {
+      color: var(--muted);
+    }
+
+    /* ===== 검색창 ===== */
+    .search-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .search-bar input {
+      border: 1px solid #ddd;
+      border-radius: 20px;
+      padding: 6px 12px;
+      font-size: 13px;
+      width: 160px;
+      outline: none;
+      background: #fff;
+    }
+
+    .search-bar button {
+      background: none;
+      border: 0;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    /* ===== 메인 배너 ===== */
+    .main-banner {
+      margin: 40px 0;
+      width: 90%;
+      max-width: 1200px;
+      height: 600px;
+      border-radius: 8px;
+      background-image: url('mainphoto.png');
+      background-size: cover;
+      background-position: center;
+    }
+
+    /* ===== 푸터 ===== */
+    footer {
+      width: 100%;
+      text-align: center;
+      padding: 40px 0;
+      border-top: 1px solid #eee;
+      font-size: 13px;
+      color: #666;
+    }
+
+    /* ===== 반응형 ===== */
+    @media (max-width: 768px) {
+      header {
+        font-size: 36px;
+        padding-top: 16px;
+      }
+      .main-banner {
+        height: 320px;
+      }
+      nav ul {
+        gap: 20px;
+      }
     }
   </style>
 </head>
 <body>
-  <header>HYPERDRAMA</header>
+  <header>
+    HYPERDRAMA<sup>™</sup>
+  </header>
 
   <nav>
     <ul>
