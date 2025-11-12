@@ -55,7 +55,7 @@ header img{
 /* ===== SEARCH & CART 오른쪽 상단 ===== */
 .search-bar{
   position:absolute;
-  right:3cm; /* 오른쪽 상단 */
+  right:calc(3cm - 4cm); /* 오른쪽 상단에서 왼쪽으로 4cm 이동 */
   top:0.7cm;
   font-size:13px;
   font-weight:400;
@@ -183,7 +183,7 @@ footer{
 @media(max-width:768px){
   header img{width:80%}
   nav ul{gap:0.4cm}
-  .search-bar{top:0.7cm; right:1.5cm; gap:0.4cm;}
+  .search-bar{top:0.7cm; right:calc(1.5cm - 4cm); gap:0.4cm;}
   .search-bar a.cart-link img{width:20px;height:20px;}
 }
 </style>
