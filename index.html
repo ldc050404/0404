@@ -15,52 +15,61 @@
   </script>
 
   <style>
+    /* 기본 스타일 */
     body {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
       margin: 0;
-      padding: 20px;
-      background-color: #f0f0f0;
+      padding: 0;
       font-family: Arial, sans-serif;
-      min-height: 100vh;
+      background-color: #f0f0f0;
+      display: flex;
+      justify-content: center;
+    }
+
+    .container {
+      position: relative;
+      width: 80%;
+      max-width: 800px;
+      margin: 40px 0;
     }
 
     h1 {
+      text-align: center;
       margin-bottom: 20px;
       color: #333;
       font-size: 2em;
-      text-align: center;
     }
 
+    /* 사진 컨테이너 */
     .photo-container {
-      width: 80%;
-      max-width: 800px;
-      margin-bottom: 20px;
       position: relative;
+      width: 100%;
+      padding-top: 56.25%; /* 16:9 비율 */
+      overflow: hidden;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
 
     .photo-container img {
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
-      height: auto;
-      object-fit: contain;
-      border: 2px solid #ccc;
-      border-radius: 8px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      height: 100%;
+      object-fit: cover;
       transition: opacity 1s ease;
-      display: block;
       opacity: 1;
-      position: relative; /* 절대 위치 제거 */
     }
 
     .photo-container img.inactive {
       opacity: 0;
-      position: relative; /* 절대 위치 제거 */
-      display: block;     /* 항상 공간 차지 */
     }
 
-    button {
-      padding: 12px 24px;
+    /* 버튼 */
+    #switchBtn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      padding: 10px 18px;
       font-weight: bold;
       font-size: 1em;
       background-color: #007bff;
@@ -68,49 +77,55 @@
       border: none;
       border-radius: 5px;
       cursor: pointer;
+      z-index: 10;
       transition: 0.2s;
-      margin-bottom: 40px;
     }
 
-    button:hover { background-color: #0056b3; }
+    #switchBtn:hover {
+      background-color: #0056b3;
+    }
 
+    /* 모바일 대응 */
     @media (max-width: 700px) {
-      .photo-container { width: 95%; }
+      .container { width: 95%; }
       h1 { font-size: 1.5em; }
-      button { padding: 10px 20px; font-size: 0.9em; }
+      #switchBtn { padding: 8px 16px; font-size: 0.9em; }
     }
   </style>
 </head>
 <body>
 
-<h1>leedongchan</h1>
-
-<div class="photo-container">
-  <img id="photo1" src="1502.png" alt="photo1">
-  <img id="photo2" src="1333.png" alt="photo2" class="inactive">
+<div class="container">
+  <h1>leedongchan</h1>
+  <div class="photo-container">
+    <img id="photo1" src="1502.png" alt="photo1">
+    <img id="photo2" src="1333.png" alt="photo2" class="inactive">
+    <button id="switchBtn">사진 바꾸기</button>
+  </div>
 </div>
-
-<button onclick="switchPhoto()">사진 바꾸기</button>
 
 <script>
   const photo1 = document.getElementById('photo1');
   const photo2 = document.getElementById('photo2');
+  const btn = document.getElementById('switchBtn');
 
-  function switchPhoto() {
-    // 부드럽게 페이드 전환
-    if(photo1.style.opacity === "0") {
-      photo1.style.opacity = "1";
-      photo2.style.opacity = "0";
+  let showingFirst = true;
+
+  btn.addEventListener('click', () => {
+    if(showingFirst){
+      photo1.classList.add('inactive');
+      photo2.classList.remove('inactive');
     } else {
-      photo1.style.opacity = "0";
-      photo2.style.opacity = "1";
+      photo2.classList.add('inactive');
+      photo1.classList.remove('inactive');
     }
-  }
+    showingFirst = !showingFirst;
+  });
 
-  // 페이지 로드 시 첫 번째 사진 보이기
+  // 초기 상태
   window.onload = () => {
-    photo1.style.opacity = "1";
-    photo2.style.opacity = "0";
+    photo1.classList.remove('inactive');
+    photo2.classList.add('inactive');
   };
 </script>
 
