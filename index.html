@@ -26,8 +26,10 @@ body{
   align-items:flex-start;
   -webkit-font-smoothing:antialiased;
   -moz-osx-font-smoothing:grayscale;
-  padding-top:0.7cm; 
+  padding-top:0.5cm; /* 1444를 좀 더 위로 */
   line-height:1.15;
+  min-height:100vh;
+  position:relative;
 }
 
 /* ===== 상단 로고 ===== */
@@ -36,8 +38,8 @@ header{
   text-align:left;
   position:relative;
   z-index:2;
-  padding-left:0; /* 왼쪽 끝으로 */
-  margin-top:0; /* 상단과 맞닿게 */
+  padding-left:0;
+  margin-top:0; 
 }
 
 header a{
@@ -53,7 +55,7 @@ header img{
 /* ===== SEARCH 오른쪽 상단 ===== */
 .search-bar{
   position:absolute;
-  right:3cm; /* 오른쪽 3cm 여유 */
+  right:3cm; 
   top:0.7cm;
   font-size:13px;
   font-weight:400;
@@ -117,7 +119,7 @@ nav a.underline-effect:hover::after{
 
 /* ===== 메인 배너 (0000.png) ===== */
 .main-banner{
-  position:absolute;
+  position:fixed;
   top:50%;
   left:50%;
   transform:translate(-50%, -50%);
@@ -140,6 +142,8 @@ footer{
   border-top:1px solid #eee;
   font-size:13px;
   color:#666;
+  position:absolute;
+  bottom:0; /* 항상 맨 아래 */
 }
 
 /* ===== 반응형 ===== */
@@ -201,7 +205,7 @@ footer{
 <script>
 window.addEventListener('load', () => {
   const banner = document.querySelector('.main-banner');
-  banner.style.opacity = '1'; // 0000.png 페이드 인
+  banner.style.opacity = '1'; // 0000.png 천천히 페이드 인
 });
 </script>
 
