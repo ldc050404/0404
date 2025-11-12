@@ -62,18 +62,30 @@ header img{
   z-index:3;
   display:flex;
   align-items:center;
-  gap:0.6cm; /* SEARCH와 아이콘 간격 넉넉히 */
+  gap:0.6cm;
 }
 
 .search-bar a.text-link{
   text-decoration:none;
   color:var(--brand);
   font-weight:500;
-  border-bottom:1px solid var(--brand);
   padding-bottom:2px;
   display:inline-block;
+  position:relative; /* ::after 사용 위해 추가 */
   transition: color 0.3s ease;
 }
+
+/* 밑줄 길이 1cm 늘리기 */
+.search-bar a.text-link::after{
+  content:"";
+  position:absolute;
+  left:-0.5cm; /* 왼쪽으로 0.5cm 확장 */
+  bottom:0;
+  width:calc(100% + 1cm); /* 오른쪽으로 1cm 확장 */
+  height:1px;
+  background:var(--brand);
+}
+
 .search-bar a.text-link:hover{
   color:#777;
 }
@@ -234,4 +246,3 @@ window.addEventListener('load', () => {
 
 </body>
 </html>
-
