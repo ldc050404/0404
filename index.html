@@ -1,74 +1,75 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>leedongchan</title>
-  <link rel="icon" type="image/png" href="1502.png">
+<meta charset="UTF-8">
+<title>leedongchan</title>
+<link rel="icon" type="image/png" href="1502.png">
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: #f0f0f0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding-top: 20px;
-    }
+<style>
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+    min-height: 100vh;
+  }
 
-    h1 {
-      margin-bottom: 20px;
-      color: #333;
-      font-size: 2em;
-      text-align: center;
-      transition: opacity 0.5s ease;
-    }
+  h1 {
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 2em;
+    text-align: center;
+    transition: opacity 0.5s ease;
+  }
 
-    .photo-container {
-      position: relative;
-      margin-bottom: 40px;
-      width: 100%;
-      display: flex;
-      justify-content: center; /* 컨테이너 중앙 정렬 */
-    }
+  .photo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    margin-bottom: 40px;
+    width: 100%;
+  }
 
-    .photo-container img {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%); /* 중앙 정렬 */
-      max-width: 90vw;
-      height: auto;
-      display: block;
-      transition: opacity 0.8s ease;
-      opacity: 1;
-    }
+  .photo-container img {
+    max-width: 90vw;
+    height: auto;
+    border-radius: 8px;
+    border: 2px solid #ccc;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: opacity 0.8s ease;
+    position: absolute;
+    opacity: 1;
+  }
 
-    .photo-container img.inactive {
-      opacity: 0;
-      pointer-events: none;
-    }
+  .photo-container img.inactive {
+    opacity: 0;
+    pointer-events: none;
+  }
 
-    #switchBtn {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      padding: 12px 20px;
-      font-weight: bold;
-      font-size: 1em;
-      background-color: #ff4d4d;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      z-index: 1000;
-      transition: background-color 0.2s;
-    }
+  #switchBtn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 12px 20px;
+    font-weight: bold;
+    font-size: 1em;
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 1000;
+    transition: background-color 0.2s;
+  }
 
-    #switchBtn:hover {
-      background-color: #cc0000;
-    }
-  </style>
+  #switchBtn:hover {
+    background-color: #cc0000;
+  }
+</style>
 </head>
 <body>
 
@@ -87,4 +88,41 @@
   const btn = document.getElementById('switchBtn');
   const title = document.getElementById('title');
 
-  let sh
+  let showingFirst = true;
+  let animating = false;
+
+  btn.addEventListener('click', () => {
+    if(animating) return;
+    animating = true;
+
+    // 사진 전환
+    const fadeOutPhoto = showingFirst ? photo1 : photo2;
+    const fadeInPhoto = showingFirst ? photo2 : photo1;
+
+    fadeOutPhoto.classList.add('inactive');
+    fadeInPhoto.classList.remove('inactive');
+
+    // 제목 페이드
+    title.style.opacity = 0;
+    setTimeout(() => {
+      title.textContent = showingFirst ? 'hongseulgi' : 'leedongchan';
+      title.style.opacity = 1;
+    }, 300);
+
+    showingFirst = !showingFirst;
+
+    setTimeout(() => {
+      animating = false;
+    }, 800); // 사진 페이드 시간과 동일
+  });
+
+  // 초기 상태
+  window.addEventListener('load', () => {
+    photo1.classList.remove('inactive');
+    photo2.classList.add('inactive');
+    title.textContent = 'leedongchan';
+  });
+</script>
+
+</body>
+</html>
