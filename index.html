@@ -23,7 +23,7 @@ body{
   color:var(--brand);
   display:flex;
   flex-direction:column;
-  align-items:flex-start; 
+  align-items:flex-start;
   -webkit-font-smoothing:antialiased;
   -moz-osx-font-smoothing:grayscale;
   padding-top:0.7cm; 
@@ -33,25 +33,26 @@ body{
 /* ===== 상단 로고 ===== */
 header{
   width:100%;
-  text-align:center;
+  text-align:left; 
   position:relative;
   z-index:2;
+  padding-left:1cm;
 }
 
 header a{
   display:inline-block;
 }
 header img{
-  width:600px; /* 1444.png 절반 크기 */
+  width:300px; /* 1444.png 절반 */
   max-width:90%;
   height:auto;
   cursor:pointer;
 }
 
-/* 검색창 왼쪽으로 이동 */
+/* ===== SEARCH 오른쪽 상단 ===== */
 .search-bar{
   position:absolute;
-  left:3cm; 
+  right:1cm;
   top:0.7cm;
   font-size:13px;
   font-weight:400;
@@ -64,11 +65,11 @@ header img{
   border-bottom:1px solid var(--brand);
   padding-bottom:2px;
   display:inline-block;
-  width:170px; /* 밑줄 길이 1cm 더 늘림 */
+  width:170px;
   transition: color 0.3s ease;
 }
 .search-bar a:hover{
-  color:#777; /* 커서 올리면 회색으로 살짝 페이드 */
+  color:#777; /* 회색 페이드 */
 }
 
 /* ===== 네비게이션 ===== */
@@ -79,18 +80,17 @@ nav{
   align-items:center;
   flex-wrap:wrap;
   margin-top:10px;
-  padding-left:1.8cm; 
+  padding-left:1cm; /* 로고 기준 왼쪽 정렬 */
 }
 
 nav ul{
   list-style:none;
   display:flex;
-  gap:12px; 
+  gap:12px;
   padding:2px 0;
 }
 
 nav a{
-  position:relative;
   text-decoration:none;
   color:var(--brand);
   font-size:13px;
@@ -117,11 +117,11 @@ nav a.underline-effect:hover::after{
 /* ===== 메인 배너 (0000.png) ===== */
 .main-banner{
   position:absolute;
-  top:0;
+  top:50%;
   left:50%;
-  transform:translateX(-50%);
-  width:120%;
-  height:120%;
+  transform:translate(-50%, -50%);
+  width:150%;
+  height:150%;
   overflow-y:auto;
   background-image:url('0000.png');
   background-size:cover;
@@ -142,9 +142,9 @@ footer{
 /* ===== 반응형 ===== */
 @media(max-width:768px){
   header img{width:80%}
-  .main-banner{height:500px;width:150%}
+  .main-banner{height:500px;width:180%}
   nav ul{gap:8px}
-  .search-bar{top:0.7cm; left:1cm}
+  .search-bar{top:0.7cm; right:0.5cm}
 }
 </style>
 </head>
