@@ -15,6 +15,7 @@
   </script>
 
   <style>
+    /* 기본 스타일 */
     body {
       display: flex;
       flex-direction: column;
@@ -31,31 +32,36 @@
       color: #333;
     }
 
+    /* 사진 컨테이너 */
     .photo-container {
       position: relative;
       width: 80%;
       max-width: 600px;
+      height: auto; /* 높이는 이미지에 맞게 자동 */
       overflow: hidden;
     }
 
+    /* 이미지 스타일 */
     .photo-container img {
       width: 100%;
       max-height: 80vh;
       border: 2px solid #ccc;
       border-radius: 8px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      transition: opacity 1s ease;
-      opacity: 1;
       position: absolute;
       top: 0;
       left: 0;
+      transition: opacity 1s ease;
+      opacity: 1;
     }
 
+    /* 안 보이는 이미지 */
     .photo-container img.inactive {
       opacity: 0;
       pointer-events: none;
     }
 
+    /* 버튼 스타일 */
     button {
       margin-top: 20px;
       padding: 10px 20px;
@@ -71,28 +77,42 @@
     button:hover {
       background-color: #0056b3;
     }
+
+    /* 모바일 대응: 이미지 비율 유지 */
+    @media (max-width: 700px) {
+      .photo-container {
+        width: 95%;
+      }
+    }
   </style>
 </head>
 <body>
 
-  <h1>leedongchan</h1>
+<h1>leedongchan</h1>
 
-  <div class="photo-container">
-    <img id="photo1" src="1502.png" alt="photo1">
-    <img id="photo2" src="1333.png" alt="photo2" class="inactive">
-  </div>
+<div class="photo-container">
+  <img id="photo1" src="1502.png" alt="photo1">
+  <img id="photo2" src="1333.png" alt="photo2" class="inactive">
+</div>
 
-  <button onclick="switchPhoto()">사진 바꾸기</button>
+<button onclick="switchPhoto()">사진 바꾸기</button>
 
-  <script>
-    const photo1 = document.getElementById('photo1');
-    const photo2 = document.getElementById('photo2');
+<script>
+  const photo1 = document.getElementById('photo1');
+  const photo2 = document.getElementById('photo2');
 
-    function switchPhoto() {
-      photo1.classList.toggle('inactive');
-      photo2.classList.toggle('inactive');
-    }
-  </script>
+  function switchPhoto() {
+    // 두 이미지의 클래스 전환
+    photo1.classList.toggle('inactive');
+    photo2.classList.toggle('inactive');
+  }
+
+  // 페이지 로드 시 첫 번째 이미지가 항상 보이도록
+  window.onload = () => {
+    photo1.classList.remove('inactive');
+    photo2.classList.add('inactive');
+  }
+</script>
 
 </body>
 </html>
