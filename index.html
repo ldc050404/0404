@@ -13,9 +13,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
-    min-height: 100vh;
     padding-top: 40px;
+    min-height: 100vh;
   }
 
   h1 {
@@ -30,26 +29,30 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    position: relative;
     margin-bottom: 40px;
     width: 100%;
+    position: relative;
   }
 
   .photo-container img {
     display: block;
     max-width: 90vw;
-    height: auto; /* 원본 크기 유지 */
+    height: auto; /* 원본 비율 유지 */
     border-radius: 8px;
     border: 2px solid #ccc;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     transition: opacity 0.8s ease;
     opacity: 1;
-    position: absolute;
+    position: relative; /* absolute 제거 */
   }
 
   .photo-container img.inactive {
     opacity: 0;
+    position: absolute; /* inactive 이미지만 absolute로 겹치게 */
     pointer-events: none;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
   }
 
   #switchBtn {
