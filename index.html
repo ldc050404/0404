@@ -37,7 +37,7 @@
 
   .photo-container img {
     max-width: 100%;
-    height: auto; /* 원본 크기 유지 */
+    height: auto;
     border-radius: 8px;
     border: 2px solid #ccc;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
@@ -96,29 +96,33 @@ btn.addEventListener('click', () => {
   if(animating) return;
   animating = true;
 
+  // 상태를 먼저 반전
+  showingFirst = !showingFirst;
+
   // 사진 전환
-  const fadeOut = showingFirst ? photo1 : photo2;
-  const fadeIn = showingFirst ? photo2 : photo1;
+  if(showingFirst){
+    photo1.classList.remove('inactive');
+    photo2.classList.add('inactive');
+  } else {
+    photo2.classList.remove('inactive');
+    photo1.classList.add('inactive');
+  }
 
-  fadeOut.classList.add('inactive');
-  fadeIn.classList.remove('inactive');
-
-  // 제목 전환
+  // 제목 전환 페이드
   title.style.opacity = 0;
   setTimeout(() => {
-    title.textContent = showingFirst ? 'hongseulgi' : 'leedongchan';
+    title.textContent = showingFirst ? 'leedongchan' : 'hongseulgi';
     title.style.opacity = 1;
-  }, 300);
-
-  showingFirst = !showingFirst;
+  }, 50);
 
   setTimeout(() => {
     animating = false;
-  }, 800); // 페이드 시간과 동기화
+  }, 800);
 });
 
 // 초기 상태
 window.addEventListener('load', () => {
+  showingFirst = true;
   photo1.classList.remove('inactive');
   photo2.classList.add('inactive');
   title.textContent = 'leedongchan';
