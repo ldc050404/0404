@@ -26,7 +26,7 @@ body{
   align-items:flex-start;
   -webkit-font-smoothing:antialiased;
   -moz-osx-font-smoothing:grayscale;
-  padding-top:0.2cm; /* 상단 최소 공백 */
+  padding-top:0.2cm;
   line-height:1.15;
   min-height:100vh;
   position:relative;
@@ -88,8 +88,8 @@ nav{
 nav ul{
   list-style:none;
   display:flex;
-  gap:8px; /* 글자 간격 줄임 */
-  padding:2px 0;
+  gap:0.48cm; /* 가로 간격 0.48cm */
+  padding:1px 0; /* 세로 줄 간격 0.1cm 더 줄임 */
 }
 
 nav a{
@@ -117,23 +117,6 @@ nav a.underline-effect:hover::after{
   width:100%;
 }
 
-/* ===== 메인 배너 (0000.png) ===== */
-.main-banner{
-  position:fixed;
-  top:50%;
-  left:50%;
-  transform:translate(-50%, -50%);
-  width:150%;
-  height:150%;
-  overflow-y:auto;
-  background-image:url('0000.png');
-  background-size:cover;
-  background-position:center;
-  z-index:-1;
-  opacity:0;
-  transition: opacity 2s ease-in;
-}
-
 /* ===== 푸터 ===== */
 footer{
   width:100%;
@@ -149,8 +132,7 @@ footer{
 /* ===== 반응형 ===== */
 @media(max-width:768px){
   header img{width:80%}
-  .main-banner{height:500px;width:180%}
-  nav ul{gap:6px}
+  nav ul{gap:0.3cm}
   .search-bar{top:0.7cm; right:1.5cm}
 }
 </style>
@@ -194,20 +176,11 @@ footer{
   </ul>
 </nav>
 
-<div class="main-banner" role="img" aria-label="메인 배너 이미지"></div>
-
 <footer>
   <p>📞 010-1234-5678</p>
   <p>🕓 MON-FRI : 11:00 - 20:00 | SAT-SUN : 12:00 - 19:00</p>
   <p>© 2025 HYPERDRAMA</p>
 </footer>
-
-<script>
-window.addEventListener('load', () => {
-  const banner = document.querySelector('.main-banner');
-  banner.style.opacity = '1'; // 0000.png 천천히 페이드 인
-});
-</script>
 
 </body>
 </html>
