@@ -27,20 +27,21 @@
     .photo-container {
       position: relative;
       margin-bottom: 40px;
+      width: 100%;
+      display: flex;
+      justify-content: center; /* 컨테이너 중앙 정렬 */
     }
 
     .photo-container img {
-      display: block;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%); /* 중앙 정렬 */
       max-width: 90vw;
-      height: auto; /* 원본 비율 유지 */
-      border-radius: 8px;
-      border: 2px solid #ccc;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      height: auto;
+      display: block;
       transition: opacity 0.8s ease;
       opacity: 1;
-      position: absolute;
-      top: 0;
-      left: 0;
     }
 
     .photo-container img.inactive {
@@ -86,46 +87,4 @@
   const btn = document.getElementById('switchBtn');
   const title = document.getElementById('title');
 
-  let showingFirst = true;
-  let animating = false;
-
-  btn.addEventListener('click', () => {
-    if (animating) return;
-    animating = true;
-
-    // 사진 전환
-    if (showingFirst) {
-      photo1.classList.add('inactive');
-      photo2.classList.remove('inactive');
-      // 제목 바로 변경
-      title.style.opacity = 0;
-      setTimeout(() => {
-        title.textContent = 'hongseulgi';
-        title.style.opacity = 1;
-      }, 300);
-    } else {
-      photo2.classList.add('inactive');
-      photo1.classList.remove('inactive');
-      title.style.opacity = 0;
-      setTimeout(() => {
-        title.textContent = 'leedongchan';
-        title.style.opacity = 1;
-      }, 300);
-    }
-
-    showingFirst = !showingFirst;
-
-    setTimeout(() => {
-      animating = false;
-    }, 800); // 사진 페이드 시간과 동일
-  });
-
-  window.addEventListener('load', () => {
-    photo1.classList.remove('inactive');
-    photo2.classList.add('inactive');
-    title.textContent = 'leedongchan';
-  });
-</script>
-
-</body>
-</html>
+  let sh
