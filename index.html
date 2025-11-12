@@ -62,9 +62,10 @@ header img{
   z-index:3;
   display:flex;
   align-items:center;
-  gap:0.3cm; /* SEARCH와 아이콘 간격 */
+  gap:0.6cm; /* SEARCH와 아이콘 간격 넉넉히 */
 }
-.search-bar a{
+
+.search-bar a.text-link{
   text-decoration:none;
   color:var(--brand);
   font-weight:500;
@@ -73,10 +74,11 @@ header img{
   display:inline-block;
   transition: color 0.3s ease;
 }
-.search-bar a:hover{
+.search-bar a.text-link:hover{
   color:#777;
 }
-.search-bar img{
+
+.search-bar a.cart-link img{
   width:24px;
   height:24px;
   cursor:pointer;
@@ -168,8 +170,8 @@ footer{
 @media(max-width:768px){
   header img{width:80%}
   nav ul{gap:0.4cm}
-  .search-bar{top:0.7cm; right:1.5cm; gap:0.2cm;}
-  .search-bar img{width:20px;height:20px;}
+  .search-bar{top:0.7cm; right:1.5cm; gap:0.4cm;}
+  .search-bar a.cart-link img{width:20px;height:20px;}
 }
 </style>
 </head>
@@ -180,8 +182,8 @@ footer{
     <img src="1444.png" alt="HYPERDRAMA 로고">
   </a>
   <div class="search-bar">
-    <a href="search.html">SEARCH</a>
-    <a href="cart.html"><img src="1234.png" alt="장바구니"></a>
+    <a href="search.html" class="text-link">SEARCH</a>
+    <a href="cart.html" class="cart-link"><img src="1234.png" alt="장바구니"></a>
   </div>
 </header>
 
