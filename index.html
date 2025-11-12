@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <title>leedongchan</title>
 <link rel="icon" type="image/png" href="1502.png">
-
 <style>
   body {
     margin: 0;
@@ -17,35 +16,36 @@
     min-height: 100vh;
   }
 
-  /* 제목 */
-  #title {
+  h1 {
     font-size: 2em;
     color: #333;
     margin-bottom: 20px;
     transition: opacity 0.5s ease;
   }
 
-  /* 사진 컨테이너 */
   .photo-container {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
     max-width: 1200px;
-    position: relative;
     margin-bottom: 40px;
+    position: relative;
+    height: auto; /* 이미지 높이에 따라 유동 */
   }
 
   .photo-container img {
+    width: auto;
     max-width: 100%;
-    height: auto; /* 원본 비율 유지 */
+    height: auto;
+    display: block;
     border-radius: 8px;
     border: 2px solid #ccc;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    position: absolute; /* 겹쳐도 중앙 */
-    top: 0;
+    position: absolute;
+    top: 50%;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translate(-50%, -50%);
     transition: opacity 0.8s ease;
     opacity: 1;
   }
@@ -55,7 +55,6 @@
     pointer-events: none;
   }
 
-  /* 버튼 */
   #switchBtn {
     position: fixed;
     top: 20px;
@@ -101,28 +100,30 @@ btn.addEventListener('click', () => {
   if(animating) return;
   animating = true;
 
-  // 사진 전환
-  if(showingFirst){
+  // 현재 상태를 기준으로 사진과 제목 전환
+  if(showingFirst) {
     photo1.classList.add('inactive');
     photo2.classList.remove('inactive');
+    title.style.opacity = 0;
+    setTimeout(() => {
+      title.textContent = 'hongseulgi';
+      title.style.opacity = 1;
+    }, 50);
   } else {
     photo2.classList.add('inactive');
     photo1.classList.remove('inactive');
+    title.style.opacity = 0;
+    setTimeout(() => {
+      title.textContent = 'leedongchan';
+      title.style.opacity = 1;
+    }, 50);
   }
-
-  // 제목 전환
-  title.style.opacity = 0;
-  setTimeout(() => {
-    title.textContent = showingFirst ? 'hongseulgi' : 'leedongchan';
-    title.style.opacity = 1;
-  }, 50);
 
   showingFirst = !showingFirst;
 
-  // 애니메이션 끝나면 클릭 가능
   setTimeout(() => {
     animating = false;
-  }, 800);
+  }, 800); // CSS transition과 맞춤
 });
 
 // 초기 상태
