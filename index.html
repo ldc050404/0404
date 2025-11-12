@@ -13,8 +13,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top: 20px;
+    justify-content: flex-start;
     min-height: 100vh;
+    padding-top: 40px;
   }
 
   h1 {
@@ -35,14 +36,15 @@
   }
 
   .photo-container img {
+    display: block;
     max-width: 90vw;
-    height: auto;
+    height: auto; /* 원본 크기 유지 */
     border-radius: 8px;
     border: 2px solid #ccc;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     transition: opacity 0.8s ease;
-    position: absolute;
     opacity: 1;
+    position: absolute;
   }
 
   .photo-container img.inactive {
@@ -83,45 +85,45 @@
 <button id="switchBtn">change</button>
 
 <script>
-  const photo1 = document.getElementById('photo1');
-  const photo2 = document.getElementById('photo2');
-  const btn = document.getElementById('switchBtn');
-  const title = document.getElementById('title');
+const photo1 = document.getElementById('photo1');
+const photo2 = document.getElementById('photo2');
+const btn = document.getElementById('switchBtn');
+const title = document.getElementById('title');
 
-  let showingFirst = true;
-  let animating = false;
+let showingFirst = true;
+let animating = false;
 
-  btn.addEventListener('click', () => {
-    if(animating) return;
-    animating = true;
+btn.addEventListener('click', () => {
+  if(animating) return;
+  animating = true;
 
-    // 사진 전환
-    const fadeOutPhoto = showingFirst ? photo1 : photo2;
-    const fadeInPhoto = showingFirst ? photo2 : photo1;
+  // 사진 전환
+  const fadeOutPhoto = showingFirst ? photo1 : photo2;
+  const fadeInPhoto = showingFirst ? photo2 : photo1;
 
-    fadeOutPhoto.classList.add('inactive');
-    fadeInPhoto.classList.remove('inactive');
+  fadeOutPhoto.classList.add('inactive');
+  fadeInPhoto.classList.remove('inactive');
 
-    // 제목 페이드
-    title.style.opacity = 0;
-    setTimeout(() => {
-      title.textContent = showingFirst ? 'hongseulgi' : 'leedongchan';
-      title.style.opacity = 1;
-    }, 300);
+  // 제목 페이드
+  title.style.opacity = 0;
+  setTimeout(() => {
+    title.textContent = showingFirst ? 'hongseulgi' : 'leedongchan';
+    title.style.opacity = 1;
+  }, 300);
 
-    showingFirst = !showingFirst;
+  showingFirst = !showingFirst;
 
-    setTimeout(() => {
-      animating = false;
-    }, 800); // 사진 페이드 시간과 동일
-  });
+  setTimeout(() => {
+    animating = false;
+  }, 800);
+});
 
-  // 초기 상태
-  window.addEventListener('load', () => {
-    photo1.classList.remove('inactive');
-    photo2.classList.add('inactive');
-    title.textContent = 'leedongchan';
-  });
+// 초기 상태
+window.addEventListener('load', () => {
+  photo1.classList.remove('inactive');
+  photo2.classList.add('inactive');
+  title.textContent = 'leedongchan';
+});
 </script>
 
 </body>
