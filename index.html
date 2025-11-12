@@ -26,8 +26,8 @@ body{
   align-items:flex-start;
   -webkit-font-smoothing:antialiased;
   -moz-osx-font-smoothing:grayscale;
-  padding-top:0.2cm;
-  line-height:1.05; /* 전체 폰트 줄간격 조금 줄임 */
+  padding-top:0;
+  line-height:1.05; /* 전체 줄간격 조금 줄임 */
   font-size:0.9em; /* 전체 폰트 1정도 낮춤 */
   min-height:100vh;
   position:relative;
@@ -65,8 +65,7 @@ header img{
   text-decoration:none;
   color:var(--brand);
   font-weight:500;
-  border-bottom:1px solid var(--brand);
-  padding-bottom:2px;
+  border-bottom:none; /* 밑줄 제거 */
   display:inline-block;
   width:170px;
   transition: color 0.3s ease;
@@ -89,8 +88,8 @@ nav{
 nav ul{
   list-style:none;
   display:flex;
-  gap:0.68cm; /* 가로 간격 0.68cm */
-  padding:0.2cm 0; /* 세로 줄 간격 0.2cm */
+  gap:0.68cm; /* 가로 간격 */
+  padding:0.2cm 0; /* 세로 줄 간격 */
 }
 
 nav a{
@@ -188,45 +187,3 @@ footer{
   <ul>
     <li><a href="mypage.html" class="underline-effect">MY PAGE</a></li>
     <li><a href="cart.html" class="underline-effect">CART</a></li>
-  </ul>
-</nav>
-
-<nav>
-  <ul>
-    <li><a href="about.html" class="underline-effect">ABOUT</a></li>
-    <li><a href="work.html" class="underline-effect">WORK</a></li>
-  </ul>
-</nav>
-
-<nav>
-  <ul>
-    <li><a href="new.html" class="underline-effect">NEW ARRIVAL</a></li>
-    <li><a href="outwear.html" class="underline-effect">OUTWEAR</a></li>
-    <li><a href="top.html" class="underline-effect">TOP</a></li>
-    <li><a href="bottom.html" class="underline-effect">BOTTOM</a></li>
-    <li><a href="shoe.html" class="underline-effect">SHOE</a></li>
-    <li><a href="acc.html" class="underline-effect">ACC</a></li>
-  </ul>
-</nav>
-
-<!-- 메인 이미지 -->
-<div class="main-image-container">
-  <img src="0000.png" alt="메인 이미지" class="main-image" id="mainImage">
-</div>
-
-<footer>
-  <p>📞 010-1234-5678</p>
-  <p>🕓 MON-FRI : 11:00 - 20:00 | SAT-SUN : 12:00 - 19:00</p>
-  <p>© 2025 HYPERDRAMA</p>
-</footer>
-
-<script>
-// 0000.png 페이드인
-window.addEventListener('load', () => {
-  const mainImg = document.getElementById('mainImage');
-  mainImg.style.opacity = 1;
-});
-</script>
-
-</body>
-</html>
