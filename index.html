@@ -19,33 +19,39 @@
     body {
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: flex-start; /* 상단부터 배치 */
       align-items: center;
-      min-height: 100vh;
       margin: 0;
+      padding: 20px;
       background-color: #f0f0f0;
       font-family: Arial, sans-serif;
+      min-height: 100vh; /* 최소 화면 높이 */
     }
 
     h1 {
       margin-bottom: 20px;
       color: #333;
+      font-size: 2em;
+      text-align: center;
     }
 
     /* 사진 컨테이너 */
     .photo-container {
       position: relative;
       width: 80%;
-      max-width: 600px;
+      max-width: 800px;
+      height: auto; /* 사진 크기에 맞춤 */
+      max-height: 90vh; /* 화면보다 너무 크면 제한 */
       overflow: hidden;
-      aspect-ratio: 4/3; /* 사진 비율 유지, 필요시 조정 */
+      margin-bottom: 20px;
     }
 
     /* 사진 공통 스타일 */
     .photo-container img {
       width: 100%;
-      height: 100%;
-      object-fit: cover; /* 사진 잘림 없이 채움 */
+      height: auto;
+      max-height: 90vh;
+      object-fit: contain; /* 사진 비율 유지 */
       border: 2px solid #ccc;
       border-radius: 8px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
@@ -64,15 +70,16 @@
 
     /* 버튼 스타일 */
     button {
-      margin-top: 20px;
-      padding: 10px 20px;
+      padding: 12px 24px;
       font-weight: bold;
+      font-size: 1em;
       background-color: #007bff;
       color: white;
       border: none;
       border-radius: 5px;
       cursor: pointer;
       transition: 0.2s;
+      margin-bottom: 40px;
     }
 
     button:hover {
@@ -83,6 +90,13 @@
     @media (max-width: 700px) {
       .photo-container {
         width: 95%;
+      }
+      h1 {
+        font-size: 1.5em;
+      }
+      button {
+        padding: 10px 20px;
+        font-size: 0.9em;
       }
     }
   </style>
@@ -103,11 +117,12 @@
   const photo2 = document.getElementById('photo2');
 
   function switchPhoto() {
+    // 페이드 전환
     photo1.classList.toggle('inactive');
     photo2.classList.toggle('inactive');
   }
 
-  // 페이지 로드 시 항상 첫 번째 사진 보이기
+  // 페이지 로드 시 첫 번째 사진 보이도록
   window.onload = () => {
     photo1.classList.remove('inactive');
     photo2.classList.add('inactive');
