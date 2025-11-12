@@ -22,7 +22,7 @@
       color: #333;
       font-size: 2em;
       text-align: center;
-      transition: opacity 0.8s ease;
+      transition: opacity 0.5s ease;
     }
 
     .photo-container {
@@ -30,7 +30,8 @@
       width: 90%;
       max-width: 1200px;
       margin-bottom: 40px;
-      padding-top: 56.25%; /* 초기 비율 확보 */
+      padding-top: 56.25%; /* 16:9 비율 확보 */
+      overflow: hidden;
     }
 
     .photo-container img {
@@ -39,12 +40,10 @@
       left: 0;
       width: 100%;
       height: 100%;
-      object-fit: contain;
-      border-radius: 8px;
-      border: 2px solid #ccc;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      transition: opacity 1s ease;
+      object-fit: cover;
+      transition: opacity 0.8s ease;
       opacity: 1;
+      display: block;
     }
 
     .photo-container img.inactive {
@@ -65,6 +64,7 @@
       border-radius: 5px;
       cursor: pointer;
       z-index: 1000;
+      transition: background-color 0.2s;
     }
 
     #switchBtn:hover {
@@ -96,8 +96,21 @@
   const title = document.getElementById('title');
 
   let showingFirst = true;
+  let animating = false; // 애니메이션 중복 방지
 
   btn.addEventListener('click', () => {
+    if(animating) return; // 이미 페이드 중이면 무시
+    animating = true;
+
+    // 제목 페이드 아웃
+    title.style.opacity = 0;
+
+    setTimeout(() => {
+      // 제목 변경
+      title.textContent = showingFirst ? 'hongseulgi' : 'leedongchan';
+      title.style.opacity = 1;
+    }, 300); // 페이드 아웃 후 0.3초 후 변경
+
     // 사진 전환
     if(showingFirst){
       photo1.classList.add('inactive');
@@ -107,14 +120,13 @@
       photo1.classList.remove('inactive');
     }
 
-    // 제목 페이드 전환
-    title.style.opacity = 0;
-    setTimeout(() => {
-      title.textContent = showingFirst ? 'hongseulgi' : 'leedongchan';
-      title.style.opacity = 1;
-    }, 400); // 0.4초 후 변경
-
+    // 상태 업데이트
     showingFirst = !showingFirst;
+
+    // 애니메이션 완료 후 다시 클릭 가능
+    setTimeout(() => {
+      animating = false;
+    }, 800); // 사진 페이드 시간과 동일
   });
 
   // 초기 상태
