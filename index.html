@@ -29,17 +29,35 @@ body{
   padding-top:10px;
 }
 
-/* ===== 로고 ===== */
+/* ===== 상단 로고와 검색 ===== */
 header{
   width:100%;
   display:flex;
-  justify-content:center; /* 중앙 배치 */
+  justify-content:space-between;
   align-items:flex-start;
+  padding:10px 8%;
 }
 
 header img{
   width:540px; /* 2배 크기 */
   height:auto;
+  cursor:pointer;
+}
+
+/* 검색창 오른쪽 상단 */
+.search-bar{
+  font-size:13px;
+  font-weight:400;
+}
+.search-bar a{
+  text-decoration:none;
+  color:var(--brand);
+  font-weight:500;
+  border-bottom:1px solid var(--brand);
+  padding-bottom:2px;
+}
+.search-bar a:hover{
+  color:var(--accent);
 }
 
 /* ===== 네비게이션 ===== */
@@ -55,7 +73,7 @@ nav{
 nav ul{
   list-style:none;
   display:flex;
-  gap:28px; /* 간격 줄임 */
+  gap:28px; /* 줄 간격 조절 */
   padding:4px 0;
 }
 
@@ -83,7 +101,7 @@ nav a::after{
   transform-origin:left;
 }
 
-/* 호버하면 밑줄 늘어나고 나머지 흐려짐 */
+/* hover 시 나머지 메뉴 흐리게 */
 nav ul:hover a{
   color:var(--muted);
 }
@@ -93,23 +111,6 @@ nav ul a:hover{
 nav ul a:hover::after{
   width:100%;
 }
-
-/* ===== Search 영역 ===== */
-.search-bar{
-  font-size:13px;
-  font-weight:400;
-  cursor:text;
-  border-bottom:1px solid #111;
-  padding-bottom:2px;
-}
-.search-bar input{
-  border:none;
-  outline:none;
-  font-size:13px;
-  background:none;
-  width:160px;
-}
-.search-bar button{display:none;} /* 돋보기 제거 */
 
 /* ===== 메인 배너 ===== */
 .main-banner{
@@ -143,7 +144,12 @@ footer{
 </head>
 <body>
 <header>
-  <img src="1444.png" alt="HYPERDRAMA 로고">
+  <a href="https://leedongchan.site">
+    <img src="1444.png" alt="HYPERDRAMA 로고">
+  </a>
+  <div class="search-bar">
+    <a href="search.html">Search</a>
+  </div>
 </header>
 
 <nav>
@@ -159,7 +165,6 @@ footer{
   <ul>
     <li><a href="about.html">ABOUT</a></li>
     <li><a href="work.html">WORK</a></li>
-    <li><div class="search-bar"><input type="text" placeholder="Search"></div></li>
   </ul>
 </nav>
 
