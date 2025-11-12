@@ -27,7 +27,7 @@ body{
   -webkit-font-smoothing:antialiased;
   -moz-osx-font-smoothing:grayscale;
   padding-top:0;
-  line-height:1.2; /* 전체 폰트 줄간격 조정 */
+  line-height:1.15; /* 전체 글자 줄간격 약간 줄임 */
 }
 
 /* ===== 상단 로고와 검색 ===== */
@@ -36,7 +36,7 @@ header{
   display:flex;
   justify-content:center; /* 완전 중앙 */
   align-items:flex-start;
-  padding:5px 0 0 0; /* 최상단에 붙임 */
+  padding:0;
   position: relative;
 }
 
@@ -44,7 +44,7 @@ header a{
   display:block;
 }
 header img{
-  width:720px; /* 3/2로 줄임 */
+  width:480px; /* 3/2 비율 조정 */
   max-width:80%;
   height:auto;
   cursor:pointer;
@@ -53,8 +53,8 @@ header img{
 /* 검색창 오른쪽 상단 */
 .search-bar{
   position:absolute;
-  right:8%;
-  top:20px;
+  right:5%;
+  top:15px;
   font-size:13px;
   font-weight:400;
 }
@@ -96,7 +96,7 @@ nav{
 nav ul{
   list-style:none;
   display:flex;
-  gap:15px; /* 줄 간격 줄임 */
+  gap:12px; /* 줄 간격 줄임 */
   padding:2px 0;
 }
 
@@ -169,8 +169,8 @@ footer{
 @media(max-width:768px){
   header img{width:360px}
   .main-banner{height:320px}
-  nav ul{gap:10px}
-  .search-bar{top:15px; right:5%}
+  nav ul{gap:8px}
+  .search-bar{top:10px; right:3%}
 }
 </style>
 </head>
