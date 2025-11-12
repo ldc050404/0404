@@ -1,47 +1,182 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>leedoŋɢcɧan</title>
-
-  <!-- 파비콘 설정 (같은 폴더 안의 1502.png 사용) -->
-  <link rel="icon" type="image/png" href="1502.png">
-
-  <!-- Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-F1XZ9V7V54"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-F1XZ9V7V54');
-  </script>
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HYPERDRAMA</title>
+  <link rel="icon" type="image/png" href="hyperdrama.png">
   <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      color: #111;
+      background-color: #fff;
       display: flex;
       flex-direction: column;
+      align-items: center;
+    }
+
+    /* 상단 로고 */
+    header {
+      width: 100%;
+      text-align: center;
+      padding: 40px 0 10px 0;
+      font-size: 36px;
+      font-weight: bold;
+      letter-spacing: 3px;
+    }
+
+    /* 네비게이션 공통 */
+    nav {
+      width: 100%;
+      display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      margin: 0;
-      background-color: #f0f0f0;
-      font-family: Arial, sans-serif;
+      flex-wrap: wrap;
     }
-    img {
-      max-width: 90%;
-      max-height: 80vh;
-      border: 2px solid #ccc;
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 40px;
+      padding: 10px 0;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #111;
+      font-size: 14px;
+      letter-spacing: 1px;
+      position: relative;
+      transition: 0.2s;
+    }
+
+    nav a:hover {
+      color: #777;
+    }
+
+    /* 검색창 */
+    .search-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .search-bar input {
+      border: 1px solid #ccc;
+      border-radius: 20px;
+      padding: 5px 12px;
+      font-size: 13px;
+      outline: none;
+      width: 160px;
+      transition: 0.3s;
+    }
+
+    .search-bar input:focus {
+      border-color: #111;
+    }
+
+    .search-bar button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    /* 메인 이미지 영역 */
+    .main-banner {
+      margin: 50px 0;
+      width: 90%;
+      max-width: 1200px;
+      height: 600px;
+      background-image: url('mainphoto.png'); /* 메인 이미지 파일 이름 */
+      background-size: cover;
+      background-position: center;
       border-radius: 8px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
-    h1 {
-      margin-bottom: 20px;
-      color: #333;
+
+    /* 하단 정보 */
+    footer {
+      width: 100%;
+      text-align: center;
+      padding: 40px 0;
+      border-top: 1px solid #ddd;
+      font-size: 13px;
+      color: #666;
+      line-height: 1.6;
+    }
+
+    footer p {
+      margin-bottom: 6px;
+    }
+
+    /* 반응형 */
+    @media (max-width: 768px) {
+      nav ul {
+        gap: 20px;
+      }
+      .main-banner {
+        height: 300px;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>leedongchan</h1>
-  <img src="1502.png" alt="leedongchan">
+
+  <!-- 로고 -->
+  <header>HYPERDRAMA</header>
+
+  <!-- 1단 네비게이션 -->
+  <nav>
+    <ul>
+      <li><a href="join.html">JOIN</a></li>
+      <li><a href="login.html">LOGIN</a></li>
+      <li><a href="mypage.html">MY PAGE</a></li>
+      <li><a href="cart.html">CART</a></li>
+    </ul>
+  </nav>
+
+  <!-- 2단 네비게이션 -->
+  <nav>
+    <ul>
+      <li><a href="about.html">ABOUT</a></li>
+      <li><a href="work.html">WORK</a></li>
+    </ul>
+  </nav>
+
+  <!-- 3단 네비게이션 + 검색창 -->
+  <nav>
+    <ul>
+      <li><a href="new.html">NEW ARRIVAL</a></li>
+      <li><a href="shop.html">SHOP</a></li>
+      <li><a href="outwear.html">OUTWEAR</a></li>
+      <li><a href="top.html">TOP</a></li>
+      <li><a href="bottom.html">BOTTOM</a></li>
+      <li><a href="shoe.html">SHOE</a></li>
+      <li><a href="acc.html">ACC</a></li>
+      <li>
+        <div class="search-bar">
+          <input type="text" placeholder="Search...">
+          <button>🔍</button>
+        </div>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- 메인 이미지 -->
+  <div class="main-banner"></div>
+
+  <!-- 하단 정보 -->
+  <footer>
+    <p>📞 010-1234-5678</p>
+    <p>🕓 MON - FRI : 11:00 - 20:00 | SAT - SUN : 12:00 - 19:00</p>
+    <p>© 2025 HYPERDRAMA. All Rights Reserved.</p>
+  </footer>
+
 </body>
 </html>
