@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>HYPERDRAMA</title>
 
-<!-- Pretendard Variable -->
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css" rel="stylesheet">
 
@@ -26,26 +25,35 @@ body{
   align-items:center;
   -webkit-font-smoothing:antialiased;
   -moz-osx-font-smoothing:grayscale;
-  padding-top:10px;
+  padding-top:0;
+  line-height:1.2; /* 전체 폰트 줄간격 조정 */
 }
 
 /* ===== 상단 로고와 검색 ===== */
 header{
   width:100%;
   display:flex;
-  justify-content:space-between;
+  justify-content:center; /* 중앙 배치 */
   align-items:flex-start;
-  padding:10px 8%;
+  padding:10px 0 0 0; /* 최상단에 붙임 */
+  position: relative;
 }
 
+header a{
+  display:block;
+}
 header img{
-  width:540px; /* 2배 크기 */
+  width:1080px; /* 2배 크기 */
+  max-width:90%;
   height:auto;
   cursor:pointer;
 }
 
 /* 검색창 오른쪽 상단 */
 .search-bar{
+  position:absolute;
+  right:8%;
+  top:20px;
   font-size:13px;
   font-weight:400;
 }
@@ -55,6 +63,8 @@ header img{
   font-weight:500;
   border-bottom:1px solid var(--brand);
   padding-bottom:2px;
+  display:inline-block;
+  width:calc(1em*5); /* 밑줄 길이 5배 */
 }
 .search-bar a:hover{
   color:var(--accent);
@@ -62,9 +72,9 @@ header img{
 
 /* ===== 네비게이션 ===== */
 nav{
-  width:100%;
+  width:90%;
   display:flex;
-  justify-content:center;
+  justify-content:flex-start; /* 로고 기준 왼쪽 정렬 */
   align-items:center;
   flex-wrap:wrap;
   margin-top:10px;
@@ -73,8 +83,8 @@ nav{
 nav ul{
   list-style:none;
   display:flex;
-  gap:28px; /* 줄 간격 조절 */
-  padding:4px 0;
+  gap:20px; /* 줄 간격 조절 */
+  padding:2px 0;
 }
 
 nav a{
@@ -97,7 +107,7 @@ nav a::after{
   width:0%;
   height:1px;
   background:var(--brand);
-  transition:width 0.35s ease;
+  transition:width 0.5s ease; /* 부드러운 점→밑줄 */
   transform-origin:left;
 }
 
@@ -105,16 +115,26 @@ nav a::after{
 nav ul:hover a{
   color:var(--muted);
 }
-nav ul a:hover{
+
+/* 개별 hover 시 밑줄 및 색상 복원 */
+nav ul li a:hover{
   color:var(--brand);
 }
-nav ul a:hover::after{
+nav ul li a:hover::after{
+  width:100%;
+}
+
+/* Shop만 특별 처리: 점→부드러운 밑줄 */
+nav ul li a.shop::after{
+  width:0%;
+}
+nav ul li a.shop:hover::after{
   width:100%;
 }
 
 /* ===== 메인 배너 ===== */
 .main-banner{
-  margin:40px 0;
+  margin:30px 0;
   width:90%;
   max-width:1200px;
   height:600px;
@@ -136,15 +156,17 @@ footer{
 
 /* ===== 반응형 ===== */
 @media(max-width:768px){
-  header img{width:270px}
+  header img{width:540px}
   .main-banner{height:320px}
-  nav ul{gap:18px}
+  nav ul{gap:12px}
+  .search-bar{top:15px; right:5%}
 }
 </style>
 </head>
 <body>
+
 <header>
-  <a href="https://leedongchan.site">
+  <a href="http://leedongchan.site">
     <img src="1444.png" alt="HYPERDRAMA 로고">
   </a>
   <div class="search-bar">
@@ -171,7 +193,7 @@ footer{
 <nav>
   <ul>
     <li><a href="new.html">NEW ARRIVAL</a></li>
-    <li><a href="shop.html">SHOP</a></li>
+    <li><a href="shop.html" class="shop">SHOP</a></li>
     <li><a href="outwear.html">OUTWEAR</a></li>
     <li><a href="top.html">TOP</a></li>
     <li><a href="bottom.html">BOTTOM</a></li>
@@ -187,5 +209,6 @@ footer{
   <p>🕓 MON-FRI : 11:00 - 20:00 | SAT-SUN : 12:00 - 19:00</p>
   <p>© 2025 HYPERDRAMA</p>
 </footer>
+
 </body>
 </html>
