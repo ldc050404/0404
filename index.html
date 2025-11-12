@@ -15,17 +15,15 @@
   </script>
 
   <style>
-    /* 기본 스타일 */
     body {
       display: flex;
       flex-direction: column;
-      justify-content: flex-start; /* 상단부터 배치 */
       align-items: center;
       margin: 0;
       padding: 20px;
       background-color: #f0f0f0;
       font-family: Arial, sans-serif;
-      min-height: 100vh; /* 최소 화면 높이 */
+      min-height: 100vh;
     }
 
     h1 {
@@ -35,40 +33,32 @@
       text-align: center;
     }
 
-    /* 사진 컨테이너 */
     .photo-container {
-      position: relative;
       width: 80%;
       max-width: 800px;
-      height: auto; /* 사진 크기에 맞춤 */
-      max-height: 90vh; /* 화면보다 너무 크면 제한 */
-      overflow: hidden;
       margin-bottom: 20px;
+      position: relative;
     }
 
-    /* 사진 공통 스타일 */
     .photo-container img {
       width: 100%;
       height: auto;
-      max-height: 90vh;
-      object-fit: contain; /* 사진 비율 유지 */
+      object-fit: contain;
       border: 2px solid #ccc;
       border-radius: 8px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      position: absolute;
-      top: 0;
-      left: 0;
       transition: opacity 1s ease;
+      display: block;
       opacity: 1;
+      position: relative; /* 절대 위치 제거 */
     }
 
-    /* 안 보이는 사진 */
     .photo-container img.inactive {
       opacity: 0;
-      pointer-events: none;
+      position: relative; /* 절대 위치 제거 */
+      display: block;     /* 항상 공간 차지 */
     }
 
-    /* 버튼 스타일 */
     button {
       padding: 12px 24px;
       font-weight: bold;
@@ -82,22 +72,12 @@
       margin-bottom: 40px;
     }
 
-    button:hover {
-      background-color: #0056b3;
-    }
+    button:hover { background-color: #0056b3; }
 
-    /* 모바일 대응 */
     @media (max-width: 700px) {
-      .photo-container {
-        width: 95%;
-      }
-      h1 {
-        font-size: 1.5em;
-      }
-      button {
-        padding: 10px 20px;
-        font-size: 0.9em;
-      }
+      .photo-container { width: 95%; }
+      h1 { font-size: 1.5em; }
+      button { padding: 10px 20px; font-size: 0.9em; }
     }
   </style>
 </head>
@@ -117,15 +97,20 @@
   const photo2 = document.getElementById('photo2');
 
   function switchPhoto() {
-    // 페이드 전환
-    photo1.classList.toggle('inactive');
-    photo2.classList.toggle('inactive');
+    // 부드럽게 페이드 전환
+    if(photo1.style.opacity === "0") {
+      photo1.style.opacity = "1";
+      photo2.style.opacity = "0";
+    } else {
+      photo1.style.opacity = "0";
+      photo2.style.opacity = "1";
+    }
   }
 
-  // 페이지 로드 시 첫 번째 사진 보이도록
+  // 페이지 로드 시 첫 번째 사진 보이기
   window.onload = () => {
-    photo1.classList.remove('inactive');
-    photo2.classList.add('inactive');
+    photo1.style.opacity = "1";
+    photo2.style.opacity = "0";
   };
 </script>
 
