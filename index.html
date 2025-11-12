@@ -1,182 +1,5 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>HYPERDRAMA</title>
-
-<link rel="icon" type="image/png" href="1111.png">
-<link rel="preconnect" href="https://cdn.jsdelivr.net">
-<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css" rel="stylesheet">
-
-<style>
-:root {
-  --brand:#111;
-  --muted:#999;
-  --accent:#000;
-}
-
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;background:#fff}
-body{
-  font-family:'Pretendard Variable',system-ui,-apple-system,'Segoe UI',Roboto,'Noto Sans KR','Helvetica Neue',Arial;
-  color:var(--brand);
-  display:flex;
-  flex-direction:column;
-  align-items:flex-start;
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
-  padding-top:0;
-  line-height:1.05; /* 전체 줄간격 조금 줄임 */
-  font-size:0.9em; /* 전체 폰트 1정도 낮춤 */
-  min-height:100vh;
-  position:relative;
-}
-
-/* ===== 상단 로고 ===== */
-header{
-  width:100%;
-  text-align:left;
-  position:relative;
-  z-index:2;
-  margin-top:0; 
-}
-
-header a{
-  display:inline-block;
-}
-header img{
-  width:450px; /* 1444.png 1.5배 */
-  max-width:90%;
-  height:auto;
-  cursor:pointer;
-}
-
-/* ===== SEARCH 오른쪽 상단 ===== */
-.search-bar{
-  position:absolute;
-  right:3cm; 
-  top:0.7cm;
-  font-size:13px;
-  font-weight:400;
-  z-index:3;
-}
-.search-bar a{
-  text-decoration:none;
-  color:var(--brand);
-  font-weight:500;
-  border-bottom:none; /* 밑줄 제거 */
-  display:inline-block;
-  width:170px;
-  transition: color 0.3s ease;
-}
-.search-bar a:hover{
-  color:#777; /* 회색 페이드 */
-}
-
-/* ===== 네비게이션 ===== */
-nav{
-  width:100%;
-  display:flex;
-  justify-content:flex-start; 
-  align-items:center;
-  flex-wrap:wrap;
-  margin-top:10px;
-  padding-left:1cm; /* 로고 기준 왼쪽 정렬 */
-}
-
-nav ul{
-  list-style:none;
-  display:flex;
-  gap:0.68cm; /* 가로 간격 */
-  padding:0.2cm 0; /* 세로 줄 간격 */
-}
-
-nav a{
-  text-decoration:none;
-  color:var(--brand);
-  font-size:12px;
-  letter-spacing:0.4px;
-  font-weight:500;
-  line-height:1.05;
-  position:relative;
-  transition: color 0.3s;
-}
-
-/* 밑줄 점 → 길게 자연스러운 애니메이션 (SEARCH 제외) */
-nav a.underline-effect::after{
-  content:"";
-  position:absolute;
-  left:0;
-  bottom:-3px;
-  width:0;
-  height:1px;
-  background:var(--brand);
-  transition: width 0.5s ease;
-}
-nav a.underline-effect:hover::after{
-  width:100%;
-}
-
-/* 커서 올리면 나머지 글자 회색 */
-nav a:hover ~ a, nav a:hover ~ a.underline-effect{
-  color:#aaa;
-}
-
-/* ===== 메인 이미지 0000.png ===== */
-.main-image-container{
-  width:100%;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  flex-shrink:0;
-  overflow-x:hidden;
-  overflow-y:auto;
-  max-height:80vh;
-  margin-top:1cm;
-}
-.main-image{
-  width:auto;
-  max-width:90%;
-  height:auto;
-  display:block;
-  opacity:0;
-  transition: opacity 2s ease;
-}
-
-/* ===== 푸터 ===== */
-footer{
-  width:100%;
-  text-align:center;
-  padding:40px 0;
-  border-top:1px solid #eee;
-  font-size:12px;
-  color:#666;
-  margin-top:auto; 
-  position:relative;
-}
-
-/* ===== 반응형 ===== */
-@media(max-width:768px){
-  header img{width:80%}
-  nav ul{gap:0.4cm}
-  .search-bar{top:0.7cm; right:1.5cm}
-}
-</style>
-</head>
-<body>
-
-<header>
-  <a href="http://leedongchan.site">
-    <img src="1444.png" alt="HYPERDRAMA 로고">
-  </a>
-  <div class="search-bar">
-    <a href="search.html">SEARCH</a>
-  </div>
-</header>
-
 <nav>
-  <ul>
+  <ul style="margin-bottom:0.3cm;">
     <li><a href="join.html" class="underline-effect">JOIN</a></li>
     <li><a href="login.html" class="underline-effect">LOGIN</a></li>
     <li><a href="shop.html" class="underline-effect">SHOP</a></li>
@@ -184,6 +7,26 @@ footer{
 </nav>
 
 <nav>
-  <ul>
+  <ul style="margin-bottom:0.3cm;">
     <li><a href="mypage.html" class="underline-effect">MY PAGE</a></li>
     <li><a href="cart.html" class="underline-effect">CART</a></li>
+  </ul>
+</nav>
+
+<nav>
+  <ul style="margin-bottom:0.3cm;">
+    <li><a href="about.html" class="underline-effect">ABOUT</a></li>
+    <li><a href="work.html" class="underline-effect">WORK</a></li>
+  </ul>
+</nav>
+
+<nav>
+  <ul style="margin-bottom:0.3cm;">
+    <li><a href="new.html" class="underline-effect">NEW ARRIVAL</a></li>
+    <li><a href="outwear.html" class="underline-effect">OUTWEAR</a></li>
+    <li><a href="top.html" class="underline-effect">TOP</a></li>
+    <li><a href="bottom.html" class="underline-effect">BOTTOM</a></li>
+    <li><a href="shoe.html" class="underline-effect">SHOE</a></li>
+    <li><a href="acc.html" class="underline-effect">ACC</a></li>
+  </ul>
+</nav>
