@@ -55,7 +55,7 @@ header img{
 /* ===== SEARCH & CART 오른쪽 상단 ===== */
 .search-bar{
   position:absolute;
-  right:3cm; 
+  left:3cm; /* 왼쪽으로 3cm 이동 */
   top:0.7cm;
   font-size:13px;
   font-weight:400;
@@ -63,6 +63,7 @@ header img{
   display:flex;
   align-items:center;
   gap:0.6cm;
+  justify-content:flex-start; /* 왼쪽 정렬 */
 }
 
 .search-bar a.text-link{
@@ -71,17 +72,18 @@ header img{
   font-weight:500;
   padding-bottom:2px;
   display:inline-block;
-  position:relative; /* ::after 사용 위해 추가 */
+  position:relative; /* ::after 밑줄용 */
   transition: color 0.3s ease;
+  text-align:left; /* 텍스트 왼쪽 정렬 */
 }
 
-/* 밑줄 길이 1cm 늘리기 */
+/* 밑줄 3cm 늘리기 */
 .search-bar a.text-link::after{
   content:"";
   position:absolute;
-  left:-0.5cm; /* 왼쪽으로 0.5cm 확장 */
+  left:-1.5cm; /* 왼쪽으로 1.5cm 확장 */
   bottom:0;
-  width:calc(100% + 1cm); /* 오른쪽으로 1cm 확장 */
+  width:calc(100% + 3cm); /* 오른쪽으로 3cm 확장 */
   height:1px;
   background:var(--brand);
 }
@@ -182,7 +184,7 @@ footer{
 @media(max-width:768px){
   header img{width:80%}
   nav ul{gap:0.4cm}
-  .search-bar{top:0.7cm; right:1.5cm; gap:0.4cm;}
+  .search-bar{top:0.7cm; left:1.5cm; gap:0.4cm;} /* 반응형에도 왼쪽 이동 적용 */
   .search-bar a.cart-link img{width:20px;height:20px;}
 }
 </style>
