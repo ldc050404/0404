@@ -55,7 +55,7 @@ header img{
 /* ===== SEARCH & CART 오른쪽 상단 ===== */
 .search-bar{
   position:absolute;
-  left:3cm; /* 왼쪽으로 3cm 이동 */
+  right:3cm; /* 오른쪽 상단 */
   top:0.7cm;
   font-size:13px;
   font-weight:400;
@@ -73,16 +73,16 @@ header img{
   display:inline-block;
   position:relative; /* ::after 밑줄용 */
   transition: color 0.3s ease;
-  text-align:left; /* 텍스트 왼쪽 정렬 */
+  text-align:left; /* 밑줄 기준 왼쪽 정렬 */
 }
 
 /* 밑줄 기준으로 길이 3cm 늘리기 */
 .search-bar a.text-link::after{
   content:"";
   position:absolute;
-  left:0; /* 밑줄 기준 왼쪽 맞춤 */
+  left:0; /* 밑줄 왼쪽 기준 */
   bottom:0;
-  width:calc(100% + 3cm); /* 3cm 확장 */
+  width:calc(100% + 3cm); /* 오른쪽으로 3cm 확장 */
   height:1px;
   background:var(--brand);
 }
@@ -183,7 +183,7 @@ footer{
 @media(max-width:768px){
   header img{width:80%}
   nav ul{gap:0.4cm}
-  .search-bar{top:0.7cm; left:1.5cm; gap:0.4cm;}
+  .search-bar{top:0.7cm; right:1.5cm; gap:0.4cm;}
   .search-bar a.cart-link img{width:20px;height:20px;}
 }
 </style>
