@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>leedoŋɢcɧan</title>
 
-  <!-- 파비콘 설정 (같은 폴더 안의 1502.png 사용) -->
+  <!-- 파비콘 설정 -->
   <link rel="icon" type="image/png" href="1502.png">
 
   <!-- Google Analytics -->
@@ -27,21 +27,72 @@
       background-color: #f0f0f0;
       font-family: Arial, sans-serif;
     }
-    img {
-      max-width: 90%;
-      max-height: 80vh;
-      border: 2px solid #ccc;
-      border-radius: 8px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    }
     h1 {
       margin-bottom: 20px;
       color: #333;
     }
+    .photo-container {
+      position: relative;
+      width: 80%;
+      max-width: 600px;
+      height: auto;
+    }
+    img {
+      width: 100%;
+      max-height: 80vh;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      position: absolute;
+      top: 0;
+      left: 0;
+      transition: opacity 1s ease;
+      opacity: 1;
+    }
+    img.hidden {
+      opacity: 0;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-weight: bold;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
   </style>
 </head>
 <body>
-  <h1>leedongchan</h1>
-  <img src="1502.png" alt="leedongchan">
+
+<h1>leedongchan</h1>
+
+<div class="photo-container">
+  <img id="photo1" src="1502.png" alt="photo1">
+  <img id="photo2" src="1333.png" alt="photo2" class="hidden">
+</div>
+
+<button onclick="switchPhoto()">사진 바꾸기</button>
+
+<script>
+function switchPhoto() {
+  const photo1 = document.getElementById('photo1');
+  const photo2 = document.getElementById('photo2');
+
+  if (photo1.classList.contains('hidden')) {
+    photo1.classList.remove('hidden');
+    photo2.classList.add('hidden');
+  } else {
+    photo1.classList.add('hidden');
+    photo2.classList.remove('hidden');
+  }
+}
+</script>
+
 </body>
 </html>
