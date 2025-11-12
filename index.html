@@ -1,75 +1,84 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
+<meta charset="utf-8" />
 <title>leedongchan</title>
 <link rel="icon" type="image/png" href="1502.png">
 <style>
+  :root { --btn-color: #ff4d4d; --btn-hover: #cc0000; }
+
+  html,body {
+    height:100%;
+    margin:0;
+  }
+
   body {
-    margin: 0;
     font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 60px;
-    min-height: 100vh;
+    background:#f0f0f0;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding-top:60px;
+    box-sizing:border-box;
   }
 
-  h1 {
-    font-size: 2em;
-    color: #333;
-    margin-bottom: 20px;
-    text-align: center;
-    transition: opacity 0.5s ease;
+  #title {
+    font-size:2em;
+    color:#333;
+    margin:0 0 20px 0;
+    transition:opacity .45s ease;
+    text-align:center;
   }
 
-  .photo-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    max-width: 1200px;
-    margin-bottom: 40px;
-    flex-direction: column;
+  /* 컨테이너: 중앙 정렬, 크기는 JS가 계산해서 고정 */
+  .photo-frame {
     position: relative;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow:hidden;
+    background:transparent;
+    border-radius:8px;
   }
 
-  .photo-container img {
-    max-width: 100%;
-    width: auto;
-    height: auto;
-    display: block;
-    border-radius: 8px;
-    border: 2px solid #ccc;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    transition: opacity 0.8s ease;
-    opacity: 1;
+  /* 이미지: 프레임에 딱 맞게 100%/100%로 하고 object-fit: contain으로 원본 비율 유지 */
+  .photo-frame img {
+    position:absolute;
+    inset:0; /* top:0;right:0;bottom:0;left:0 */
+    width:100%;
+    height:100%;
+    object-fit:contain; /* 원본 비율 유지, 컨테이너에 맞춰 축소 */
+    transition:opacity .8s ease;
+    opacity:1;
+    display:block;
+    pointer-events:none;
   }
 
-  .photo-container img.inactive {
-    opacity: 0;
-    pointer-events: none;
+  .photo-frame img.inactive {
+    opacity:0;
   }
 
+  /* 버튼: 화면 오른쪽 상단 고정 */
   #switchBtn {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    padding: 12px 20px;
-    font-weight: bold;
-    font-size: 1em;
-    background-color: #ff4d4d;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    z-index: 1000;
-    transition: background-color 0.2s;
+    position:fixed;
+    top:20px;
+    right:20px;
+    z-index:2000;
+    padding:12px 20px;
+    background:var(--btn-color);
+    color:white;
+    border:none;
+    border-radius:6px;
+    font-weight:700;
+    cursor:pointer;
+    transition:background .15s ease;
   }
+  #switchBtn:hover { background:var(--btn-hover); }
 
-  #switchBtn:hover {
-    background-color: #cc0000;
+  /* 반응형 안전장치 */
+  @media (max-width:700px){
+    #title { font-size:1.4em; }
+    #switchBtn { padding:10px 16px; }
   }
 </style>
 </head>
@@ -77,62 +86,126 @@
 
 <h1 id="title">leedongchan</h1>
 
-<div class="photo-container">
-  <img id="photo1" src="1502.png" alt="photo1">
-  <img id="photo2" src="1333.png" alt="photo2" class="inactive">
+<!-- 프레임: JS가 width/height(픽셀)를 설정해서 두 이미지가 같은 박스 안에 들어가게 함 -->
+<div id="frame" class="photo-frame" aria-live="polite" aria-atomic="true">
+  <img id="img1" src="1502.png" alt="이미지 1 (1502)">
+  <img id="img2" src="1333.png" alt="이미지 2 (1333)" class="inactive">
 </div>
 
-<button id="switchBtn">change</button>
+<button id="switchBtn" type="button">change</button>
 
 <script>
-const photo1 = document.getElementById('photo1');
-const photo2 = document.getElementById('photo2');
+/*
+  동작 요약:
+  1) 두 이미지가 로드될 때까지 기다린 뒤(또는 로드 실패 시에도 처리),
+     자연 크기(naturalWidth/naturalHeight)를 참조하여 '공통 프레임 크기'를 계산.
+     (두 이미지의 자연 크기 중 큰 값을 기준으로, 화면 폭의 90% 이내로 스케일)
+  2) 프레임(width/height)을 픽셀 단위로 고정 -> 전환시 자리(위치) 변화 없음.
+  3) 클릭 시 animating 플래그로 중복 방지, 현재 보이는 이미지를 fade out, 다른 이미지를 fade in.
+  4) 제목은 이미지 전환과 거의 동시에 (약간의 짧은 딜레이) 텍스트 변경 + fade in 처리.
+*/
+
+const img1 = document.getElementById('img1');
+const img2 = document.getElementById('img2');
+const frame = document.getElementById('frame');
 const title = document.getElementById('title');
 const btn = document.getElementById('switchBtn');
 
 let showingFirst = true;
 let animating = false;
 
+// 이미지 로드 대기 Promise
+function waitImageLoad(img) {
+  return new Promise(resolve => {
+    if (img.complete && img.naturalWidth) return resolve(true);
+    img.addEventListener('load', () => resolve(true), { once: true });
+    img.addEventListener('error', () => resolve(false), { once: true });
+  });
+}
+
+// 프레임 크기 계산 및 적용
+async function setupFrame() {
+  // 기다려서 natural sizes 획득
+  await Promise.all([waitImageLoad(img1), waitImageLoad(img2)]);
+  // natural sizes (fallback to displayed sizes if unavailable)
+  const w1 = img1.naturalWidth || img1.width || 800;
+  const h1 = img1.naturalHeight || img1.height || 600;
+  const w2 = img2.naturalWidth || img2.width || 800;
+  const h2 = img2.naturalHeight || img2.height || 600;
+
+  // 두 이미지 중 큰 natural size 사용 (폭과 높이 개별 비교)
+  const maxNaturalW = Math.max(w1, w2);
+  const maxNaturalH = Math.max(h1, h2);
+
+  // 화면에 맞게 스케일 (화면 폭의 90% 이내, 화면 높이의 80% 이내)
+  const maxAllowedW = Math.floor(window.innerWidth * 0.9);
+  const maxAllowedH = Math.floor(window.innerHeight * 0.8);
+
+  const scale = Math.min(1, maxAllowedW / maxNaturalW, maxAllowedH / maxNaturalH);
+
+  const frameW = Math.max(200, Math.round(maxNaturalW * scale));
+  const frameH = Math.max(120, Math.round(maxNaturalH * scale));
+
+  // 픽셀값으로 고정 (이로써 전환 시 위치/크기 변화 없음)
+  frame.style.width = frameW + 'px';
+  frame.style.height = frameH + 'px';
+}
+
+// 리사이즈에도 대응: 프레임 재계산
+let resizeTimer = null;
+function onResize() {
+  clearTimeout(resizeTimer);
+  // 재계산: 약간의 디바운스
+  resizeTimer = setTimeout(async () => {
+    await setupFrame();
+  }, 120);
+}
+
+// 전환 함수 (한 번 클릭으로 동작)
 function switchContent() {
-  if(animating) return;
+  if (animating) return;
   animating = true;
 
-  // 사진 전환
-  if(showingFirst) {
-    photo1.classList.add('inactive');
-    photo2.classList.remove('inactive');
-    fadeTitle('hongseulgi');
+  // 현재 보이는 것을 fade out -> 다른 것을 fade in (교차 페이드)
+  if (showingFirst) {
+    img1.classList.add('inactive'); // fade out
+    img2.classList.remove('inactive'); // fade in
+    // 제목은 거의 동시에 변경 (짧은 딜레이로 fade 효과 유지)
+    title.style.opacity = 0;
+    setTimeout(() => {
+      title.textContent = 'hongseulgi';
+      title.style.opacity = 1;
+    }, 50);
   } else {
-    photo2.classList.add('inactive');
-    photo1.classList.remove('inactive');
-    fadeTitle('leedongchan');
+    img2.classList.add('inactive');
+    img1.classList.remove('inactive');
+    title.style.opacity = 0;
+    setTimeout(() => {
+      title.textContent = 'leedongchan';
+      title.style.opacity = 1;
+    }, 50);
   }
 
   showingFirst = !showingFirst;
 
+  // 애니메이션 시간(0.8s) 후 클릭 허용
   setTimeout(() => {
     animating = false;
-  }, 800); // CSS transition과 동기화
+  }, 850);
 }
 
-function fadeTitle(newText) {
-  title.style.opacity = 0;
-  setTimeout(() => {
-    title.textContent = newText;
-    title.style.opacity = 1;
-  }, 50);
-}
-
-// 초기 상태
-window.addEventListener('load', () => {
-  showingFirst = true;
-  photo1.classList.remove('inactive');
-  photo2.classList.add('inactive');
+// 초기 설정 실행
+(async function init() {
+  await setupFrame();
+  // 초기 노출 세팅: img1 보임, img2 숨김
+  img1.classList.remove('inactive');
+  img2.classList.add('inactive');
   title.textContent = 'leedongchan';
-});
 
-btn.addEventListener('click', switchContent);
+  // 이벤트 바인딩
+  btn.addEventListener('click', switchContent);
+  window.addEventListener('resize', onResize);
+})();
 </script>
-
 </body>
 </html>
