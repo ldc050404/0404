@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>HYPERDRAMA</title>
 
+<link rel="icon" type="image/png" href="1111.png">
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css" rel="stylesheet">
 
@@ -33,9 +34,9 @@ body{
 header{
   width:100%;
   display:flex;
-  justify-content:center; /* 중앙 배치 */
+  justify-content:center; /* 완전 중앙 */
   align-items:flex-start;
-  padding:10px 0 0 0; /* 최상단에 붙임 */
+  padding:5px 0 0 0; /* 최상단에 붙임 */
   position: relative;
 }
 
@@ -43,8 +44,8 @@ header a{
   display:block;
 }
 header img{
-  width:1080px; /* 2배 크기 */
-  max-width:90%;
+  width:720px; /* 3/2로 줄임 */
+  max-width:80%;
   height:auto;
   cursor:pointer;
 }
@@ -65,9 +66,21 @@ header img{
   padding-bottom:2px;
   display:inline-block;
   width:calc(1em*5); /* 밑줄 길이 5배 */
+  transition: color .25s;
 }
 .search-bar a:hover{
   color:var(--accent);
+}
+.search-bar a::after{
+  content:"";
+  display:block;
+  width:0%;
+  height:1px;
+  background:var(--brand);
+  transition:width 0.5s ease;
+}
+.search-bar a:hover::after{
+  width:100%;
 }
 
 /* ===== 네비게이션 ===== */
@@ -83,7 +96,7 @@ nav{
 nav ul{
   list-style:none;
   display:flex;
-  gap:20px; /* 줄 간격 조절 */
+  gap:15px; /* 줄 간격 줄임 */
   padding:2px 0;
 }
 
@@ -107,7 +120,7 @@ nav a::after{
   width:0%;
   height:1px;
   background:var(--brand);
-  transition:width 0.5s ease; /* 부드러운 점→밑줄 */
+  transition:width 0.5s ease;
   transform-origin:left;
 }
 
@@ -115,8 +128,6 @@ nav a::after{
 nav ul:hover a{
   color:var(--muted);
 }
-
-/* 개별 hover 시 밑줄 및 색상 복원 */
 nav ul li a:hover{
   color:var(--brand);
 }
@@ -124,7 +135,7 @@ nav ul li a:hover::after{
   width:100%;
 }
 
-/* Shop만 특별 처리: 점→부드러운 밑줄 */
+/* Shop 특별 처리 */
 nav ul li a.shop::after{
   width:0%;
 }
@@ -156,9 +167,9 @@ footer{
 
 /* ===== 반응형 ===== */
 @media(max-width:768px){
-  header img{width:540px}
+  header img{width:360px}
   .main-banner{height:320px}
-  nav ul{gap:12px}
+  nav ul{gap:10px}
   .search-bar{top:15px; right:5%}
 }
 </style>
@@ -170,7 +181,7 @@ footer{
     <img src="1444.png" alt="HYPERDRAMA 로고">
   </a>
   <div class="search-bar">
-    <a href="search.html">Search</a>
+    <a href="search.html">SEARCH</a>
   </div>
 </header>
 
