@@ -5,34 +5,128 @@
   <title>leedongchan</title>
   <link rel="icon" type="image/png" href="1502.png">
 
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-F1XZ9V7V54"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-F1XZ9V7V54');
+  </script>
+
   <style>
+    /* 전체 페이지 스타일 */
     body {
       margin: 0;
-      padding: 0;
       font-family: Arial, sans-serif;
       background-color: #f0f0f0;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      min-height: 100vh;
+      padding-top: 20px;
     }
 
     h1 {
-      margin: 20px 0;
+      margin-bottom: 20px;
       color: #333;
       font-size: 2em;
       text-align: center;
     }
 
+    /* 사진 컨테이너 */
     .photo-container {
       position: relative;
       width: 90%;
       max-width: 1200px;
-      height: auto; /* 이미지 비율에 따라 높이 자동 */
+      margin-bottom: 40px;
+      /* 높이는 이미지 크기에 맞게 자동 */
     }
 
-    /* 사진 */
     .photo-container img {
       width: 100%;
+      height: auto;
       display: block;
-      border-r
+      object-fit: contain;
+      border-radius: 8px;
+      border: 2px solid #ccc;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      position: absolute;
+      top: 0;
+      left: 0;
+      transition: opacity 1s ease;
+      opacity: 1;
+    }
+
+    .photo-container img.inactive {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* 버튼 스타일 */
+    #switchBtn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 12px 20px;
+      font-weight: bold;
+      font-size: 1em;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: 0.2s;
+      z-index: 1000; /* 사진 위에 올라오도록 */
+    }
+
+    #switchBtn:hover {
+      background-color: #0056b3;
+    }
+
+    /* 모바일 대응 */
+    @media (max-width: 700px) {
+      .photo-container { width: 95%; }
+      h1 { font-size: 1.5em; }
+      #switchBtn { padding: 10px 16px; font-size: 0.9em; }
+    }
+  </style>
+</head>
+<body>
+
+<h1>leedongchan</h1>
+
+<div class="photo-container">
+  <img id="photo1" src="1502.png" alt="photo1">
+  <img id="photo2" src="1333.png" alt="photo2" class="inactive">
+</div>
+
+<button id="switchBtn">사진 바꾸기</button>
+
+<script>
+  const photo1 = document.getElementById('photo1');
+  const photo2 = document.getElementById('photo2');
+  const btn = document.getElementById('switchBtn');
+
+  let showingFirst = true;
+
+  btn.addEventListener('click', () => {
+    if(showingFirst){
+      photo1.classList.add('inactive');
+      photo2.classList.remove('inactive');
+    } else {
+      photo2.classList.add('inactive');
+      photo1.classList.remove('inactive');
+    }
+    showingFirst = !showingFirst;
+  });
+
+  // 초기 상태
+  window.onload = () => {
+    photo1.classList.remove('inactive');
+    photo2.classList.add('inactive');
+  };
+</script>
+
+</body>
+</html>
