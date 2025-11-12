@@ -62,7 +62,7 @@ header img{
   z-index:3;
   display:flex;
   align-items:center;
-  gap:0.5cm;
+  gap:0.3cm; /* SEARCH와 아이콘 간격 */
 }
 .search-bar a{
   text-decoration:none;
@@ -71,7 +71,6 @@ header img{
   border-bottom:1px solid var(--brand);
   padding-bottom:2px;
   display:inline-block;
-  width:90px;
   transition: color 0.3s ease;
 }
 .search-bar a:hover{
@@ -169,8 +168,7 @@ footer{
 @media(max-width:768px){
   header img{width:80%}
   nav ul{gap:0.4cm}
-  .search-bar{top:0.7cm; right:1.5cm}
-  .search-bar a{width:70px;}
+  .search-bar{top:0.7cm; right:1.5cm; gap:0.2cm;}
   .search-bar img{width:20px;height:20px;}
 }
 </style>
