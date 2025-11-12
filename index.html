@@ -27,8 +27,8 @@ body{
   -webkit-font-smoothing:antialiased;
   -moz-osx-font-smoothing:grayscale;
   padding-top:0.2cm;
-  line-height:1.05; /* 전체 폰트 줄간격 조금 줄임 */
-  font-size:0.9em; /* 전체 폰트 1정도 낮춤 */
+  line-height:1.05;
+  font-size:0.9em;
   min-height:100vh;
   position:relative;
 }
@@ -46,7 +46,7 @@ header a{
   display:inline-block;
 }
 header img{
-  width:450px; /* 1444.png 1.5배 */
+  width:450px;
   max-width:90%;
   height:auto;
   cursor:pointer;
@@ -72,7 +72,7 @@ header img{
   transition: color 0.3s ease;
 }
 .search-bar a:hover{
-  color:#777; /* 회색 페이드 */
+  color:#777;
 }
 
 /* ===== 네비게이션 ===== */
@@ -83,14 +83,14 @@ nav{
   align-items:center;
   flex-wrap:wrap;
   margin-top:10px;
-  padding-left:1cm; /* 로고 기준 왼쪽 정렬 */
+  padding-left:1cm;
 }
 
 nav ul{
   list-style:none;
   display:flex;
-  gap:0.68cm; /* 가로 간격 0.68cm */
-  margin-bottom:0.3cm; /* 줄 간격 0.3cm 고정 */
+  gap:0.68cm;
+  margin-bottom:0.2cm; /* 줄 간격 0.2cm로 고정 */
 }
 
 nav a{
@@ -104,7 +104,6 @@ nav a{
   transition: color 0.3s;
 }
 
-/* 밑줄 점 → 길게 자연스러운 애니메이션 (SEARCH 제외) */
 nav a.underline-effect::after{
   content:"";
   position:absolute;
@@ -119,12 +118,11 @@ nav a.underline-effect:hover::after{
   width:100%;
 }
 
-/* 커서 올리면 나머지 글자 회색 */
 nav a:hover ~ a, nav a:hover ~ a.underline-effect{
   color:#aaa;
 }
 
-/* ===== 메인 이미지 0000.png ===== */
+/* ===== 메인 이미지 ===== */
 .main-image-container{
   width:100%;
   display:flex;
@@ -220,7 +218,6 @@ footer{
 </footer>
 
 <script>
-// 0000.png 페이드인
 window.addEventListener('load', () => {
   const mainImg = document.getElementById('mainImage');
   mainImg.style.opacity = 1;
