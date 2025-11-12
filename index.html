@@ -5,154 +5,139 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>HYPERDRAMA</title>
 
-  <!-- Pretendard -->
+  <!-- Pretendard Variable -->
   <link rel="preconnect" href="https://cdn.jsdelivr.net">
   <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css" rel="stylesheet">
 
   <style>
     :root {
-      --brand: #111;
-      --muted: #aaa;
-      --accent: #d90000;
+      --brand:#111;
+      --muted:#999;
+      --accent:#000;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { height: 100%; }
-
-    body {
-      font-family: 'Pretendard', system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans KR', Arial, sans-serif;
-      color: var(--brand);
-      background: #fff;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      padding-left: 10%;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%;background:#fff}
+    body{
+      font-family:'Pretendard Variable',system-ui,-apple-system,'Segoe UI',Roboto,'Noto Sans KR','Helvetica Neue',Arial;
+      color:var(--brand);
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
     }
 
-    /* ===== 로고 ===== */
-    header {
-      width: auto;
-      margin-top: 4px;
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
+    header{
+      width:100%;
+      display:flex;
+      justify-content:flex-start;
+      align-items:flex-start;
+      padding-top:10px;
+      padding-left:8%;
     }
 
-    header img {
-      width: 280px; /* 로고 크기 조정 */
-      height: auto;
-      display: block;
+    header img{
+      width:270px; /* 기존보다 1.8배 크기 */
+      height:auto;
     }
 
-    /* ===== 네비게이션 ===== */
-    nav {
-      width: 100%;
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      flex-wrap: wrap;
-      margin-left: 0;
+    nav{
+      width:100%;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      flex-wrap:wrap;
+      margin-top:20px;
     }
 
-    nav ul {
-      list-style: none;
-      display: flex;
-      gap: 36px;
-      padding: 8px 0;
+    nav ul{
+      list-style:none;
+      display:flex;
+      gap:32px;
+      padding:8px 0;
     }
 
-    nav a {
-      position: relative;
-      text-decoration: none;
-      color: var(--brand);
-      font-size: 14px;
-      letter-spacing: 1px;
-      transition: color 0.25s ease;
+    nav a{
+      position:relative;
+      text-decoration:none;
+      color:var(--brand);
+      font-size:13px; /* 1 정도 줄임 */
+      letter-spacing:0.6px;
+      font-weight:500;
+      line-height:1.1;
+      transition:color .25s ease;
     }
 
-    /* hover 시 밑줄 애니메이션 */
-    nav a::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      bottom: -3px;
-      width: 0%;
-      height: 1.5px;
-      background-color: var(--brand);
-      transition: width 0.35s ease-in-out;
-      transform-origin: left;
-      opacity: 0.8;
+    /* 밑줄 애니메이션 */
+    nav a::after{
+      content:"";
+      position:absolute;
+      left:0;
+      bottom:-3px;
+      width:0%;
+      height:1px;
+      background:var(--brand);
+      transition:width 0.35s ease;
+      transform-origin:left;
     }
 
-    nav a:hover::after {
-      width: 100%;
+    nav a:hover::after{
+      width:100%;
     }
 
-    /* 🔥 핵심 효과: 하나에 hover하면 나머지 흐려짐 */
-    nav ul:hover a {
-      color: var(--muted);
+    /* hover 시 다른 메뉴 흐리게 */
+    nav:hover a{
+      color:var(--muted);
+    }
+    nav a:hover{
+      color:var(--brand);
     }
 
-    nav ul a:hover {
-      color: var(--brand);
+    /* Search 영역 */
+    .search-bar{
+      position:relative;
+      font-size:13px;
+      font-weight:400;
+      cursor:text;
+    }
+    .search-bar::after{
+      content:"";
+      display:block;
+      width:200%;
+      height:1px;
+      background:#000;
+      margin-top:4px;
+      transition:width .4s ease;
+    }
+    .search-bar:hover::after{
+      width:250%;
     }
 
-    /* 검색창 */
-    .search-bar {
-      display: flex;
-      align-items: center;
-      gap: 8px;
+    .main-banner{
+      margin:60px 0;
+      width:90%;
+      max-width:1200px;
+      height:600px;
+      border-radius:8px;
+      background-image:url('mainphoto.png');
+      background-size:cover;
+      background-position:center;
     }
 
-    .search-bar input {
-      border: 1px solid #ddd;
-      border-radius: 20px;
-      padding: 6px 12px;
-      font-size: 13px;
-      width: 160px;
-      outline: none;
-      background: #fff;
+    footer{
+      width:100%;
+      text-align:center;
+      padding:40px 0;
+      border-top:1px solid #eee;
+      font-size:13px;
+      color:#666;
     }
 
-    .search-bar button {
-      background: none;
-      border: 0;
-      cursor: pointer;
-      font-size: 16px;
-    }
-
-    /* ===== 메인 배너 ===== */
-    .main-banner {
-      margin: 40px 0;
-      width: 90%;
-      max-width: 1200px;
-      height: 600px;
-      border-radius: 8px;
-      background-image: url('mainphoto.png');
-      background-size: cover;
-      background-position: center;
-      align-self: center;
-    }
-
-    /* ===== 푸터 ===== */
-    footer {
-      width: 100%;
-      text-align: center;
-      padding: 40px 0;
-      border-top: 1px solid #eee;
-      font-size: 13px;
-      color: #666;
-      align-self: center;
-    }
-
-    /* ===== 반응형 ===== */
-    @media (max-width: 768px) {
-      body { padding-left: 5%; }
-      header img { width: 180px; }
-      .main-banner { height: 320px; }
-      nav ul { gap: 20px; }
+    @media(max-width:768px){
+      header img{width:180px}
+      .main-banner{height:320px}
+      nav ul{gap:18px}
     }
   </style>
 </head>
@@ -174,6 +159,7 @@
     <ul>
       <li><a href="about.html">ABOUT</a></li>
       <li><a href="work.html">WORK</a></li>
+      <li><div class="search-bar">Search</div></li>
     </ul>
   </nav>
 
@@ -186,12 +172,6 @@
       <li><a href="bottom.html">BOTTOM</a></li>
       <li><a href="shoe.html">SHOE</a></li>
       <li><a href="acc.html">ACC</a></li>
-      <li>
-        <div class="search-bar">
-          <input type="text" placeholder="Search...">
-          <button aria-label="search">🔍</button>
-        </div>
-      </li>
     </ul>
   </nav>
 
