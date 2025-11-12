@@ -20,6 +20,7 @@
     font-size: 2em;
     color: #333;
     margin-bottom: 20px;
+    text-align: center;
     transition: opacity 0.5s ease;
   }
 
@@ -30,22 +31,18 @@
     width: 100%;
     max-width: 1200px;
     margin-bottom: 40px;
+    flex-direction: column;
     position: relative;
-    height: auto; /* 이미지 높이에 따라 유동 */
   }
 
   .photo-container img {
-    width: auto;
     max-width: 100%;
+    width: auto;
     height: auto;
     display: block;
     border-radius: 8px;
     border: 2px solid #ccc;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     transition: opacity 0.8s ease;
     opacity: 1;
   }
@@ -96,35 +93,35 @@ const btn = document.getElementById('switchBtn');
 let showingFirst = true;
 let animating = false;
 
-btn.addEventListener('click', () => {
+function switchContent() {
   if(animating) return;
   animating = true;
 
-  // 현재 상태를 기준으로 사진과 제목 전환
+  // 사진 전환
   if(showingFirst) {
     photo1.classList.add('inactive');
     photo2.classList.remove('inactive');
-    title.style.opacity = 0;
-    setTimeout(() => {
-      title.textContent = 'hongseulgi';
-      title.style.opacity = 1;
-    }, 50);
+    fadeTitle('hongseulgi');
   } else {
     photo2.classList.add('inactive');
     photo1.classList.remove('inactive');
-    title.style.opacity = 0;
-    setTimeout(() => {
-      title.textContent = 'leedongchan';
-      title.style.opacity = 1;
-    }, 50);
+    fadeTitle('leedongchan');
   }
 
   showingFirst = !showingFirst;
 
   setTimeout(() => {
     animating = false;
-  }, 800); // CSS transition과 맞춤
-});
+  }, 800); // CSS transition과 동기화
+}
+
+function fadeTitle(newText) {
+  title.style.opacity = 0;
+  setTimeout(() => {
+    title.textContent = newText;
+    title.style.opacity = 1;
+  }, 50);
+}
 
 // 초기 상태
 window.addEventListener('load', () => {
@@ -133,6 +130,8 @@ window.addEventListener('load', () => {
   photo2.classList.add('inactive');
   title.textContent = 'leedongchan';
 });
+
+btn.addEventListener('click', switchContent);
 </script>
 
 </body>
