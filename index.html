@@ -23,36 +23,39 @@ body{
   color:var(--brand);
   display:flex;
   flex-direction:column;
-  align-items:flex-start; /* 전체 왼쪽 기준 */
+  align-items:flex-start; 
   -webkit-font-smoothing:antialiased;
   -moz-osx-font-smoothing:grayscale;
-  padding-top:0.7cm; /* 상단 패딩 */
+  padding-top:0.7cm; 
   line-height:1.15;
 }
 
 /* ===== 상단 로고 ===== */
 header{
   width:100%;
-  padding-left:1cm; /* 왼쪽 여백 */
+  text-align:center;
+  position:relative;
+  z-index:2;
 }
 
 header a{
-  display:block;
+  display:inline-block;
 }
 header img{
-  width:1200px; /* 2.5배 확대 */
+  width:600px; /* 1444.png 절반 크기 */
   max-width:90%;
   height:auto;
   cursor:pointer;
 }
 
-/* 검색창 오른쪽 상단 */
+/* 검색창 왼쪽으로 이동 */
 .search-bar{
   position:absolute;
-  right:1cm;
+  left:3cm; 
   top:0.7cm;
   font-size:13px;
   font-weight:400;
+  z-index:3;
 }
 .search-bar a{
   text-decoration:none;
@@ -61,7 +64,11 @@ header img{
   border-bottom:1px solid var(--brand);
   padding-bottom:2px;
   display:inline-block;
-  width:150px; /* 밑줄 기준 좌측 정렬, 길게 */
+  width:170px; /* 밑줄 길이 1cm 더 늘림 */
+  transition: color 0.3s ease;
+}
+.search-bar a:hover{
+  color:#777; /* 커서 올리면 회색으로 살짝 페이드 */
 }
 
 /* ===== 네비게이션 ===== */
@@ -72,13 +79,13 @@ nav{
   align-items:center;
   flex-wrap:wrap;
   margin-top:10px;
-  padding-left:1.8cm; /* 메뉴 좌측 여백 */
+  padding-left:1.8cm; 
 }
 
 nav ul{
   list-style:none;
   display:flex;
-  gap:12px; /* 줄 간격 줄임 */
+  gap:12px; 
   padding:2px 0;
 }
 
@@ -92,37 +99,34 @@ nav a{
   line-height:1.1;
 }
 
-/* 메뉴 밑줄 */
-nav a::after{
+/* 밑줄 애니메이션 SHOP, LOGIN, CART */
+nav a.underline-effect::after{
   content:"";
   position:absolute;
   left:0;
   bottom:-3px;
-  width:100px; /* 밑줄 길이 */
+  width:0;
   height:1px;
   background:var(--brand);
+  transition: width 0.5s ease;
 }
-nav ul:hover a{
-  color:var(--muted);
-}
-nav ul li a:hover{
-  color:var(--brand);
-}
-nav ul li a:hover::after{
-  width:100px;
+nav a.underline-effect:hover::after{
+  width:100%;
 }
 
-/* ===== 메인 배너 ===== */
+/* ===== 메인 배너 (0000.png) ===== */
 .main-banner{
-  margin:30px 0;
-  width:90%;
-  max-width:1200px;
-  height:800px; /* 스크롤 가능 정도 */
+  position:absolute;
+  top:0;
+  left:50%;
+  transform:translateX(-50%);
+  width:120%;
+  height:120%;
   overflow-y:auto;
-  border-radius:8px;
   background-image:url('0000.png');
   background-size:cover;
   background-position:center;
+  z-index:-1;
 }
 
 /* ===== 푸터 ===== */
@@ -138,9 +142,9 @@ footer{
 /* ===== 반응형 ===== */
 @media(max-width:768px){
   header img{width:80%}
-  .main-banner{height:500px}
+  .main-banner{height:500px;width:150%}
   nav ul{gap:8px}
-  .search-bar{top:0.7cm; right:0.7cm}
+  .search-bar{top:0.7cm; left:1cm}
 }
 </style>
 </head>
@@ -158,9 +162,9 @@ footer{
 <nav>
   <ul>
     <li><a href="join.html">JOIN</a></li>
-    <li><a href="login.html">LOGIN</a></li>
+    <li><a href="login.html" class="underline-effect">LOGIN</a></li>
     <li><a href="mypage.html">MY PAGE</a></li>
-    <li><a href="cart.html">CART</a></li>
+    <li><a href="cart.html" class="underline-effect">CART</a></li>
   </ul>
 </nav>
 
@@ -174,7 +178,7 @@ footer{
 <nav>
   <ul>
     <li><a href="new.html">NEW ARRIVAL</a></li>
-    <li><a href="shop.html">SHOP</a></li>
+    <li><a href="shop.html" class="underline-effect">SHOP</a></li>
     <li><a href="outwear.html">OUTWEAR</a></li>
     <li><a href="top.html">TOP</a></li>
     <li><a href="bottom.html">BOTTOM</a></li>
