@@ -26,7 +26,7 @@ body{
   align-items:flex-start;
   -webkit-font-smoothing:antialiased;
   -moz-osx-font-smoothing:grayscale;
-  padding-top:0.5cm; /* 1444를 좀 더 위로 */
+  padding-top:0.2cm; /* 상단 최소 공백 */
   line-height:1.15;
   min-height:100vh;
   position:relative;
@@ -38,7 +38,6 @@ header{
   text-align:left;
   position:relative;
   z-index:2;
-  padding-left:0;
   margin-top:0; 
 }
 
@@ -97,12 +96,13 @@ nav a{
   text-decoration:none;
   color:var(--brand);
   font-size:13px;
-  letter-spacing:0.4px; /* 글자 자체 간격 조금 줄임 */
+  letter-spacing:0.4px;
   font-weight:500;
   line-height:1.1;
+  position:relative;
 }
 
-/* 밑줄 애니메이션 SHOP, LOGIN, CART */
+/* 밑줄 점 → 길게 자연스러운 애니메이션 (SEARCH 제외) */
 nav a.underline-effect::after{
   content:"";
   position:absolute;
@@ -168,29 +168,29 @@ footer{
 
 <nav>
   <ul>
-    <li><a href="join.html">JOIN</a></li>
+    <li><a href="join.html" class="underline-effect">JOIN</a></li>
     <li><a href="login.html" class="underline-effect">LOGIN</a></li>
-    <li><a href="mypage.html">MY PAGE</a></li>
+    <li><a href="mypage.html" class="underline-effect">MY PAGE</a></li>
     <li><a href="cart.html" class="underline-effect">CART</a></li>
   </ul>
 </nav>
 
 <nav>
   <ul>
-    <li><a href="about.html">ABOUT</a></li>
-    <li><a href="work.html">WORK</a></li>
+    <li><a href="about.html" class="underline-effect">ABOUT</a></li>
+    <li><a href="work.html" class="underline-effect">WORK</a></li>
   </ul>
 </nav>
 
 <nav>
   <ul>
-    <li><a href="new.html">NEW ARRIVAL</a></li>
+    <li><a href="new.html" class="underline-effect">NEW ARRIVAL</a></li>
     <li><a href="shop.html" class="underline-effect">SHOP</a></li>
-    <li><a href="outwear.html">OUTWEAR</a></li>
-    <li><a href="top.html">TOP</a></li>
-    <li><a href="bottom.html">BOTTOM</a></li>
-    <li><a href="shoe.html">SHOE</a></li>
-    <li><a href="acc.html">ACC</a></li>
+    <li><a href="outwear.html" class="underline-effect">OUTWEAR</a></li>
+    <li><a href="top.html" class="underline-effect">TOP</a></li>
+    <li><a href="bottom.html" class="underline-effect">BOTTOM</a></li>
+    <li><a href="shoe.html" class="underline-effect">SHOE</a></li>
+    <li><a href="acc.html" class="underline-effect">ACC</a></li>
   </ul>
 </nav>
 
