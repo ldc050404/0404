@@ -23,29 +23,25 @@ body{
   color:var(--brand);
   display:flex;
   flex-direction:column;
-  align-items:center;
+  align-items:flex-start; /* 전체 왼쪽 기준 */
   -webkit-font-smoothing:antialiased;
   -moz-osx-font-smoothing:grayscale;
-  padding-top:0;
-  line-height:1.15; /* 전체 글자 줄간격 약간 줄임 */
+  padding-top:0.7cm; /* 상단 패딩 */
+  line-height:1.15;
 }
 
-/* ===== 상단 로고와 검색 ===== */
+/* ===== 상단 로고 ===== */
 header{
   width:100%;
-  display:flex;
-  justify-content:center; /* 완전 중앙 */
-  align-items:flex-start;
-  padding:0;
-  position: relative;
+  padding-left:1cm; /* 왼쪽 여백 */
 }
 
 header a{
   display:block;
 }
 header img{
-  width:480px; /* 3/2 비율 조정 */
-  max-width:80%;
+  width:1200px; /* 2.5배 확대 */
+  max-width:90%;
   height:auto;
   cursor:pointer;
 }
@@ -53,8 +49,8 @@ header img{
 /* 검색창 오른쪽 상단 */
 .search-bar{
   position:absolute;
-  right:5%;
-  top:15px;
+  right:1cm;
+  top:0.7cm;
   font-size:13px;
   font-weight:400;
 }
@@ -65,32 +61,18 @@ header img{
   border-bottom:1px solid var(--brand);
   padding-bottom:2px;
   display:inline-block;
-  width:calc(1em*5); /* 밑줄 길이 5배 */
-  transition: color .25s;
-}
-.search-bar a:hover{
-  color:var(--accent);
-}
-.search-bar a::after{
-  content:"";
-  display:block;
-  width:0%;
-  height:1px;
-  background:var(--brand);
-  transition:width 0.5s ease;
-}
-.search-bar a:hover::after{
-  width:100%;
+  width:150px; /* 밑줄 기준 좌측 정렬, 길게 */
 }
 
 /* ===== 네비게이션 ===== */
 nav{
-  width:90%;
+  width:100%;
   display:flex;
-  justify-content:flex-start; /* 로고 기준 왼쪽 정렬 */
+  justify-content:flex-start; 
   align-items:center;
   flex-wrap:wrap;
   margin-top:10px;
+  padding-left:1.8cm; /* 메뉴 좌측 여백 */
 }
 
 nav ul{
@@ -108,23 +90,18 @@ nav a{
   letter-spacing:0.6px;
   font-weight:500;
   line-height:1.1;
-  transition:color .25s ease;
 }
 
-/* 밑줄 애니메이션 */
+/* 메뉴 밑줄 */
 nav a::after{
   content:"";
   position:absolute;
   left:0;
   bottom:-3px;
-  width:0%;
+  width:100px; /* 밑줄 길이 */
   height:1px;
   background:var(--brand);
-  transition:width 0.5s ease;
-  transform-origin:left;
 }
-
-/* hover 시 나머지 메뉴 흐리게 */
 nav ul:hover a{
   color:var(--muted);
 }
@@ -132,15 +109,7 @@ nav ul li a:hover{
   color:var(--brand);
 }
 nav ul li a:hover::after{
-  width:100%;
-}
-
-/* Shop 특별 처리 */
-nav ul li a.shop::after{
-  width:0%;
-}
-nav ul li a.shop:hover::after{
-  width:100%;
+  width:100px;
 }
 
 /* ===== 메인 배너 ===== */
@@ -148,9 +117,10 @@ nav ul li a.shop:hover::after{
   margin:30px 0;
   width:90%;
   max-width:1200px;
-  height:600px;
+  height:800px; /* 스크롤 가능 정도 */
+  overflow-y:auto;
   border-radius:8px;
-  background-image:url('mainphoto.png');
+  background-image:url('0000.png');
   background-size:cover;
   background-position:center;
 }
@@ -167,10 +137,10 @@ footer{
 
 /* ===== 반응형 ===== */
 @media(max-width:768px){
-  header img{width:360px}
-  .main-banner{height:320px}
+  header img{width:80%}
+  .main-banner{height:500px}
   nav ul{gap:8px}
-  .search-bar{top:10px; right:3%}
+  .search-bar{top:0.7cm; right:0.7cm}
 }
 </style>
 </head>
@@ -204,7 +174,7 @@ footer{
 <nav>
   <ul>
     <li><a href="new.html">NEW ARRIVAL</a></li>
-    <li><a href="shop.html" class="shop">SHOP</a></li>
+    <li><a href="shop.html">SHOP</a></li>
     <li><a href="outwear.html">OUTWEAR</a></li>
     <li><a href="top.html">TOP</a></li>
     <li><a href="bottom.html">BOTTOM</a></li>
