@@ -1,137 +1,78 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>HYPERDRAMA</title>
-  <link rel="icon" type="image/png" href="hyperdrama.png">
+
+  <!-- Pretendard (공식 jsDelivr 배포) -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css" rel="stylesheet">
+
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    /* 전역 폰트 적용 — Pretendard 우선 */
+    :root {
+      --brand:#111;
+      --muted:#777;
+      --accent:#d90000;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      font-family: 'Pretendard', system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans KR', 'Helvetica Neue', Arial;
+      color:var(--brand);
+      background:#fff;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
     }
 
-    body {
-      font-family: 'Helvetica Neue', Arial, sans-serif;
-      color: #111;
-      background-color: #fff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+    header{
+      width:100%;
+      text-align:center;
+      padding:40px 0 10px;
+      font-size:36px;
+      font-weight:700;
+      letter-spacing:3px;
     }
 
-    /* 상단 로고 */
-    header {
-      width: 100%;
-      text-align: center;
-      padding: 40px 0 10px 0;
-      font-size: 36px;
-      font-weight: bold;
-      letter-spacing: 3px;
+    nav{width:100%;display:flex;justify-content:center;align-items:center;flex-wrap:wrap}
+    nav ul{list-style:none;display:flex;gap:36px;padding:8px 0}
+    nav a{
+      text-decoration:none;
+      color:var(--brand);
+      font-size:14px;
+      letter-spacing:1px;
+      transition:color .15s;
+    }
+    nav a:hover{color:var(--muted)}
+
+    .search-bar{display:flex;align-items:center;gap:8px}
+    .search-bar input{
+      border:1px solid #ddd;border-radius:20px;padding:6px 12px;font-size:13px;width:160px;
+      outline:none;background:#fff;
+    }
+    .search-bar button{background:none;border:0;cursor:pointer;font-size:16px}
+
+    .main-banner{
+      margin:50px 0;width:90%;max-width:1200px;height:600px;border-radius:8px;
+      background-image:url('mainphoto.png');background-size:cover;background-position:center;
     }
 
-    /* 네비게이션 공통 */
-    nav {
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-wrap: wrap;
-    }
+    footer{width:100%;text-align:center;padding:40px 0;border-top:1px solid #eee;font-size:13px;color:#666}
 
-    nav ul {
-      list-style: none;
-      display: flex;
-      gap: 40px;
-      padding: 10px 0;
-    }
-
-    nav a {
-      text-decoration: none;
-      color: #111;
-      font-size: 14px;
-      letter-spacing: 1px;
-      position: relative;
-      transition: 0.2s;
-    }
-
-    nav a:hover {
-      color: #777;
-    }
-
-    /* 검색창 */
-    .search-bar {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .search-bar input {
-      border: 1px solid #ccc;
-      border-radius: 20px;
-      padding: 5px 12px;
-      font-size: 13px;
-      outline: none;
-      width: 160px;
-      transition: 0.3s;
-    }
-
-    .search-bar input:focus {
-      border-color: #111;
-    }
-
-    .search-bar button {
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-size: 16px;
-    }
-
-    /* 메인 이미지 영역 */
-    .main-banner {
-      margin: 50px 0;
-      width: 90%;
-      max-width: 1200px;
-      height: 600px;
-      background-image: url('mainphoto.png'); /* 메인 이미지 파일 이름 */
-      background-size: cover;
-      background-position: center;
-      border-radius: 8px;
-    }
-
-    /* 하단 정보 */
-    footer {
-      width: 100%;
-      text-align: center;
-      padding: 40px 0;
-      border-top: 1px solid #ddd;
-      font-size: 13px;
-      color: #666;
-      line-height: 1.6;
-    }
-
-    footer p {
-      margin-bottom: 6px;
-    }
-
-    /* 반응형 */
-    @media (max-width: 768px) {
-      nav ul {
-        gap: 20px;
-      }
-      .main-banner {
-        height: 300px;
-      }
+    @media(max-width:768px){
+      .main-banner{height:320px}
+      header{font-size:24px}
+      nav ul{gap:20px}
     }
   </style>
 </head>
 <body>
-
-  <!-- 로고 -->
   <header>HYPERDRAMA</header>
 
-  <!-- 1단 네비게이션 -->
   <nav>
     <ul>
       <li><a href="join.html">JOIN</a></li>
@@ -141,7 +82,6 @@
     </ul>
   </nav>
 
-  <!-- 2단 네비게이션 -->
   <nav>
     <ul>
       <li><a href="about.html">ABOUT</a></li>
@@ -149,7 +89,6 @@
     </ul>
   </nav>
 
-  <!-- 3단 네비게이션 + 검색창 -->
   <nav>
     <ul>
       <li><a href="new.html">NEW ARRIVAL</a></li>
@@ -162,21 +101,18 @@
       <li>
         <div class="search-bar">
           <input type="text" placeholder="Search...">
-          <button>🔍</button>
+          <button aria-label="search">🔍</button>
         </div>
       </li>
     </ul>
   </nav>
 
-  <!-- 메인 이미지 -->
-  <div class="main-banner"></div>
+  <div class="main-banner" role="img" aria-label="메인 배너 이미지"></div>
 
-  <!-- 하단 정보 -->
   <footer>
     <p>📞 010-1234-5678</p>
-    <p>🕓 MON - FRI : 11:00 - 20:00 | SAT - SUN : 12:00 - 19:00</p>
-    <p>© 2025 HYPERDRAMA. All Rights Reserved.</p>
+    <p>🕓 MON-FRI : 11:00 - 20:00 | SAT-SUN : 12:00 - 19:00</p>
+    <p>© 2025 HYPERDRAMA</p>
   </footer>
-
 </body>
 </html>
