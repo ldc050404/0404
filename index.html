@@ -1,172 +1,165 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>커스텀 인챈트 검색</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>커스텀 인챈트 검색</title>
+  <style>
+    body {
+      background-color: #111;
+      color: white;
+      font-family: 'Pretendard', sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 40px 0;
+    }
 
-<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css" rel="stylesheet">
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      font-weight: 700;
+    }
 
-<style>
-body {
-  font-family: 'Pretendard Variable', sans-serif;
-  background: #fff;
-  color: #111;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  min-height: 100vh;
-  padding-top: 2cm;
-}
+    /* 검색창 */
+    #searchBar {
+      width: 60%;
+      max-width: 600px;
+      padding: 15px 20px;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 10px;
+      outline: none;
+      margin-bottom: 20px;
+    }
 
-/* ===== 필터 버튼 ===== */
-.filter-container {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 30px;
-  flex-wrap: wrap;
-}
+    /* 등급 선택 */
+    .tier-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-bottom: 30px;
+    }
 
-.filter-btn {
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  padding: 6px 12px;
-  cursor: pointer;
-  background: #fff;
-  font-size: 14px;
-  transition: all 0.2s ease;
-}
-.filter-btn:hover {
-  transform: translateY(-2px);
-}
+    .tier-buttons button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: bold;
+      transition: transform 0.1s ease-in-out, opacity 0.2s;
+    }
 
-/* 색상별 필터 */
-.filter-btn[data-tier="일반"] { color: #111; border-color: #ddd; }
-.filter-btn[data-tier="특별"] { color: #0f0; border-color: #0f0; }
-.filter-btn[data-tier="엘리트"] { color: #00aaff; border-color: #00aaff; }
-.filter-btn[data-tier="근본"] { color: #ffaa00; border-color: #ffaa00; }
-.filter-btn[data-tier="전설"] { color: #ff6600; border-color: #ff6600; }
-.filter-btn[data-tier="신화"] { color: #ff66cc; border-color: #ff66cc; }
+    .tier-buttons button:hover {
+      transform: scale(1.1);
+      opacity: 0.9;
+    }
 
-/* 활성화 시 */
-.filter-btn.active {
-  background: currentColor;
-  color: #fff;
-}
+    /* 등급 색상 */
+    .일반 { background-color: #fff; color: #000; }
+    .특별 { background-color: #32CD32; color: #fff; }
+    .엘리트 { background-color: #1E90FF; color: #fff; }
+    .근본 { background-color: #FFD700; color: #000; }
+    .전설 { background-color: #FFA500; color: #fff; }
+    .신화 { background-color: #FF69B4; color: #fff; }
 
-/* ===== 검색창 ===== */
-.search-container {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 30px;
-}
+    /* 결과 영역 */
+    #results {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 20px;
+    }
 
-.search-input {
-  width: 300px;
-  padding: 8px 12px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 14px;
-}
+    .enchant-card {
+      background-color: #222;
+      padding: 12px 18px;
+      border-radius: 10px;
+      font-size: 1rem;
+      transition: 0.2s;
+    }
 
-/* ===== 결과 영역 ===== */
-.results {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  width: 80%;
-  max-width: 700px;
-  margin-top: 20px;
-  gap: 12px;
-}
-
-.result-card {
-  width: 100%;
-  border: 1px solid #eee;
-  padding: 15px;
-  border-radius: 8px;
-  transition: all 0.2s ease;
-  cursor: pointer;
-}
-.result-card:hover {
-  background: #f9f9f9;
-}
-</style>
+    .enchant-card:hover {
+      background-color: #333;
+      transform: translateY(-3px);
+    }
+  </style>
 </head>
-
 <body>
-  <div class="filter-container">
-    <button class="filter-btn" data-tier="일반">일반</button>
-    <button class="filter-btn" data-tier="특별">특별</button>
-    <button class="filter-btn" data-tier="엘리트">엘리트</button>
-    <button class="filter-btn" data-tier="근본">근본</button>
-    <button class="filter-btn" data-tier="전설">전설</button>
-    <button class="filter-btn" data-tier="신화">신화</button>
+  <h1>🔮 커스텀 인챈트 검색</h1>
 
-    <div class="search-container">
-      <input type="text" class="search-input" id="searchInput" placeholder="인챈트 이름 검색..." />
-    </div>
+  <!-- 검색창 -->
+  <input type="text" id="searchBar" placeholder="인챈트 이름을 입력하세요..." onkeyup="filterEnchants()">
+
+  <!-- 등급 버튼 -->
+  <div class="tier-buttons">
+    <button class="일반" onclick="filterTier('일반')">일반</button>
+    <button class="특별" onclick="filterTier('특별')">특별</button>
+    <button class="엘리트" onclick="filterTier('엘리트')">엘리트</button>
+    <button class="근본" onclick="filterTier('근본')">근본</button>
+    <button class="전설" onclick="filterTier('전설')">전설</button>
+    <button class="신화" onclick="filterTier('신화')">신화</button>
+    <button onclick="filterTier('전체')">전체보기</button>
   </div>
 
-  <div class="results" id="results"></div>
+  <!-- 결과 영역 -->
+  <div id="results"></div>
 
-<script>
-// 예시 데이터
-const enchantments = [
-  { name: "불멸", tier: "전설", desc: "사망 시 일정 확률로 부활" },
-  { name: "흡혈", tier: "엘리트", desc: "공격 시 일정 확률로 체력 회복" },
-  { name: "광폭", tier: "특별", desc: "공격력 대폭 상승" },
-  { name: "절대방어", tier: "신화", desc: "일정 확률로 모든 피해 무효" },
-];
+  <script>
+    const enchants = [
+      // 등급, 이름 형식
+      ["일반", "낙뢰"], ["일반", "수중 호흡"], ["일반", "재련"], ["일반", "숙련"], ["일반", "광부"], ["일반", "호흡 보충"], ["일반", "야시경"], ["일반", "참수"], ["일반", "밀어내기"], ["일반", "팅커벨"], ["일반", "좀비 학살자"], ["일반", "스켈레톤 학살자"],
+      ["특별", "재수확"], ["특별", "헌터"], ["특별", "광전사"], ["특별", "반사"], ["특별", "피해 흡수"], ["특별", "폭발 화살"], ["특별", "폭발 석궁"], ["특별", "부스터"], ["특별", "화염 갑옷"], ["특별", "전투식량"], ["특별", "염력"], ["특별", "폭발적 최후"], ["특별", "도살자"], ["특별", "사냥꾼"], ["특별", "무자비"], ["특별", "독침"], ["특별", "소멸"], ["특별", "포식"],
+      ["엘리트", "투창"], ["엘리트", "독 갈고리"], ["엘리트", "화염 갈고리"], ["엘리트", "광맥 채굴"], ["엘리트", "엔더 학살자"], ["엘리트", "거미 학살자"], ["엘리트", "낚시꾼"], ["엘리트", "포획"], ["엘리트", "사신"], ["엘리트", "네더 학살자"], ["엘리트", "실명"], ["엘리트", "유혹"], ["엘리트", "빙결"], ["엘리트", "쇼크"], ["엘리트", "독사"], ["엘리트", "포이즌"], ["엘리트", "명장"], ["엘리트", "덫"], ["엘리트", "스프링"], ["엘리트", "좀비 소환"], ["엘리트", "탈진"], ["엘리트", "위더"], ["엘리트", "스모크"], ["엘리트", "헬파이어"], ["엘리트", "소화"], ["엘리트", "반항"], ["엘리트", "흡혈귀"], ["엘리트", "궁수 사냥꾼"], ["엘리트", "검사 사냥꾼"], ["엘리트", "로켓 탈출"], ["엘리트", "백어택"], ["엘리트", "저주"], ["엘리트", "제트팩"], ["엘리트", "사수"], ["엘리트", "포세이돈"], ["엘리트", "광산 적응"], ["엘리트", "폭팔 화살"], ["엘리트", "치명타"], ["엘리트", "불꽃"], ["엘리트", "강타"], ["엘리트", "고정 공격"], ["엘리트", "서리"], ["엘리트", "매혹"],
+      ["근본", "수확"], ["근본", "밀 파종"], ["근본", "감자 파종"], ["근본", "당근 파종"], ["근본", "낙법"], ["근본", "사슬 낚시대"], ["근본", "행운의 낚시꾼"], ["근본", "과다 출혈"], ["근본", "벌목"], ["근본", "백스텝"], ["근본", "도끼병"], ["근본", "범위공격"], ["근본", "구원"], ["근본", "화살 반사"], ["근본", "화살 차단"], ["근본", "약화"], ["근본", "방해"], ["근본", "성화"], ["근본", "넉백"], ["근본", "패링"], ["근본", "대지파괴"], ["근본", "터널링"], ["근본", "회피"], ["근본", "수호자"], ["근본", "얼음의 검"], ["근본", "강화"], ["근본", "식량 주입"], ["근본", "이프리트의 펜던트"], ["근본", "신궁"], ["근본", "보우마스터"], ["근본", "인내"], ["근본", "은신"], ["근본", "혼란"], ["근본", "분해"], ["근본", "파쇄"], ["근본", "중갑"], ["근본", "지옥불"], ["근본", "아이템 셔플"], ["근본", "검술사"], ["근본", "네더마스터"], ["근본", "엔드마스터"], ["근본", "블레이즈 소환수"], ["근본", "출혈"], ["근본", "소각"], ["근본", "화살비"], ["근본", "헤드샷"], ["근본", "공수 부대"], ["근본", "지면 강타"], ["근본", "밤의 사냥꾼"], ["근본", "수호자의 뿔피리"],
+      ["전설", "롱기누스의 창"], ["전설", "날개"], ["전설", "아수 학살자"], ["전설", "운디네의 가호"], ["전설", "경화"], ["전설", "긴급 수리"], ["전설", "실수"], ["전설", "소환 방해"], ["전설", "반격"], ["전설", "뇌운"], ["전설", "용암 걷기"], ["전설", "수면 걷기"], ["전설", "수중 학살자"], ["전설", "심판"], ["전설", "전환"], ["전설", "성화"], ["전설", "혼돈"], ["전설", "에어본"], ["전설", "축복의 갑옷"], ["전설", "일격"], ["전설", "개안"], ["전설", "이중타격"], ["전설", "기어"], ["전설", "화염 군주"], ["전설", "제노사이드"], ["전설", "탐구자"], ["전설", "흡혈"], ["전설", "추가 체력"], ["전설", "장갑"], ["전설", "등가교환"], ["전설", "영속"], ["전설", "무장 해체"], ["전설", "트리아이나"], ["전설", "도약"], ["전설", "순간 가속"], ["전설", "낙뢰 군주"],
+      ["신화", "블록화"], ["신화", "명장"], ["신화", "복원"], ["신화", "불멸"], ["신화", "내구성 무한"], ["신화", "영혼 결속"], ["신화", "무장 해제"], ["신화", "부활"], ["신화", "공포"], ["신화", "극살"], ["신화", "돌진"], ["신화", "복제"], ["신화", "다중 채굴"], ["신화", "영혼의 주인"], ["신화", "영혼의 도끼"], ["신화", "영혼의 채굴자"], ["신화", "영혼의 사냥꾼"]
+    ];
 
-const resultsDiv = document.getElementById("results");
-const searchInput = document.getElementById("searchInput");
-const filterButtons = document.querySelectorAll(".filter-btn");
-let selectedTier = null;
+    const resultsDiv = document.getElementById("results");
 
-// 필터 클릭
-filterButtons.forEach(btn => {
-  btn.addEventListener("click", () => {
-    filterButtons.forEach(b => b.classList.remove("active"));
-    if (selectedTier === btn.dataset.tier) {
-      selectedTier = null;
-    } else {
-      btn.classList.add("active");
-      selectedTier = btn.dataset.tier;
+    function displayEnchants(list) {
+      resultsDiv.innerHTML = "";
+      list.forEach(([tier, name]) => {
+        const card = document.createElement("div");
+        card.classList.add("enchant-card");
+        card.style.borderLeft = `5px solid ${getTierColor(tier)}`;
+        card.textContent = `${name} (${tier})`;
+        resultsDiv.appendChild(card);
+      });
     }
-    renderResults();
-  });
-});
 
-// 검색 입력
-searchInput.addEventListener("input", renderResults);
+    function getTierColor(tier) {
+      const colors = {
+        "일반": "#fff",
+        "특별": "#32CD32",
+        "엘리트": "#1E90FF",
+        "근본": "#FFD700",
+        "전설": "#FFA500",
+        "신화": "#FF69B4"
+      };
+      return colors[tier] || "#fff";
+    }
 
-// 결과 렌더링
-function renderResults() {
-  const keyword = searchInput.value.trim().toLowerCase();
-  const filtered = enchantments.filter(e => {
-    const matchName = e.name.toLowerCase().includes(keyword);
-    const matchTier = selectedTier ? e.tier === selectedTier : true;
-    return matchName && matchTier;
-  });
+    function filterTier(tier) {
+      if (tier === "전체") {
+        displayEnchants(enchants);
+      } else {
+        const filtered = enchants.filter(e => e[0] === tier);
+        displayEnchants(filtered);
+      }
+    }
 
-  resultsDiv.innerHTML = filtered.length
-    ? filtered.map(e => `
-        <div class="result-card">
-          <strong>${e.name}</strong> <small>[${e.tier}]</small><br>
-          <span>${e.desc}</span>
-        </div>
-      `).join("")
-    : `<p>검색 결과가 없습니다.</p>`;
-}
+    function filterEnchants() {
+      const query = document.getElementById("searchBar").value.trim();
+      const filtered = enchants.filter(e => e[1].includes(query));
+      displayEnchants(filtered);
+    }
 
-// 초기 렌더
-renderResults();
-</script>
+    // 초기 전체 표시
+    displayEnchants(enchants);
+  </script>
 </body>
 </html>
