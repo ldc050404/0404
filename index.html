@@ -3,9 +3,10 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>HYPERDRAMA — 커스텀 인챈트 티어</title>
+<title>Enchantments</title>
 
-<link rel="icon" type="image/png" href="1111.png">
+<!-- 파비콘: 0001.png -->
+<link rel="icon" type="image/png" href="0001.png">
 
 <style>
   :root{
@@ -20,34 +21,28 @@
     --tier-yellow: #FFD700;
     --tier-orange: #FFA500;
     --tier-pink: #FF69B4;
-    --glass: rgba(255,255,255,0.85);
   }
 
   html,body{height:100%;margin:0;font-family:Inter, Pretendard, system-ui, -apple-system, "Helvetica Neue", Arial;}
   body{background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
 
-  /* ===== header (fixed like MetaTFT) ===== */
+  /* ===== header (fixed) ===== */
   .topbar{
-    position:fixed;top:0;left:0;right:0;height:72px;
+    position:fixed;top:0;left:0;right:0;height:84px;
     display:flex;align-items:center;justify-content:space-between;
     padding:10px 20px;border-bottom:1px solid #e6efe8;background:linear-gradient(180deg, rgba(255,255,255,0.96), rgba(255,255,255,0.90));
     z-index:1000;
     box-shadow: 0 2px 10px rgba(12, 34, 18, 0.03);
   }
-  .logo-wrap{display:flex;align-items:center;gap:8px}
-  .logo-wrap img.logo-main{height:48px; width:auto; display:block}
-  .logo-wrap img.logo-text{height:24px; width:auto; display:block}
-
-  /* right controls (could add later) */
-  .top-controls{display:flex;align-items:center;gap:12px;}
-  .top-controls .small{
-    font-size:13px;color:var(--muted);
-  }
+  .logo-wrap{display:flex;align-items:center;gap:10px}
+  /* 0001는 1.5배(원래 48->72), 0002는 4배(원래 24->96) */
+  .logo-wrap img.logo-main{height:72px; width:auto; display:block}
+  .logo-wrap img.logo-text{height:96px; width:auto; display:block}
 
   /* ===== page container below fixed header ===== */
   .page {
     max-width:1200px;
-    margin: 90px auto 60px; /* leave space for fixed header */
+    margin: 110px auto 60px; /* leave space for fixed header */
     padding: 0 20px;
   }
 
@@ -87,7 +82,10 @@
   }
   .tier-btn.active{ box-shadow: 0 8px 28px rgba(47,178,74,0.12); transform:translateY(-2px); }
 
-  .tier-일반{ background:var(--tier-white); color:#111; border-color:#e6e6e6; }
+  .tier-일반{ background:var(--tier-white); color:#111; border-color:#e6e6e6; 
+    /* 일반 가시성 보정: 연한 그림자 추가 */
+    box-shadow: 0 6px 18px rgba(0,0,0,0.04);
+  }
   .tier-특별{ background:var(--tier-green); color:#fff; border-color:var(--tier-green); }
   .tier-엘리트{ background:var(--tier-blue); color:#fff; border-color:var(--tier-blue); }
   .tier-근본{ background:var(--tier-yellow); color:#000; border-color:var(--tier-yellow); }
@@ -117,7 +115,7 @@
   tr.enchant-row:hover{background:#fbfff9;cursor:pointer}
   .tier-badge{display:inline-block;padding:6px 8px;border-radius:6px;font-weight:700;font-size:12px}
   .name-col{display:flex;align-items:center;gap:12px}
-  .name-col img{width:34px;height:34px;border-radius:6px;object-fit:cover;box-shadow:0 2px 6px rgba(0,0,0,0.06)}
+  .name-col img{width:48px;height:48px;border-radius:6px;object-fit:cover;box-shadow:0 2px 6px rgba(0,0,0,0.06)}
   .right-muted{color:var(--muted);font-size:13px}
 
   /* modal */
@@ -130,11 +128,14 @@
   @media(max-width:900px){
     .search-box{width:92%}
     table.enchant-table th, table.enchant-table td{padding:10px}
-    .logo-wrap img.logo-main{height:40px}
+    .logo-wrap img.logo-main{height:56px}
+    .logo-wrap img.logo-text{height:76px}
+    .name-col img{width:40px;height:40px}
   }
   @media(max-width:560px){
     .search-box input{font-size:16px}
     .tier-btn{padding:6px 10px;font-size:13px}
+    .logo-wrap img.logo-text{display:none} /* 모바일에선 로고-text 숨김(너가 원하면 유지 가능) */
   }
 </style>
 </head>
@@ -142,16 +143,13 @@
 
   <!-- topbar -->
   <header class="topbar" role="banner">
-    <div class="logo-wrap">
-      <a href="./">
+    <div class="logo-wrap" aria-hidden="false">
+      <a href="./" aria-label="Enchantments 홈">
         <img src="0001.png" alt="logo" class="logo-main">
       </a>
       <img src="0002.png" alt="logo-text" class="logo-text">
     </div>
-
-    <div class="top-controls">
-      <div class="small">HYPERDRAMA</div>
-    </div>
+    <!-- 오른쪽 상단 텍스트(HYPERDRAMA) 삭제 요청에 따라 제거 -->
   </header>
 
   <!-- page -->
@@ -202,9 +200,7 @@
   </div>
 
 <script>
-/* ----------------------------------------------------
-   데이터: 네가 제공한 인챈트 목록 (tier, name)
-   ---------------------------------------------------- */
+/* 데이터: 네가 제공한 인챈트 목록 (tier, name) */
 const ENCHANTS = [
 ["일반","낙뢰"],["일반","수중 호흡"],["일반","재련"],["일반","숙련"],["일반","광부"],["일반","호흡 보충"],["일반","야시경"],
 ["일반","참수"],["일반","밀어내기"],["일반","팅커벨"],["일반","좀비 학살자"],["일반","스켈레톤 학살자"],
@@ -245,14 +241,13 @@ const TIER_COLORS = {
   "신화": "#FF69B4"
 };
 
-/* state */
 let activeTier = "전체";
 let searchQuery = "";
 
 const tableBody = document.getElementById("tableBody");
 const searchInput = document.getElementById("searchInput");
 
-/* render rows into table */
+/* render rows into table (0003.png displayed as enchant book icon next to name) */
 function renderTable(list){
   tableBody.innerHTML = "";
   if(!list.length){
@@ -267,11 +262,11 @@ function renderTable(list){
     tr.className = "enchant-row";
     tr.dataset.idx = idx;
 
-    // left column: icon (placeholder) + name
+    // left column: 0003.png (인챈트북) + name
     const nameTd = document.createElement("td");
     nameTd.innerHTML = `
       <div class="name-col">
-        <img src="https://via.placeholder.com/64x64.png?text=${encodeURIComponent(name.charAt(0))}" alt="" aria-hidden="true">
+        <img src="0003.png" alt="인챈트북" aria-hidden="true">
         <div>
           <div style="font-weight:700">${name}</div>
           <div class="right-muted" style="margin-top:4px">${name} 인챈트</div>
@@ -284,7 +279,7 @@ function renderTable(list){
     const color = TIER_COLORS[tier] || "#ccc";
     tierTd.innerHTML = `<span class="tier-badge" style="background:${color}; color:${(tier==='일반'?'#000':'#fff')};">${tier}</span>`;
 
-    // 기타 (placeholder: 빈도/기타)
+    // 기타 (placeholder)
     const otherTd = document.createElement("td");
     otherTd.innerHTML = `<div class="right-muted">등급 기반 데이터</div>`;
 
@@ -314,7 +309,6 @@ function getFiltered(){
   });
 }
 
-/* handlers */
 function onFilterChange(){
   searchQuery = searchInput.value || "";
   renderTable(getFiltered());
@@ -322,11 +316,9 @@ function onFilterChange(){
 
 function toggleTier(tier){
   activeTier = tier;
-  // update active button visuals
   document.querySelectorAll('.tier-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.tier === tier);
   });
-  // if 전체, clear
   if(tier === "전체"){ activeTier = "전체"; }
   renderTable(getFiltered());
 }
