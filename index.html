@@ -103,6 +103,15 @@ body {
   padding: 16px;
   border-bottom: 1px solid #f1f1f1;
 }
+/* 전체 가운데 정렬 */
+.ench-table th, .ench-table td {
+  text-align: center;
+}
+
+/* 첫 번째 열만 왼쪽 정렬 */
+.ench-table td:first-child {
+  text-align: left;
+}
 
 .ench-table tbody tr {
   cursor: pointer;
@@ -386,5 +395,6 @@ renderList(ENCHANTS);
 
 </body>
 </html>
+
 
 
