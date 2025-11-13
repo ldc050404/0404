@@ -13,14 +13,15 @@
     --bg: #ffffff;
     --text: #12221a;
     --muted: #6b6b6b;
-    --accent: #2fb24a; /* primary green accent */
+    --accent: #2fb24a; /* primary green accent (unchanged) */
     --table-head: #f6fbf7;
-    --tier-white: #ffffff;
-    --tier-green: #32CD32;
-    --tier-blue: #1E90FF;
-    --tier-yellow: #FFD700;
-    --tier-orange: #FFA500;
-    --tier-pink: #FF69B4;
+    /* 변경된 색상 매핑 (요청값) */
+    --tier-신화: #FC54FC;
+    --tier-전설: #FCA800;
+    --tier-근본: #FCFC54;
+    --tier-일반: #FCFCFC;
+    --tier-특별: #54FC54;
+    --tier-엘리트: #54FCFC;
   }
 
   html,body{height:100%;margin:0;font-family:Inter, Pretendard, system-ui, -apple-system, "Helvetica Neue", Arial;}
@@ -82,15 +83,15 @@
   }
   .tier-btn.active{ box-shadow: 0 8px 28px rgba(47,178,74,0.12); transform:translateY(-2px); }
 
-  .tier-일반{ background:var(--tier-white); color:#111; border-color:#e6e6e6; 
+  .tier-일반{ background:var(--tier-일반); color:#111; border-color:#e6e6e6;
     /* 일반 가시성 보정: 연한 그림자 추가 */
     box-shadow: 0 6px 18px rgba(0,0,0,0.04);
   }
-  .tier-특별{ background:var(--tier-green); color:#fff; border-color:var(--tier-green); }
-  .tier-엘리트{ background:var(--tier-blue); color:#fff; border-color:var(--tier-blue); }
-  .tier-근본{ background:var(--tier-yellow); color:#000; border-color:var(--tier-yellow); }
-  .tier-전설{ background:var(--tier-orange); color:#fff; border-color:var(--tier-orange); }
-  .tier-신화{ background:var(--tier-pink); color:#fff; border-color:var(--tier-pink); }
+  .tier-특별{ background:var(--tier-특별); color:#fff; border-color:var(--tier-특별); }
+  .tier-엘리트{ background:var(--tier-엘리트); color:#fff; border-color:var(--tier-엘리트); }
+  .tier-근본{ background:var(--tier-근본); color:#000; border-color:var(--tier-근본); }
+  .tier-전설{ background:var(--tier-전설); color:#fff; border-color:var(--tier-전설); }
+  .tier-신화{ background:var(--tier-신화); color:#fff; border-color:var(--tier-신화); }
 
   /* ===== table area (MetaTFT-like) ===== */
   .table-wrap{
@@ -135,7 +136,7 @@
   @media(max-width:560px){
     .search-box input{font-size:16px}
     .tier-btn{padding:6px 10px;font-size:13px}
-    .logo-wrap img.logo-text{display:none} /* 모바일에선 로고-text 숨김(너가 원하면 유지 가능) */
+    .logo-wrap img.logo-text{display:none}
   }
 </style>
 </head>
@@ -177,10 +178,11 @@
       <table class="enchant-table" id="enchantTable" role="table">
         <thead>
           <tr>
-            <th style="width:48%;">인챈트</th>
+            <th style="width:36%;">인챈트</th>
+            <th style="width:12%;">등급</th>
             <th style="width:16%;">티어</th>
-            <th style="width:18%;">기타</th>
-            <th style="width:18%;">비고</th>
+            <th style="width:12%;">최대 레벨</th>
+            <th style="width:24%;">아이템</th>
           </tr>
         </thead>
         <tbody id="tableBody">
@@ -231,14 +233,20 @@ const ENCHANTS = [
 ["신화","영혼의 사냥꾼"]
 ];
 
-/* tier color map (used for badge & left accent) */
+/* 최대 레벨 데이터 — 사용자가 보내준 순차값을 그대로 넣음 */
+const MAX_LEVELS = [
+3,1,3,5,3,2,1,3,5,3,5,3,1,4,5,5,4,5,5,3,4,4,4,8,4,4,4,3,5,3,4,3,3,3,5,3,3,3,4,5,3,3,3,4,3,4,10,4,3,10,6,5,8,3,3,5,3,5,5,3,8,2,3,4,4,3,5,3,3,4,3,3,3,9,3,3,3,3,9,3,5,3,4,7,7,5,4,6,1,2,4,4,3,9,9,5,10,3,4,3,1,5,4,2,4,4,4,4,5,5,4,
+4,5,3,3,3,10,6,3,3,5,3,3,3,3,4,1,4,3,3,3,3,3,3,3,1,1,4,5,5,5,5,6,6,4,3,3,3,3,5,4,5,3,4,5,1,8,5,3,3,3,3,1,3,4,4,1,3,3,3,5,4,3,5,5,3,3,3,3
+];
+
+/* tier color map (요청 색상) */
 const TIER_COLORS = {
-  "일반": "#ffffff",
-  "특별": "#32CD32",
-  "엘리트": "#1E90FF",
-  "근본": "#FFD700",
-  "전설": "#FFA500",
-  "신화": "#FF69B4"
+  "일반": "#FCFCFC",
+  "특별": "#54FC54",
+  "엘리트": "#54FCFC",
+  "근본": "#FCFC54",
+  "전설": "#FCA800",
+  "신화": "#FC54FC"
 };
 
 let activeTier = "전체";
@@ -252,7 +260,7 @@ function renderTable(list){
   tableBody.innerHTML = "";
   if(!list.length){
     const tr = document.createElement("tr");
-    tr.innerHTML = `<td colspan="4" style="padding:26px 16px;text-align:center;color:var(--muted)">검색 결과가 없습니다.</td>`;
+    tr.innerHTML = `<td colspan="5" style="padding:26px 16px;text-align:center;color:var(--muted)">검색 결과가 없습니다.</td>`;
     tableBody.appendChild(tr);
     return;
   }
@@ -274,26 +282,34 @@ function renderTable(list){
       </div>
     `;
 
-    // tier
-    const tierTd = document.createElement("td");
+    // 등급
+    const gradeTd = document.createElement("td");
     const color = TIER_COLORS[tier] || "#ccc";
-    tierTd.innerHTML = `<span class="tier-badge" style="background:${color}; color:${(tier==='일반'?'#000':'#fff')};">${tier}</span>`;
+    // 텍스트 색: '일반'은 어두운 글자, 나머지는 흰색
+    const textColor = tier === '일반' ? '#000' : '#fff';
+    gradeTd.innerHTML = `<span class="tier-badge" style="background:${color}; color:${textColor};">${tier}</span>`;
 
-    // 기타 (placeholder)
+    // 기타 -> 티어 (유지되는 텍스트 '등급 기반 데이터'로 표기 — 기존 구조 최대한 유지)
     const otherTd = document.createElement("td");
-    otherTd.innerHTML = `<div class="right-muted">등급 기반 데이터</div>`;
+    otherTd.innerHTML = `<div class="right-muted">티어 정보</div>`;
 
-    // 비고
-    const noteTd = document.createElement("td");
-    noteTd.innerHTML = `<div class="right-muted">클릭하면 상세보기</div>`;
+    // 최대 레벨 (사용자가 제공한 값, 순서대로)
+    const maxLevelTd = document.createElement("td");
+    const levelVal = MAX_LEVELS[idx] !== undefined ? MAX_LEVELS[idx] : "";
+    maxLevelTd.innerHTML = `<div style="font-weight:700">${levelVal}</div>`;
+
+    // 비고 -> 아이템
+    const itemTd = document.createElement("td");
+    itemTd.innerHTML = `<div class="right-muted">아이템 정보</div>`;
 
     tr.appendChild(nameTd);
-    tr.appendChild(tierTd);
+    tr.appendChild(gradeTd);
     tr.appendChild(otherTd);
-    tr.appendChild(noteTd);
+    tr.appendChild(maxLevelTd);
+    tr.appendChild(itemTd);
 
     // click -> open modal
-    tr.addEventListener("click", () => openModal({tier,name}));
+    tr.addEventListener("click", () => openModal({tier,name,level:levelVal}));
 
     tableBody.appendChild(tr);
   });
@@ -329,9 +345,9 @@ const modalTitle = document.getElementById('modalTitle');
 const modalTier = document.getElementById('modalTier');
 const modalDesc = document.getElementById('modalDesc');
 
-function openModal({tier,name}){
+function openModal({tier,name,level}){
   modalTitle.textContent = name;
-  modalTier.innerHTML = `<span style="display:inline-block;padding:6px 10px;border-radius:8px;background:${TIER_COLORS[tier]};color:${tier==='일반'?'#000':'#fff'};font-weight:700">${tier}</span>`;
+  modalTier.innerHTML = `<span style="display:inline-block;padding:6px 10px;border-radius:8px;background:${TIER_COLORS[tier]};color:${tier==='일반'?'#000':'#fff'};font-weight:700">${tier} ・ 최대 레벨 ${level}</span>`;
   modalDesc.textContent = `${name}에 대한 상세 설명을 여기에 넣을 수 있습니다. (현재 더미 텍스트)`;
   modalBackdrop.style.display = 'flex';
   window.scrollTo({top:0,behavior:'smooth'});
