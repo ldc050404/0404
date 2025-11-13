@@ -220,7 +220,7 @@ function openModal({tier,name,level,item}){
   document.getElementById("modalTitle").textContent=name;
   document.getElementById("modalTier").innerHTML =
     `<span class="tier-badge" style="background:${TIER_COLORS[tier]};color:${tier==="일반"?"#000":"#fff"}">${tier} • Lv ${level}</span>`;
-  document.getElementById("modalDesc").textContent = `장착 가능 아이템: ${item}`;
+  document.getElementById("modalDesc").textContent = `적용 대상: ${item}`;
   modal.style.display="flex";
 }
 function closeModal(e){ if(e.target===modal) modal.style.display="none"; }
@@ -231,3 +231,4 @@ searchInput.onkeydown=e=>{if(e.key==="Enter")onFilterChange()};
 
 </body>
 </html>
+
