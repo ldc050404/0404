@@ -234,6 +234,18 @@ function tierText(t){
   if(t==="전설" || t==="신화") return "#000";
   return "#000";
 }
+
+// 🔥 등급(grade) → 숫자 티어로 변환
+function convertGrade(g) {
+  if (g.includes("벨런스 붕괴")) return "OP";
+  if (g.includes("최상")) return "1티어";
+  if (g.includes("상") && !g.includes("최상")) return "2티어";
+  if (g.includes("중")) return "3티어";
+  if (g.includes("하") && !g.includes("최하")) return "4티어";
+  if (g.includes("최하")) return "5티어";
+  return g;
+}
+
 //////////////////////////////////////////////////////
 //           🔥 ENCHANTS (180개 전체 데이터) 🔥
 //////////////////////////////////////////////////////
@@ -310,7 +322,7 @@ function renderList(data) {
       </div>
   </td>
 
-  <td>${e.grade}</td>
+  <td>${convertGrade(e.grade)}</td>
 
   <td>
     <span style="
@@ -395,6 +407,7 @@ renderList(ENCHANTS);
 
 </body>
 </html>
+
 
 
 
