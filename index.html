@@ -264,7 +264,18 @@ function renderList(data) {
       </div>
   </td>
   <td>${e.grade}</td>
-  <td>${e.tier}</td>
+  <td>
+  <span style="
+    background:${getTierColor(e.tier)};
+    color:${getTierTextColor(e.tier)};
+    padding:6px 12px;
+    border-radius:10px;
+    font-weight:600;
+    display:inline-block;
+  ">
+    ${e.tier}
+  </span>
+</td>
   <td>${e.maxLevel}</td>
   <td>${e.items.join(", ")}</td>
 `;
@@ -318,6 +329,7 @@ renderList(ENCHANTS);
 
 </body>
 </html>
+
 
 
 
