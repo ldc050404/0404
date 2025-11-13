@@ -149,7 +149,7 @@ body {
 </header>
 
 <section class="search-area">
-  <input id="searchBar" placeholder="인챈트 이름을 입력하세요..." />
+  <input id="searchBar" placeholder="인챈트 이름을 입력하세요...(예: 불멸, 낙뢰, 수확 ...)" />
   <button id="searchBtn" class="search-btn">검색</button>
 </section>
 
@@ -170,7 +170,7 @@ body {
       <th>등급</th>
       <th>티어</th>
       <th>최대 레벨</th>
-      <th>아이템</th>
+      <th>적용 아이템</th>
     </tr>
   </thead>
   <tbody id="enchList"></tbody>
@@ -192,6 +192,22 @@ body {
 </div>
 
 <script>
+
+/* ===== 티어 색상 함수 (HTML만 사용) ===== */
+function tierBg(t){
+  if(t==="일반") return "#FCFCFC";
+  if(t==="특별") return "#54FC54";
+  if(t==="엘리트") return "#54FCFC";
+  if(t==="근본") return "#FCFC54";
+  if(t==="전설") return "#FCA800";
+  if(t==="신화") return "#FC54FC";
+  return "#eee";
+}
+
+function tierText(t){
+  if(t==="전설" || t==="신화") return "#fff";
+  return "#000";
+}
 //////////////////////////////////////////////////////
 //           🔥 ENCHANTS (180개 전체 데이터) 🔥
 //////////////////////////////////////////////////////
@@ -246,15 +262,19 @@ const ENCHANTS = [
 //////////////////////////////////////////////////////
 //                 기능 스크립트
 //////////////////////////////////////////////////////
+
 const listBody = document.getElementById("enchList");
 const modal = document.getElementById("modal");
 const closeModal = document.getElementById("closeModal");
+
 
 // 🔥 리스트 렌더링
 function renderList(data) {
   listBody.innerHTML = "";
   data.forEach(e => {
+
     const row = document.createElement("tr");
+
     row.innerHTML = `
   <td style="display:flex; align-items:center; gap:10px;">
       <img src="0003.png" style="width:32px; height:32px;" />
@@ -263,20 +283,44 @@ function renderList(data) {
         <div style="font-size:12px; color:#888;">${e.name} 인챈트</div>
       </div>
   </td>
+
   <td>${e.grade}</td>
-  <td>${e.tier}</td>
+
+  <td>
+    <span style="
+      background:${tierBg(e.tier)};
+      color:${tierText(e.tier)};
+      padding:6px 12px;
+      display:inline-block;
+      border-radius:8px;
+      font-weight:700;
+    ">
+      ${e.tier}
+    </span>
+  </td>
+
   <td>${e.maxLevel}</td>
   <td>${e.items.join(", ")}</td>
 `;
+
     row.onclick = () => openModal(e);
     listBody.appendChild(row);
   });
 }
-
 // 🔥 모달 열기
 function openModal(e) {
   document.getElementById("mName").textContent = e.name;
-  document.getElementById("mTier").textContent = e.tier;
+
+  document.getElementById("mTier").innerHTML = `
+    <span style="
+      background:${tierBg(e.tier)};
+      color:${tierText(e.tier)};
+      padding:4px 10px;
+      border-radius:6px;
+      font-weight:700;
+    ">${e.tier}</span>
+  `;
+
   document.getElementById("mMaxLevel").textContent = `최대 레벨 ${e.maxLevel}`;
   document.getElementById("mEffect").textContent = e.effect;
   document.getElementById("mItems").textContent = `적용 아이템: ${e.items.join(", ")}`;
@@ -299,11 +343,18 @@ document.getElementById("searchBtn").onclick = () => {
   renderList(filtered);
 };
 
+// 🔥 엔터 키로 검색
+document.getElementById("searchBar").addEventListener("keyup", (e) => {
+  if (e.key === "Enter") {
+    document.getElementById("searchBtn").click();
+  }
+});
+
 // 🔥 티어 필터
 document.querySelectorAll(".tier-btn").forEach(btn => {
   btn.onclick = () => {
     const t = btn.dataset.tier;
-    if (t === "전체") {
+    if (t === "전체" || t === "전체보기") {
       renderList(ENCHANTS);
     } else {
       renderList(ENCHANTS.filter(e => e.tier === t));
@@ -311,13 +362,10 @@ document.querySelectorAll(".tier-btn").forEach(btn => {
   };
 });
 
-// 🔥 페이지 처음 로드할 때 전체 출력
+// 🔥 페이지 처음 로드 시 전체 목록 표시
 renderList(ENCHANTS);
 
 </script>
 
 </body>
 </html>
-
-
-
