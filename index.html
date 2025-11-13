@@ -14,21 +14,6 @@ body {
   font-family: 'Pretendard', sans-serif;
 }
 
-  function getTierColor(tier) {
-  if (tier === "일반") return "#FCFCFC";
-  if (tier === "특별") return "#54FC54";
-  if (tier === "엘리트") return "#54FCFC";
-  if (tier === "근본") return "#FCFC54";
-  if (tier === "전설") return "#FCA800";
-  if (tier === "신화") return "#FC54FC";
-  return "#eee";
-}
-
-function getTextColor(tier) {
-  if (tier === "전설" || tier === "신화") return "#fff";
-  return "#000";
-}
-
 /* 상단 */
 .nav {
   padding: 20px 40px;
@@ -279,19 +264,7 @@ function renderList(data) {
       </div>
   </td>
   <td>${e.grade}</td>
-  <td>
-  <span style="
-    background:${getTierColor(e.tier)};
-    color:${getTextColor(e.tier)};
-    padding:6px 12px;
-    border-radius:10px;
-    font-weight:600;
-    display:inline-block;
-  ">
-    ${e.tier}
-  </span>
-</td>
-
+  <td>${e.tier}</td>
   <td>${e.maxLevel}</td>
   <td>${e.items.join(", ")}</td>
 `;
@@ -345,7 +318,6 @@ renderList(ENCHANTS);
 
 </body>
 </html>
-
 
 
 
