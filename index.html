@@ -73,8 +73,14 @@ body {
   filter: brightness(1.1);
 }
 
+/* ★ 아이템 필터 active = 검은색 테두리 */
 .item-btn.active {
-  outline: 3px solid #2fb24a;
+  outline: 3px solid #000;
+}
+
+/* ★ 등급 필터 active = 검은색 테두리 */
+.tier-btn.active {
+  outline: 3px solid #000;
 }
 
 /* 테이블 */
@@ -190,7 +196,7 @@ body {
 
 <!-- 등급 필터 -->
 <div class="filters">
-  <button class="tier-btn" data-tier="일반" style="background:#FCFCFC;">일반</button>
+  <button class="tier-btn active" data-tier="일반" style="background:#FCFCFC;">일반</button>
   <button class="tier-btn" data-tier="특별" style="background:#54FC54;">특별</button>
   <button class="tier-btn" data-tier="엘리트" style="background:#54FCFC;">엘리트</button>
   <button class="tier-btn" data-tier="근본" style="background:#FCFC54;">근본</button>
@@ -215,7 +221,6 @@ body {
   <button class="item-btn" data-item="낫">낫</button>
   <button class="item-btn" data-item="도구">도구</button>
 </div>
-
 
 <!-- 테이블 -->
 <table class="ench-table">
@@ -347,29 +352,6 @@ document.getElementById("searchBtn").onclick = () => {
 
 document.getElementById("searchBar").addEventListener("keyup", e => {
   if (e.key === "Enter") document.getElementById("searchBtn").click();
-});
+};
 
-// 등급 필터
-document.querySelectorAll(".tier-btn").forEach(btn => {
-  btn.onclick = () => {
-    currentTierFilter = btn.dataset.tier;
-    renderList(DATA);
-  };
-});
-
-// 아이템 필터
-document.querySelectorAll(".item-btn").forEach(btn => {
-  btn.onclick = () => {
-    document.querySelectorAll(".item-btn")
-      .forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-
-    currentItemFilter = btn.dataset.item;
-    renderList(DATA);
-  };
-});
-</script>
-
-</body>
-</html>
-
+// 등급 필터 (★ active 적�
