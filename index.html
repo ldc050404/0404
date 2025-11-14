@@ -27,6 +27,7 @@ body {
 .search-area {
   text-align: center;
   padding: 30px 0 10px;
+  position: relative;
 }
 
 #searchBar {
@@ -49,6 +50,31 @@ body {
   cursor: pointer;
 }
 
+/* ===== 자동완성 박스 ===== */
+.autocomplete-box {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  max-width: 600px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  margin-top: 5px;
+  text-align: left;
+  z-index: 9999;
+  display: none;
+}
+
+.autocomplete-item {
+  padding: 10px 14px;
+  cursor: pointer;
+}
+
+.autocomplete-item:hover {
+  background: #f1f1f1;
+}
+
 /* ===== 필터 ===== */
 .filters {
   display: flex;
@@ -64,12 +90,6 @@ body {
   cursor: pointer;
   font-weight: 600;
   transition: all 0.15s ease-in-out;
-}
-
-.tier-btn:hover, .item-btn:hover, .fav-btn:hover {
-  transform: translateY(-2px) scale(1.05);
-  box-shadow: 0px 4px 14px rgba(0,0,0,0.15);
-  filter: brightness(1.1);
 }
 
 .tier-btn.active,
@@ -99,22 +119,6 @@ body {
   text-align: left;
 }
 
-.ench-table tbody tr:hover {
-  background: #fafafa;
-  cursor: pointer;
-}
-
-.ench-table thead {
-  background: #f3fff0;
-}
-
-/* 티어 열 width 고정 */
-.ench-table th:nth-child(3),
-.ench-table td:nth-child(3) {
-  width: 80px;
-  text-align: center;
-}
-
 /* ===== 등급 배지 ===== */
 .grade-badge {
   display: inline-block;
@@ -134,29 +138,13 @@ body {
 
 /* ===== 별 아이콘 ===== */
 .star {
-  font-size: 24px !important; /* 1.3배 확대 */
+  font-size: 22px; /* ← 1.3배 크게 */
   cursor: pointer;
-  margin-right: 8px;
+  margin-right: 6px;
 }
 
 .star.off { color: #ccc; }
 .star.on { color: #FFD700; }
-
-/* ===== 적용 아이템 버튼 (목록용) ===== */
-.item-chip {
-  display: inline-block;
-  padding: 6px 12px;
-  margin: 2px;
-  background: #f3f3f3;
-  border: 1px solid #ccc;
-  border-radius: 14px;
-  cursor: pointer;
-  font-size: 13px;
-}
-
-.item-chip:hover {
-  background: #e8e8e8;
-}
 
 /* ===== 모달 ===== */
 .modal {
@@ -186,56 +174,34 @@ body {
   cursor: pointer;
 }
 
-/* 모달 안 별 버튼 */
 .modal-star {
   position: absolute;
   right: 25px;
   top: 20px;
-  font-size: 28px;
+  font-size: 26px;
   cursor: pointer;
 }
 
 .modal-star.off { color: #ccc; }
 .modal-star.on { color: #FFD700; }
 
-.meta {
-  color: #666;
-  margin-bottom: 15px;
-  font-weight: 600;
-}
-
-.desc {
-  font-size: 17px;
-  line-height: 1.7;
-  color: #333;
-}
-
-.extra {
-  font-size: 14px;
-  margin-top: 10px;
-  color: #444;
-  font-weight: 500;
-}
-
-.items {
-  font-size: 13px;
-  margin-top: 10px;
-  color: #777;
-}
-
-/* 모달 적용 아이템 버튼 */
-.modal-item-btn {
+/* 모달 아이템 버튼 */
+.modal-item-btn, .table-item-btn {
   display: inline-block;
-  padding: 6px 14px;
-  margin-right: 6px;
-  margin-bottom: 6px;
-  border-radius: 14px;
+  padding: 5px 10px;
   background: #f3f3f3;
+  border-radius: 10px;
   border: 1px solid #ccc;
+  margin-right: 4px;
   cursor: pointer;
-  font-size: 13px;
-  font-weight: 600;
+  font-size: 12px;
 }
+
+.table-item-btn:hover,
+.modal-item-btn:hover {
+  background: #e8e8e8;
+}
+
 </style>
 </head>
 <body>
@@ -245,40 +211,39 @@ body {
 <section class="search-area">
   <input id="searchBar" placeholder="인챈트 검색 (예: 불멸, 낙뢰, 수확 ...)" />
   <button id="searchBtn" class="search-btn">검색</button>
+
+  <!-- 자동완성 -->
+  <div id="autoBox" class="autocomplete-box"></div>
 </section>
 
-<!-- 즐겨찾기 토글 -->
+<!-- 즐겨찾기 -->
 <div class="filters">
   <button id="favToggle" class="fav-btn">
-    <span id="favToggleIcon" class="star off">☆</span>
-    즐겨찾기
+    <span id="favToggleIcon" class="star off">☆</span> 즐겨찾기
   </button>
 </div>
 
 <!-- 등급 필터 -->
 <div class="filters">
   <button class="tier-btn active" data-tier="전체">전체</button>
-  <button class="tier-btn" data-tier="일반" style="background:#FCFCFC;">일반</button>
-  <button class="tier-btn" data-tier="특별" style="background:#54FC54;">특별</button>
-  <button class="tier-btn" data-tier="엘리트" style="background:#54FCFC;">엘리트</button>
-  <button class="tier-btn" data-tier="근본" style="background:#FCFC54;">근본</button>
-  <button class="tier-btn" data-tier="전설" style="background:#FCA800;">전설</button>
-  <button class="tier-btn" data-tier="신화" style="background:#FC54FC;">신화</button>
+  <button class="tier-btn" data-tier="일반">일반</button>
+  <button class="tier-btn" data-tier="특별">특별</button>
+  <button class="tier-btn" data-tier="엘리트">엘리트</button>
+  <button class="tier-btn" data-tier="근본">근본</button>
+  <button class="tier-btn" data-tier="전설">전설</button>
+  <button class="tier-btn" data-tier="신화">신화</button>
 </div>
 
 <!-- 아이템 필터 -->
 <div class="filters">
   <button class="item-btn active" data-item="전체">전체</button>
   <button class="item-btn" data-item="검">검</button>
-  <button class="item-btn" data-item="도끼">도끼</button>
   <button class="item-btn" data-item="활">활</button>
   <button class="item-btn" data-item="쇠뇌">쇠뇌</button>
-  <button class="item-btn" data-item="삼지창">삼지창</button>
-  <button class="item-btn" data-item="갑옷">갑옷</button>
-  <button class="item-btn" data-item="흉갑">흉갑</button>
   <button class="item-btn" data-item="바지">바지</button>
-  <button class="item-btn" data-item="신발">신발</button>
   <button class="item-btn" data-item="모자">모자</button>
+  <button class="item-btn" data-item="갑옷">갑옷</button>
+  <button class="item-btn" data-item="삼지창">삼지창</button>
   <button class="item-btn" data-item="낫">낫</button>
   <button class="item-btn" data-item="도구">도구</button>
 </div>
@@ -289,20 +254,18 @@ body {
       <th>인챈트</th>
       <th>등급</th>
       <th>티어</th>
-      <th>최대 레벨</th>
+      <th>최대</th>
       <th>적용 아이템</th>
     </tr>
   </thead>
-
   <tbody id="enchList"></tbody>
 </table>
 
-<!-- ===== 모달 ===== -->
+<!-- 모달 한 개만 남김 -->
 <div id="modal" class="modal">
   <div class="modal-content">
     <span id="closeModal" class="close">&times;</span>
     <span id="modalStar" class="modal-star off">☆</span>
-
     <h2 id="mName"></h2>
     <div class="meta" id="mMeta"></div>
     <p class="desc" id="mEffect"></p>
@@ -312,7 +275,7 @@ body {
 </div>
 
 <script>
-/* ===== 데이터 로드 ===== */
+/* ===== 데이터 ===== */
 const SHEET_ID = "13fF_iQfMThiw49QrYSCULF3mT4QVHO4aDsbSDD71DUg";
 const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
 
@@ -328,9 +291,7 @@ fetch(SHEET_URL)
   .then(res => res.text())
   .then(text => {
     const json = JSON.parse(text.substr(47).slice(0, -2));
-    const rows = json.table.rows;
-
-    DATA = rows.map(r => ({
+    DATA = json.table.rows.map(r => ({
       name: r.c[0]?.v ?? "",
       grade: r.c[1]?.v ?? "",
       tier: r.c[2]?.v ?? "",
@@ -343,18 +304,11 @@ fetch(SHEET_URL)
     renderList();
   });
 
-/* ===== 즐겨찾기 확인 ===== */
-function isFav(name) {
-  return favoriteList.includes(name);
-}
-
-/* ===== 즐겨찾기 토글 ===== */
-function toggleFav(name) {
-  if (isFav(name)) {
-    favoriteList = favoriteList.filter(n => n !== name);
-  } else {
-    favoriteList.push(name);
-  }
+/* ===== 즐겨찾기 ===== */
+function isFav(n) { return favoriteList.includes(n); }
+function toggleFav(n) {
+  if (isFav(n)) favoriteList = favoriteList.filter(x => x !== n);
+  else favoriteList.push(n);
   localStorage.setItem("favorites", JSON.stringify(favoriteList));
 }
 
@@ -362,17 +316,9 @@ function toggleFav(name) {
 function renderList() {
   let list = [...DATA];
 
-  if (favOnlyMode) {
-    list = list.filter(e => favoriteList.includes(e.name));
-  }
-
-  if (currentTierFilter !== "전체") {
-    list = list.filter(e => e.grade === currentTierFilter);
-  }
-
-  if (currentItemFilter !== "전체") {
-    list = list.filter(e => e.items.includes(currentItemFilter));
-  }
+  if (favOnlyMode) list = list.filter(e => isFav(e.name));
+  if (currentTierFilter !== "전체") list = list.filter(e => e.grade === currentTierFilter);
+  if (currentItemFilter !== "전체") list = list.filter(e => e.items.includes(currentItemFilter));
 
   const body = document.getElementById("enchList");
   body.innerHTML = "";
@@ -383,9 +329,9 @@ function renderList() {
     const favClass = isFav(e.name) ? "on" : "off";
     const favSymbol = isFav(e.name) ? "★" : "☆";
 
-    /* 적용 아이템 → 버튼 UI */
-    const itemChips = e.items
-      .map(i => `<span class="item-chip" data-item="${i}">${i}</span>`)
+    /* 적용 아이템 → 버튼화 */
+    const itemBtns = e.items
+      .map(i => `<span class="table-item-btn" data-item="${i}">${i}</span>`)
       .join("");
 
     tr.innerHTML = `
@@ -397,35 +343,33 @@ function renderList() {
           <div style="font-size:12px; color:#888;">${e.name} 인챈트</div>
         </div>
       </td>
+
       <td><span class="grade-badge grade-${e.grade}">${e.grade}</span></td>
       <td>${e.tier}</td>
       <td>${e.max}</td>
-      <td>${itemChips}</td>
+      <td>${itemBtns}</td>
     `;
 
-    /* ===== 별 클릭 ===== */
+    /* 별 클릭 */
     tr.querySelector(".star").onclick = ev => {
       ev.stopPropagation();
       toggleFav(e.name);
       renderList();
     };
 
-    /* ===== 적용 아이템 클릭 (목록에서) ===== */
-    tr.querySelectorAll(".item-chip").forEach(chip => {
-      chip.onclick = ev => {
+    /* 적용 아이템 버튼 클릭 시 필터 */
+    tr.querySelectorAll(".table-item-btn").forEach(btn => {
+      btn.onclick = ev => {
         ev.stopPropagation();
-        currentItemFilter = chip.dataset.item;
-
+        currentItemFilter = btn.dataset.item;
         document.querySelectorAll(".item-btn").forEach(b => b.classList.remove("active"));
-        document.querySelector(`.item-btn[data-item="${chip.dataset.item}"]`).classList.add("active");
-
+        document.querySelector(`.item-btn[data-item="${btn.dataset.item}"]`).classList.add("active");
         renderList();
       };
     });
 
-    /* ===== 모달 열기 ===== */
+    /* 모달 열기 */
     tr.onclick = () => openModal(e);
-
     body.appendChild(tr);
   });
 }
@@ -436,93 +380,45 @@ const modal = document.getElementById("modal");
 function openModal(e) {
   document.getElementById("mName").textContent = e.name;
   document.getElementById("mMeta").innerHTML =
-    `<span class="grade-badge grade-${e.grade}">${e.grade}</span> • 티어: ${e.tier} • 최대 레벨 ${e.max}`;
-
+    `<span class="grade-badge grade-${e.grade}">${e.grade}</span> • 티어: ${e.tier} • 최대 ${e.max}`;
   document.getElementById("mEffect").textContent = e.effect;
   document.getElementById("mExtra").textContent = e.extra ? `추가: ${e.extra}` : "";
 
-  /* 모달 적용 아이템 버튼 */
+  /* 적용 아이템 버튼 생성 */
   const mItems = document.getElementById("mItems");
-  mItems.innerHTML = "적용 아이템: ";
-
-  e.items.forEach(item => {
+  mItems.innerHTML = "";
+  e.items.forEach(i => {
     const btn = document.createElement("span");
-    btn.textContent = item;
     btn.className = "modal-item-btn";
-
+    btn.textContent = i;
     btn.onclick = ev => {
       ev.stopPropagation();
-      currentItemFilter = item;
-
+      currentItemFilter = i;
       document.querySelectorAll(".item-btn").forEach(b => b.classList.remove("active"));
-      document.querySelector(`.item-btn[data-item="${item}"]`).classList.add("active");
-
+      document.querySelector(`.item-btn[data-item="${i}"]`).classList.add("active");
       renderList();
     };
-
     mItems.appendChild(btn);
   });
 
-  /* ===== 모달 즐겨찾기 ===== */
+  /* 모달 별 버튼 */
   const modalStar = document.getElementById("modalStar");
   modalStar.className = "modal-star " + (isFav(e.name) ? "on" : "off");
   modalStar.textContent = isFav(e.name) ? "★" : "☆";
-
   modalStar.onclick = () => {
     toggleFav(e.name);
-    renderList();
-
     modalStar.className = "modal-star " + (isFav(e.name) ? "on" : "off");
     modalStar.textContent = isFav(e.name) ? "★" : "☆";
+    renderList();
   };
 
   modal.style.display = "block";
 }
 
-document.getElementById("closeModal").onclick = () => (modal.style.display = "none");
+document.getElementById("closeModal").onclick = () => modal.style.display = "none";
+window.onclick = e => { if (e.target === modal) modal.style.display = "none"; };
 
-window.onclick = e => {
-  if (e.target === modal) modal.style.display = "none";
-};
-
-/* ===== 검색 ===== */
-document.getElementById("searchBtn").onclick = () => {
-  const key = document.getElementById("searchBar").value.trim();
-  if (!key) return renderList();
-
-  const filtered = DATA.filter(e => e.name.includes(key));
-  const body = document.getElementById("enchList");
-  body.innerHTML = "";
-  filtered.forEach(e => displayRow(e));
-};
-
-document.getElementById("searchBar").addEventListener("keyup", e => {
-  if (e.key === "Enter") document.getElementById("searchBtn").click();
-});
-
-/* ===== 등급 필터 ===== */
-document.querySelectorAll(".tier-btn").forEach(btn => {
-  btn.onclick = () => {
-    document.querySelectorAll(".tier-btn").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-
-    currentTierFilter = btn.dataset.tier;
-    renderList();
-  };
-});
-
-/* ===== 아이템 필터 ===== */
-document.querySelectorAll(".item-btn").forEach(btn => {
-  btn.onclick = () => {
-    document.querySelectorAll(".item-btn").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-
-    currentItemFilter = btn.dataset.item;
-    renderList();
-  };
-});
-
-/* ===== 즐겨찾기 필터 버튼 ===== */
+/* ===== 즐겨찾기 필터 ===== */
 document.getElementById("favToggle").onclick = () => {
   favOnlyMode = !favOnlyMode;
 
@@ -531,10 +427,87 @@ document.getElementById("favToggle").onclick = () => {
   icon.className = "star " + (favOnlyMode ? "on" : "off");
 
   document.getElementById("favToggle").classList.toggle("active");
-
   renderList();
 };
-</script>
 
+/* ===== 검색 기능 ===== */
+document.getElementById("searchBtn").onclick = () => search();
+
+/* Enter 검색 */
+document.getElementById("searchBar").addEventListener("keyup", e => {
+  if (e.key === "Enter") search();
+});
+
+/* 자동완성 */
+document.getElementById("searchBar").addEventListener("input", () => {
+  const key = searchBar.value.trim();
+  const box = document.getElementById("autoBox");
+
+  if (!key) {
+    box.style.display = "none";
+    return;
+  }
+
+  const matched = DATA.filter(e => e.name.includes(key)).slice(0, 7);
+
+  if (matched.length === 0) {
+    box.style.display = "none";
+    return;
+  }
+
+  box.innerHTML = matched
+    .map(e => `<div class="autocomplete-item" data-name="${e.name}">${e.name}</div>`)
+    .join("");
+
+  box.style.display = "block";
+
+  document.querySelectorAll(".autocomplete-item").forEach(item => {
+    item.onclick = () => {
+      searchBar.value = item.dataset.name;
+      box.style.display = "none";
+      search();
+    };
+  });
+});
+
+/* 검색 실행 */
+function search() {
+  const key = searchBar.value.trim();
+  if (!key) return renderList();
+
+  const filtered = DATA.filter(e => e.name.includes(key));
+  const body = document.getElementById("enchList");
+  body.innerHTML = "";
+
+  filtered.forEach(e => {
+    const tr = document.createElement("tr");
+    const favClass = isFav(e.name) ? "on" : "off";
+    const favSymbol = isFav(e.name) ? "★" : "☆";
+
+    const itemBtns = e.items
+      .map(i => `<span class="table-item-btn" data-item="${i}">${i}</span>`)
+      .join("");
+
+    tr.innerHTML = `
+      <td style="display:flex; align-items:center; gap:10px;">
+        <span class="star ${favClass}">${favSymbol}</span>
+        <img src="0003.png" style="width:32px;">
+        <div>
+          <div style="font-weight:600">${e.name}</div>
+          <div style="font-size:12px; color:#888;">${e.name} 인챈트</div>
+        </div>
+      </td>
+      <td><span class="grade-badge grade-${e.grade}">${e.grade}</span></td>
+      <td>${e.tier}</td>
+      <td>${e.max}</td>
+      <td>${itemBtns}</td>
+    `;
+
+    tr.onclick = () => openModal(e);
+    body.appendChild(tr);
+  });
+}
+
+</script>
 </body>
 </html>
