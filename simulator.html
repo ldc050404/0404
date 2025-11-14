@@ -18,7 +18,6 @@
     letter-spacing:-1px;
   }
 
-  /* ===== 전체 레이아웃 (MetaTFT 스타일) ===== */
   .layout{
     width:100%; max-width:1500px;
     display:grid;
@@ -26,7 +25,6 @@
     gap:24px;
   }
 
-  /* ===== 좌측 장비 리스트 (카드형) ===== */
   .equip-box{
     background:#ffffff; border-radius:16px; padding:18px;
     box-shadow:0 4px 12px rgba(0,0,0,0.08);
@@ -34,80 +32,66 @@
   .equip-item{
     padding:14px; margin-bottom:10px;
     background:#f8fafc; border-radius:12px;
-    font-weight:700;
-    text-align:center;
-    cursor:pointer;
-    transition:0.15s;
+    font-weight:700; text-align:center;
+    cursor:pointer; transition:0.15s;
     border:1px solid #e5e7eb;
   }
-  .equip-item:hover{ background:#e8f5e9; }
   .equip-item.active{
     background:#d1fae5;
     border:2px solid #34d399;
     font-weight:800;
   }
 
-  /* ===== 가운데 인챈트 카드 리스트 ===== */
   .ench-list{
     background:#ffffff; border-radius:16px; padding:20px;
     box-shadow:0 4px 12px rgba(0,0,0,0.07);
     min-height:760px;
   }
   .ench-grid{
-    display:grid; grid-template-columns:repeat(auto-fill, minmax(280px,1fr));
-    gap:16px;
+    display:grid; grid-template-columns:repeat(auto-fill, minmax(280px,1fr)); gap:16px;
   }
   .ench-card{
     display:flex; gap:12px;
     background:#f9fafb; border-radius:14px;
     border:1px solid #e5e7eb;
-    padding:14px;
-    cursor:pointer;
-    transition:0.15s;
+    padding:14px; cursor:pointer; transition:0.15s;
   }
   .ench-card:hover{ background:#eef2ff; }
 
   .ench-name{ font-size:18px; font-weight:800; }
   .ench-sub{ font-size:13px; color:#6b7280; }
 
-  /* ===== 티어 배지 ===== */
   .tier-badge{
     padding:3px 10px; border-radius:6px;
-    font-size:12px; font-weight:700;
-    margin-top:6px; width:max-content;
-    color:#000;
+    font-size:12px; font-weight:700; margin-top:6px; width:max-content; color:#000;
   }
   .grade-신화{ background:#FC54FC; }
   .grade-전설{ background:#FCA800; }
   .grade-근본{ background:#FCFC54; }
   .grade-일반{ background:#FCFCFC; }
   .grade-특별{ background:#54FC54; }
-  .grade-엘리트{ background:#54FCFC; }{ background:#cffafe; }
+  .grade-엘리트{ background:#54FCFC; }
 
-  /* ===== 우측 슬롯 창 ===== */
   .slot-box{
     background:#ffffff; border-radius:16px; padding:20px;
     box-shadow:0 4px 12px rgba(0,0,0,0.08);
   }
   .slot{
     display:flex; justify-content:space-between; align-items:center;
-    background:#f9fafb; border-radius:12px;
-    padding:12px; margin-bottom:10px;
-    border:1px solid #e5e7eb;
+    background:#f9fafb; border-radius:12px; padding:12px;
+    margin-bottom:10px; border:1px solid #e5e7eb;
   }
 
   .del-btn{
-    background:#ef4444; color:white;
+    background:#ef4444; color:#fff;
     border:none; padding:6px 12px;
     border-radius:8px; cursor:pointer;
     font-weight:600;
   }
 
-  /* ===== 저장 시스템 ===== */
   .save-item{
     background:#f9fafb; border-radius:12px;
-    border:1px solid #e5e7eb;
-    padding:10px 12px;
+    border:1px solid #e5e7eb; padding:10px 12px;
     margin-bottom:10px;
     display:flex; justify-content:space-between; align-items:center;
   }
@@ -128,15 +112,12 @@
 <h1>Simulator</h1>
 <div class="layout">
 
-  <!-- 장비 선택 -->
   <div class="equip-box" id="equipBox"></div>
 
-  <!-- 인챈트 리스트 -->
   <div class="ench-list">
     <div class="ench-grid" id="enchList">장비를 선택해주세요.</div>
   </div>
 
-  <!-- 슬롯 & 저장 -->
   <div class="slot-box">
     <h3 style="margin-top:0;">슬롯 (최대 14개)</h3>
     <div id="slots"></div>
@@ -148,13 +129,11 @@
 </div>
 
 <script>
-/* ===== 장비 분류 ===== */
 const EQUIPS = ["검","활","쇠뇌","삼지창","도끼","삽","괭이","곡괭이","모자","흉갑","바지","신발"];
 const ARMOR = ["모자","흉갑","바지","신발"];
 const TOOLS = ["삽","도끼","괭이","곡괭이"];
 const WEAPONS = ["검","활","쇠뇌","삼지창"];
 
-/* ===== 시트 연동 ===== */
 const SHEET_ID = "13fF_iQfMThiw49QrYSCULF3mT4QVHO4aDsbSDD71DUg";
 const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
 let ENCHANTS = [];
@@ -179,7 +158,6 @@ let currentEquip = null;
 let currentSlots = [];
 let saveSets = JSON.parse(localStorage.getItem("enchSaves") || "[]");
 
-/* ===== 장비 렌더링 ===== */
 function renderEquip(){
   const box = document.getElementById("equipBox");
   box.innerHTML = "";
@@ -200,7 +178,6 @@ function getCategory(equip){
   return null;
 }
 
-/* ===== 인챈트 렌더링 ===== */
 function renderEnchantList(){
   const box = document.getElementById("enchList");
   if(!currentEquip){ box.textContent = "장비를 선택해주세요."; return; }
@@ -208,8 +185,7 @@ function renderEnchantList(){
 
   const category = getCategory(currentEquip);
   const filtered = ENCHANTS.filter(e =>
-    e.items.includes(currentEquip) ||
-    (category && e.items.includes(category))
+    e.items.includes(currentEquip) || (category && e.items.includes(category))
   );
 
   filtered.forEach(e => {
@@ -221,116 +197,8 @@ function renderEnchantList(){
       <div>
         <div class="ench-name">${e.name}</div>
         <div class="ench-sub">${e.grade}</div>
-        <div class="tier-badge grade-${e.grade}">티어 ${e.tier}</div>`;
+        <div class="tier-badge grade-${e.grade}">티어 ${e.tier}</div>
+      </div>`;
 
     card.onclick = () => addToSlot(e);
     box.appendChild(card);
-  });
-}
-
-/* ===== 슬롯 관리 ===== */
-function addToSlot(e){
-  if(currentSlots.find(s => s.name === e.name)){
-    alert("이미 적용된 인챈트입니다.");
-    return;
-  }
-  if(currentSlots.length >= 14){
-    alert("슬롯이 가득 찼습니다.");
-    return;
-  }
-  currentSlots.push(e);
-  renderSlots();
-}
-
-function renderSlots(){
-  const box = document.getElementById("slots");
-  box.innerHTML = "";
-
-  for(let i=0;i<14;i++){
-    const slot = document.createElement("div");
-    slot.className = "slot";
-
-    if(currentSlots[i]){
-      slot.innerHTML = `
-        <span>${currentSlots[i].name}</span>
-        <button class="del-btn">X</button>
-      `;
-      slot.querySelector(".del-btn").onclick = () => {
-        currentSlots.splice(i,1);
-        renderSlots();
-      };
-    }
-    else{
-      slot.innerHTML = `<span style='color:#777'>빈 슬롯</span>`;
-    }
-
-    box.appendChild(slot);
-  }
-}
-
-/* ===== 저장 기능 ===== */
-function function renderSaves(){
-  const box=document.getElementById("saveList"); box.innerHTML="";
-  saveSets.forEach((s,i)=>{
-    const div=document.createElement("div"); div.className="save-item";
-    div.innerHTML=`<span>${s.name}</span><button class='del-btn' style='background:#ff4d4d;color:white;border:none;padding:5px 10px;border-radius:6px;'>X</button>`;
-    div.onclick=(ev)=>{
-      if(ev.target.classList.contains('del-btn')) return;
-      currentEquip=s.equip;
-      currentSlots=[...s.slots];
-      renderEquip(); renderSlots(); renderEnchantList();
-    };
-    div.querySelector('.del-btn').onclick=()=>{
-      saveSets.splice(i,1);
-      localStorage.setItem('enchSaves', JSON.stringify(saveSets));
-      renderSaves();
-    };
-    box.appendChild(div);
-  });
-}(){
-  const box = document.getElementById("saveList");
-  box.innerHTML = "";
-
-  saveSets.forEach((s,i) => {
-    const div = document.createElement("div");
-    div.className = "save-item";
-
-    div.innerHTML = `
-      <span>${s.name}</span>
-      <button class="del-btn">X</button>
-    `;
-
-    div.onclick = (ev) => {
-      if(ev.target.classList.contains("del-btn")) return;
-      currentEquip = s.equip;
-      currentSlots = s.slots;
-      renderEquip(); renderSlots(); renderEnchantList();
-    };
-
-    div.querySelector(".del-btn").onclick = () => {
-      saveSets.splice(i,1);
-      localStorage.setItem("enchSaves",JSON.stringify(saveSets));
-      renderSaves();
-    };
-
-    box.appendChild(div);
-  });
-}
-
-function saveSet(){
-  if(!currentEquip){ alert("장비를 먼저 선택하세요."); return; }
-  const name = prompt("세트 이름 입력");
-  if(!name) return;
-
-  saveSets.push({name,equip:currentEquip,slots:currentSlots});
-  localStorage.setItem("enchSaves",JSON.stringify(saveSets));
-  renderSaves();
-}
-
-document.getElementById("addSaveBtn").onclick = saveSet;
-
-renderEquip(); renderSlots(); renderSaves();
-</script>
-
-</body>
-</html>
