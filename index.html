@@ -2,347 +2,338 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Enchantments</title>
 
-<!-- 파비콘 -->
+<!-- 파비콘: 0001.png -->
 <link rel="icon" type="image/png" href="0001.png">
 
 <style>
-body {
-  margin: 0;
-  padding: 0 80px;
-  background: #ffffff;
-  font-family: 'Pretendard', sans-serif;
-}
+  :root{
+    --bg: #ffffff;
+    --text: #12221a;
+    --muted: #6b6b6b;
+    --accent: #2fb24a;
+    --table-head: #f6fbf7;
 
-/* 로고 */
-.logo-img {
-  width: 500px;
-  height: auto;
-  margin: 20px auto 20px auto;
-  display: block;
-}
+    --tier-신화: #FC54FC;
+    --tier-전설: #FCA800;
+    --tier-근본: #FCFC54;
+    --tier-일반: #FCFCFC;
+    --tier-특별: #54FC54;
+    --tier-엘리트: #54FCFC;
+  }
 
-/* 검색 */
-.search-area {
-  text-align: center;
-  padding: 30px 0 10px;
-}
+  html,body{height:100%;margin:0;font-family:Inter, Pretendard, system-ui, -apple-system, "Helvetica Neue", Arial;}
+  body{background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
 
-#searchBar {
-  width: 60%;
-  max-width: 600px;
-  padding: 14px 18px;
-  border-radius: 10px;
-  border: 1px solid #ddd;
-  font-size: 16px;
-}
+  /* ===== header ===== */
+  .topbar{
+    position:fixed;top:0;left:0;right:0;height:84px;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:10px 20px;
+    border-bottom:1px solid #e6efe8;
+    background:linear-gradient(180deg, rgba(255,255,255,0.96), rgba(255,255,255,0.90));
+    z-index:1000;
+    box-shadow:0 2px 10px rgba(12,34,18,0.03);
+  }
 
-.search-btn {
-  margin-left: 10px;
-  padding: 14px 20px;
-  background: #2fb24a;
-  border: none;
-  border-radius: 8px;
-  color: white;
-  font-size: 15px;
-  cursor: pointer;
-}
+  .logo-wrap{display:flex;align-items:center;gap:10px}
 
-/* 필터 */
-.filters {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-bottom: 20px;
-}
+  /* 로고 수정 — 0001은 그대로, 0002만 2.5배 확대 */
+  .logo-wrap img.logo-main{
+    height:72px; 
+    width:auto; 
+    display:block;
+  }
 
-.tier-btn, .item-btn {
-  border: none;
-  padding: 8px 18px;
-  border-radius: 20px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: all 0.15s ease-in-out;
-}
+  .logo-wrap img.logo-text{
+    height:240px; /* ← 여기만 변경됨 (원래 96px → 240px) */
+    width:auto;
+    display:block;
+  }
 
-.tier-btn:hover, .item-btn:hover {
-  transform: translateY(-2px) scale(1.05);
-  box-shadow: 0px 4px 14px rgba(0,0,0,0.15);
-  filter: brightness(1.1);
-}
+  .page{
+    max-width:1200px;
+    margin:110px auto 60px;
+    padding:0 20px;
+  }
 
-.item-btn.active {
-  outline: 3px solid #2fb24a;
-}
+  .hero{
+    display:flex;flex-direction:column;align-items:center;gap:18px;margin-bottom:18px;
+  }
 
-/* 테이블 */
-.ench-table {
-  width: 80%;
-  margin: auto;
-  border-collapse: collapse;
-  border-radius: 14px;
-  overflow: hidden;
-  font-size: 15px;
-  table-layout: fixed;
-}
+  .search-wrap{width:100%;display:flex;justify-content:center;}
 
-.ench-table th, .ench-table td {
-  padding: 16px;
-  border-bottom: 1px solid #f1f1f1;
-  text-align: center;
-}
+  .search-box{
+    width:70%;max-width:860px;min-width:300px;
+    display:flex;align-items:center;gap:12px;
+    background:var(--table-head);
+    border:1px solid #e0efe5;
+    padding:14px 16px;border-radius:12px;
+    box-shadow:0 6px 18px rgba(39,144,60,0.06);
+  }
 
-.ench-table td:first-child {
-  text-align: left;
-}
+  .search-box input{
+    flex:1;border:0;background:transparent;font-size:18px;padding:6px 0;outline:none;color:var(--text);
+  }
 
-.ench-table tbody tr:hover {
-  background: #fafafa;
-  cursor: pointer;
-}
+  .search-box .btn{
+    background:var(--accent);color:#fff;border:none;border-radius:8px;
+    padding:8px 12px;font-weight:600;cursor:pointer;
+  }
 
-.ench-table thead {
-  background: #f3fff0;
-}
+  .tiers{
+    display:flex;gap:10px;flex-wrap:wrap;justify-content:center;
+  }
 
-/* 모달 */
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 99999;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.35);
-}
+  .tier-btn{
+    padding:8px 14px;border-radius:8px;border:1px solid rgba(0,0,0,0.06);
+    background:#fff;color:var(--text);
+    cursor:pointer;font-weight:600;
+    box-shadow:0 1px 0 rgba(0,0,0,0.04);
+  }
 
-.modal-content {
-  background: #fff;
-  margin: 8% auto;
-  padding: 30px;
-  width: 50%;
-  border-radius: 12px;
-  box-shadow: 0px 5px 18px rgba(0,0,0,0.15);
-}
+  .tier-btn.active{
+    box-shadow:0 8px 28px rgba(47,178,74,0.12);
+    transform:translateY(-2px);
+  }
 
-.close {
-  float: right;
-  font-size: 28px;
-  cursor: pointer;
-}
+  .tier-일반{background:var(--tier-일반);color:#111;border-color:#e6e6e6;box-shadow:0 6px 18px rgba(0,0,0,0.04);}
+  .tier-특별{background:var(--tier-특별);color:#fff;border-color:var(--tier-특별);}
+  .tier-엘리트{background:var(--tier-엘리트);color:#fff;border-color:var(--tier-엘리트);}
+  .tier-근본{background:var(--tier-근본);color:#000;border-color:var(--tier-근본);}
+  .tier-전설{background:var(--tier-전설);color:#fff;border-color:var(--tier-전설);}
+  .tier-신화{background:var(--tier-신화);color:#fff;border-color:var(--tier-신화);}
 
-.meta {
-  color: #666;
-  margin-bottom: 15px;
-  font-weight: 600;
-}
+  .table-wrap{
+    margin-top:22px;background:#fff;border-radius:10px;
+    border:1px solid #eef7ee;box-shadow:0 6px 30px rgba(18,34,26,0.04);
+    overflow:hidden;
+  }
 
-.desc {
-  font-size: 17px;
-  line-height: 1.7;
-  color: #333;
-}
+  table.enchant-table{width:100%;border-collapse:collapse;font-size:14px}
+  table.enchant-table thead tr{background:linear-gradient(180deg,#f7fcf7,#f0faf0);}
+  table.enchant-table th{
+    text-align:left;padding:12px 16px;border-bottom:1px solid #f0f6f1;
+    color:var(--muted);font-weight:700;font-size:13px;
+  }
+  table.enchant-table td{
+    padding:12px 16px;border-bottom:1px solid #fbfdfb;vertical-align:middle;
+  }
 
-.extra {
-  font-size: 14px;
-  margin-top: 10px;
-  color: #444;
-  font-weight: 500;
-}
+  tr.enchant-row:hover{background:#fbfff9;cursor:pointer}
+  .tier-badge{display:inline-block;padding:6px 8px;border-radius:6px;font-weight:700;font-size:12px}
+  .name-col{display:flex;align-items:center;gap:12px}
+  .name-col img{width:48px;height:48px;border-radius:6px;object-fit:cover;box-shadow:0 2px 6px rgba(0,0,0,0.06)}
+  .right-muted{color:var(--muted);font-size:13px}
 
-.items {
-  font-size: 13px;
-  margin-top: 10px;
-  color: #777;
-}
+  .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.45);display:none;align-items:center;justify-content:center;z-index:2000}
+  .modal{background:#fff;padding:20px;border-radius:10px;max-width:640px;width:94%}
+  .modal h3{margin:0 0 8px}
+  .modal p{color:var(--muted);margin:8px 0 0;line-height:1.5}
+
+  @media(max-width:900px){
+    .search-box{width:92%}
+    table.enchant-table th,table.enchant-table td{padding:10px}
+    .logo-wrap img.logo-main{height:56px}
+    .logo-wrap img.logo-text{height:200px}
+    .name-col img{width:40px;height:40px}
+  }
+
+  @media(max-width:560px){
+    .search-box input{font-size:16px}
+    .tier-btn{padding:6px 10px;font-size:13px}
+    .logo-wrap img.logo-text{display:none}
+  }
 </style>
 </head>
 <body>
 
-<!-- 로고 -->
-<img src="0002.png" class="logo-img">
+<header class="topbar" role="banner">
+  <div class="logo-wrap">
+    <a href="./" aria-label="Enchantments 홈">
+      <img src="0001.png" alt="logo" class="logo-main">
+    </a>
+    <img src="0002.png" alt="logo-text" class="logo-text">
+  </div>
+</header>
 
-<!-- 검색 -->
-<section class="search-area">
-  <input id="searchBar" placeholder="인챈트 검색 (예: 불멸, 낙뢰, 수확 ...)" />
-  <button id="searchBtn" class="search-btn">검색</button>
-</section>
+<main class="page">
+  <section class="hero">
+    <div class="search-wrap">
+      <div class="search-box">
+        <input id="searchInput" type="search" placeholder="인챈트 이름을 입력하세요. (예: 불멸, 낙뢰, 수확 ...)" oninput="onFilterChange()" />
+        <button class="btn" onclick="onFilterChange()">검색</button>
+      </div>
+    </div>
 
-<!-- 등급 필터(일반/특별/엘리트 등) -->
-<div class="filters">
-  <button class="tier-btn" data-tier="일반" style="background:#FCFCFC;">일반</button>
-  <button class="tier-btn" data-tier="특별" style="background:#54FC54;">특별</button>
-  <button class="tier-btn" data-tier="엘리트" style="background:#54FCFC;">엘리트</button>
-  <button class="tier-btn" data-tier="근본" style="background:#FCFC54;">근본</button>
-  <button class="tier-btn" data-tier="전설" style="background:#FCA800;">전설</button>
-  <button class="tier-btn" data-tier="신화" style="background:#FC54FC;">신화</button>
-  <button class="tier-btn" data-tier="전체">전체보기</button>
-</div>
+    <div class="tiers">
+      <button class="tier-btn tier-일반" data-tier="일반" onclick="toggleTier('일반')">일반</button>
+      <button class="tier-btn tier-특별" data-tier="특별" onclick="toggleTier('특별')">특별</button>
+      <button class="tier-btn tier-엘리트" data-tier="엘리트" onclick="toggleTier('엘리트')">엘리트</button>
+      <button class="tier-btn tier-근본" data-tier="근본" onclick="toggleTier('근본')">근본</button>
+      <button class="tier-btn tier-전설" data-tier="전설" onclick="toggleTier('전설')">전설</button>
+      <button class="tier-btn tier-신화" data-tier="신화" onclick="toggleTier('신화')">신화</button>
+      <button class="tier-btn" data-tier="전체" onclick="toggleTier('전체')">전체보기</button>
+    </div>
+  </section>
 
-<!-- 아이템 필터 -->
-<div class="filters">
-  <button class="item-btn active" data-item="전체">전체</button>
-  <button class="item-btn" data-item="검">검</button>
-  <button class="item-btn" data-item="도끼">도끼</button>
-  <button class="item-btn" data-item="활">활</button>
-  <button class="item-btn" data-item="쇠뇌">쇠뇌</button>
-  <button class="item-btn" data-item="삼지창">삼지창</button>
-  <button class="item-btn" data-item="갑옷">갑옷</button>
-  <button class="item-btn" data-item="신발">신발</button>
-  <button class="item-btn" data-item="모자">모자</button>
-  <button class="item-btn" data-item="낫">낫</button>
-  <button class="item-btn" data-item="도구">도구</button>
-</div>
+  <section class="table-wrap">
+    <table class="enchant-table" id="enchantTable">
+      <thead>
+        <tr>
+          <th style="width:36%;">인챈트</th>
+          <th style="width:12%;">등급</th>
+          <th style="width:16%;">티어</th>
+          <th style="width:12%;">최대 레벨</th>
+          <th style="width:24%;">아이템</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </section>
+</main>
 
-<!-- 테이블 -->
-<table class="ench-table">
-  <thead>
-    <tr>
-      <th>인챈트</th>
-      <th>등급</th>
-      <th>티어</th>
-      <th>최대 레벨</th>
-      <th>적용 아이템</th>
-    </tr>
-  </thead>
-  <tbody id="enchList"></tbody>
-</table>
-
-<!-- 모달 -->
-<div id="modal" class="modal">
-  <div class="modal-content">
-    <span id="closeModal" class="close">&times;</span>
-    <h2 id="mName"></h2>
-
-    <div class="meta" id="mMeta"></div>
-
-    <p class="desc" id="mEffect"></p>
-    <p class="extra" id="mExtra"></p>
-    <p class="items" id="mItems"></p>
+<div class="modal-backdrop" id="modalBackdrop" onclick="closeModal(event)">
+  <div class="modal" id="modal">
+    <h3 id="modalTitle"></h3>
+    <div id="modalTier" style="margin-bottom:8px"></div>
+    <p id="modalDesc">상세 설명을 여기에 넣을 수 있습니다.</p>
   </div>
 </div>
 
 <script>
-// ====== ★ 구글 시트 연결 ★ ======
-const SHEET_ID = "13fF_iQfMThiw49QrYSCULF3mT4QVHO4aDsbSDD71DUg";
-const SHEET_URL =
-  `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
+/* 데이터 */
+const ENCHANTS = [
+  ["일반","낙뢰"],["일반","수중 호흡"],["일반","재련"],["일반","숙련"],["일반","광부"],["일반","호흡 보충"],["일반","야시경"],
+  ["일반","참수"],["일반","밀어내기"],["일반","팅커벨"],["일반","좀비 학살자"],["일반","스켈레톤 학살자"],
+  ["특별","재수확"],["특별","헌터"],["특별","광전사"],["특별","반사"],["특별","피해 흡수"],["특별","폭발 화살"],["특별","폭발 석궁"],
+  ["특별","부스터"],["특별","화염 갑옷"],["특별","전투식량"],["특별","염력"],["특별","폭발적 최후"],["특별","도살자"],["특별","사냥꾼"],
+  ["특별","무자비"],["특별","독침"],["특별","소멸"],["특별","포식"],
+  ["엘리트","투창"],["엘리트","독 갈고리"],["엘리트","화염 갈고리"],["엘리트","광맥 채굴"],["엘리트","엔더 학살자"],["엘리트","거미 학살자"],
+  ["엘리트","낚시꾼"],["엘리트","포획"],["엘리트","사신"],["엘리트","네더 학살자"],["엘리트","실명"],["엘리트","유혹"],["엘리트","빙결"],
+  ["엘리트","쇼크"],["엘리트","독사"],["엘리트","포이즌"],["엘리트","명장"],["엘리트","덫"],["엘리트","스프링"],["엘리트","좀비 소환"],
+  ["엘리트","탈진"],["엘리트","위더"],["엘리트","스모크"],["엘리트","헬파이어"],["엘리트","소화"],["엘리트","반항"],["엘리트","흡혈귀"],
+  ["엘리트","궁수 사냥꾼"],["엘리트","검사 사냥꾼"],["엘리트","로켓 탈출"],["엘리트","백어택"],["엘리트","저주"],["엘리트","제트팩"],
+  ["엘리트","사수"],["엘리트","포세이돈"],["엘리트","광산 적응"],["엘리트","폭팔 화살"],["엘리트","치명타"],["엘리트","불꽃"],["엘리트","강타"],
+  ["엘리트","고정 공격"],["엘리트","서리"],["엘리트","매혹"],
+  ["근본","수확"],["근본","밀 파종"],["근본","감자 파종"],["근본","당근 파종"],["근본","낙법"],["근본","사슬 낚시대"],["근본","행운의 낚시꾼"],
+  ["근본","과다 출혈"],["근본","벌목"],["근본","백스텝"],["근본","도끼병"],["근본","범위공격"],["근본","구원"],["근본","화살 반사"],
+  ["근본","화살 차단"],["근본","약화"],["근본","방해"],["근본","성화"],["근본","넉백"],["근본","패링"],["근본","대지파괴"],["근본","터널링"],
+  ["근본","회피"],["근본","수호자"],["근본","얼음의 검"],["근본","강화"],["근본","식량 주입"],["근본","이프리트의 펜던트"],["근본","신궁"],
+  ["근본","보우마스터"],["근본","인내"],["근본","은신"],["근본","혼란"],["근본","분해"],["근본","파쇄"],["근본","중갑"],["근본","지옥불"],
+  ["근본","아이템 셔플"],["근본","검술사"],["근본","네더마스터"],["근본","엔드마스터"],["근본","블레이즈 소환수"],["근본","출혈"],["근본","소각"],
+  ["근본","화살비"],["근본","헤드샷"],["근본","공수 부대"],["근본","지면 강타"],["근본","밤의 사냥꾼"],["근본","수호자의 뿔피리"],
+  ["전설","롱기누스의 창"],["전설","날개"],["전설","아수 학살자"],["전설","운디네의 가호"],["전설","경화"],["전설","긴급 수리"],["전설","실수"],
+  ["전설","소환 방해"],["전설","반격"],["전설","뇌운"],["전설","용암 걷기"],["전설","수면 걷기"],["전설","수중 학살자"],["전설","심판"],
+  ["전설","전환"],["전설","성화"],["전설","혼돈"],["전설","에어본"],["전설","축복의 갑옷"],["전설","일격"],["전설","개안"],["전설","이중타격"],
+  ["전설","기어"],["전설","화염 군주"],["전설","제노사이드"],["전설","탐구자"],["전설","흡혈"],["전설","추가 체력"],["전설","장갑"],["전설","등가교환"],
+  ["전설","영속"],["전설","무장 해체"],["전설","트리아이나"],["전설","도약"],["전설","순간 가속"],["전설","낙뢰 군주"],
+  ["신화","블록화"],["신화","명장"],["신화","복원"],["신화","불멸"],["신화","내구성 무한"],["신화","영혼 결속"],["신화","무장 해제"],["신화","부활"],
+  ["신화","공포"],["신화","극살"],["신화","돌진"],["신화","복제"],["신화","다중 채굴"],["신화","영혼의 주인"],["신화","영혼의 도끼"],["신화","영혼의 채굴자"],
+  ["신화","영혼의 사냥꾼"]
+];
 
-let DATA = [];
-let currentTierFilter = "전체";
-let currentItemFilter = "전체";
+const MAX_LEVELS = [
+3,1,3,5,3,2,1,3,5,3,5,3,1,4,5,5,4,5,5,3,4,4,4,8,4,4,4,3,5,3,4,3,3,3,5,3,3,3,4,5,3,3,3,4,3,4,10,4,3,10,6,5,8,3,3,5,3,5,5,3,8,2,3,4,4,3,5,3,3,4,3,3,3,9,3,3,3,3,9,3,5,3,4,7,7,5,4,6,1,2,4,4,3,9,9,5,10,3,4,3,1,5,4,2,4,4,4,4,5,5,4,
+4,5,3,3,3,10,6,3,3,5,3,3,3,3,4,1,4,3,3,3,3,3,3,3,1,1,4,5,5,5,5,6,6,4,3,3,3,3,5,4,5,3,4,5,1,8,5,3,3,3,3,1,3,4,4,1,3,3,3,5,4,3,5,5,3,3,3,3
+];
 
-// ---- 1. 시트 데이터 로드 ----
-fetch(SHEET_URL)
-  .then(res => res.text())
-  .then(text => {
-    const json = JSON.parse(text.substr(47).slice(0, -2));
-    const rows = json.table.rows;
+/* tier 색상 */
+const TIER_COLORS = {
+  "일반":"#FCFCFC",
+  "특별":"#54FC54",
+  "엘리트":"#54FCFC",
+  "근본":"#FCFC54",
+  "전설":"#FCA800",
+  "신화":"#FC54FC"
+};
 
-    DATA = rows.map(r => ({
-      name: r.c[0]?.v || "",
-      grade: r.c[1]?.v || "",   // 일반/특별/근본/전설/신화
-      tier: r.c[2]?.v || "",    // OP/1티어/2티어
-      max: r.c[3]?.v || "",
-      items: (r.c[4]?.v || "").split(",").map(i => i.trim()),
-      effect: r.c[5]?.v || "",
-      extra: r.c[6]?.v || ""
-    }));
+let activeTier = "전체";
+let searchQuery = "";
 
-    renderList(DATA);
-  });
+const tableBody = document.getElementById("tableBody");
+const searchInput = document.getElementById("searchInput");
 
-// ---- 2. 리스트 렌더링 ----
-const listBody = document.getElementById("enchList");
-
-function renderList(list) {
-  listBody.innerHTML = "";
-
-  let filtered = list;
-
-  // 등급 필터 (일반/특별/엘리트/근본/전설/신화)
-  if (currentTierFilter !== "전체")
-    filtered = filtered.filter(e => e.grade === currentTierFilter);
-
-  // 아이템 필터
-  if (currentItemFilter !== "전체")
-    filtered = filtered.filter(e => e.items.includes(currentItemFilter));
-
-  filtered.forEach(e => {
+/* 테이블 렌더 */
+function renderTable(list){
+  tableBody.innerHTML = "";
+  if(!list.length){
     const tr = document.createElement("tr");
+    tr.innerHTML = `<td colspan="5" style="padding:26px;text-align:center;color:var(--muted)">
+      검색 결과가 없습니다.
+    </td>`;
+    tableBody.appendChild(tr);
+    return;
+  }
 
-    tr.innerHTML = `
-      <td style="display:flex; align-items:center; gap:10px;">
-        <img src="0003.png" style="width:32px; height:32px;">
+  list.forEach(([tier,name], idx)=>{
+    const tr = document.createElement("tr");
+    tr.className = "enchant-row";
+
+    const nameTd = document.createElement("td");
+    nameTd.innerHTML = `
+      <div class="name-col">
+        <img src="0003.png" alt="인챈트북">
         <div>
-          <div style="font-weight:600">${e.name}</div>
-          <div style="font-size:12px; color:#888;">${e.name} 인챈트</div>
+          <div style="font-weight:700">${name}</div>
+          <div class="right-muted" style="margin-top:4px">${name} 인챈트</div>
         </div>
-      </td>
-      <td>${e.grade}</td>
-      <td>${e.tier}</td>
-      <td>${e.max}</td>
-      <td>${e.items.join(", ")}</td>
+      </div>
     `;
 
-    tr.onclick = () => openModal(e);
-    listBody.appendChild(tr);
+    const gradeTd = document.createElement("td");
+    const bg = TIER_COLORS[tier];
+    const txt = tier === "일반" ? "#000" : "#fff";
+    gradeTd.innerHTML = `<span class="tier-badge" style="background:${bg};color:${txt}">${tier}</span>`;
+
+    const tierTd = document.createElement("td");
+    tierTd.innerHTML = `<div class="right-muted">티어 정보</div>`;
+
+    const lvlTd = document.createElement("td");
+    lvlTd.innerHTML = `<strong>${MAX_LEVELS[idx] ?? ""}</strong>`;
+
+    const itemTd = document.createElement("td");
+    itemTd.innerHTML = `<div class="right-muted">아이템 정보</div>`;
+
+    tr.appendChild(nameTd);
+    tr.appendChild(gradeTd);
+    tr.appendChild(tierTd);
+    tr.appendChild(lvlTd);
+    tr.appendChild(itemTd);
+
+    tableBody.appendChild(tr);
   });
 }
 
-// ---- 3. 모달 ----
-const modal = document.getElementById("modal");
-const closeModal = document.getElementById("closeModal");
-
-function openModal(e) {
-  document.getElementById("mName").textContent = e.name;
-  document.getElementById("mMeta").textContent =
-    `${e.grade} • 티어: ${e.tier} • 최대 레벨 ${e.max}`;
-  document.getElementById("mEffect").textContent = e.effect;
-  document.getElementById("mItems").textContent =
-    `적용 아이템: ${e.items.join(", ")}`;
-  document.getElementById("mExtra").textContent =
-    e.extra ? `추가: ${e.extra}` : "";
-
-  modal.style.display = "block";
+function getFiltered(){
+  const q = searchQuery.trim();
+  return ENCHANTS.filter(([tier,name])=>{
+    if(activeTier!=="전체" && activeTier!==tier) return false;
+    if(q && !name.includes(q)) return false;
+    return true;
+  });
 }
 
-closeModal.onclick = () => (modal.style.display = "none");
-window.onclick = e => {
-  if (e.target === modal) modal.style.display = "none";
-};
+function onFilterChange(){
+  searchQuery = searchInput.value;
+  renderTable(getFiltered());
+}
 
-// ---- 4. 검색 ----
-document.getElementById("searchBtn").onclick = () => {
-  const key = document.getElementById("searchBar").value.trim();
-  renderList(DATA.filter(e => e.name.includes(key)));
-};
+function toggleTier(tier){
+  activeTier = tier;
+  document.querySelectorAll(".tier-btn").forEach(btn=>{
+    btn.classList.toggle("active", btn.dataset.tier===tier);
+  });
+  if(tier==="전체") activeTier="전체";
+  renderTable(getFiltered());
+}
 
-document.getElementById("searchBar").addEventListener("keyup", e => {
-  if (e.key === "Enter") document.getElementById("searchBtn").click();
-});
+renderTable(ENCHANTS);
 
-// ---- 5. 등급 필터 ----
-document.querySelectorAll(".tier-btn").forEach(btn => {
-  btn.onclick = () => {
-    currentTierFilter = btn.dataset.tier;
-    renderList(DATA);
-  };
-});
-
-// ---- 6. 아이템 필터 ----
-document.querySelectorAll(".item-btn").forEach(btn => {
-  btn.onclick = () => {
-    document.querySelectorAll(".item-btn")
-      .forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-
-    currentItemFilter = btn.dataset.item;
-    renderList(DATA);
-  };
+searchInput.addEventListener("keydown",e=>{
+  if(e.key==="Enter") onFilterChange();
 });
 </script>
 
