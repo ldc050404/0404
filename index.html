@@ -327,9 +327,9 @@ const closeModal = document.getElementById("closeModal");
 function openModal(e) {
   document.getElementById("mName").textContent = e.name;
 
-  document.getElementById("mMeta").innerHTML =
-    `<span class="grade-badge grade-${e.grade}">${e.grade}</span>
-     • 티어: ${e.tier} • 최대 레벨 ${e.max}`;
+document.getElementById("mMeta").innerHTML =
+  `<span class="grade-badge grade-${e.grade}">${e.grade}</span> • 티어: ${e.tier} • 최대 레벨 ${e.max}`;
+
 
   document.getElementById("mEffect").textContent = e.effect;
   document.getElementById("mItems").textContent =
@@ -382,3 +382,4 @@ document.querySelectorAll(".item-btn").forEach(btn => {
 
 </body>
 </html>
+
