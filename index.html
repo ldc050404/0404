@@ -15,6 +15,17 @@ body {
   background: #ffffff;
   font-family: 'Pretendard', sans-serif;
 }
+#tierSortBtn {
+  transition: transform 0.25s ease;
+}
+
+#tierSortBtn.asc {
+  transform: translateY(-3px);
+}
+
+#tierSortBtn.desc {
+  transform: translateY(3px);
+}
 
 /* 티어 열의 레이아웃 고정 (흔들림 방지) */
 .ench-table th:nth-child(3),
@@ -446,3 +457,4 @@ document.getElementById("tierSortBtn").onclick = () => {
 
 </body>
 </html>
+
