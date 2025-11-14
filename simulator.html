@@ -13,17 +13,12 @@
   }
   h1{
     margin:0 0 25px;
-    font-size:34px;
-    font-weight:800;
-    color:#0f172a;
-    letter-spacing:-1px;
+    font-size:34px; font-weight:800; color:#0f172a; letter-spacing:-1px;
   }
 
   .layout{
     width:100%; max-width:1500px;
-    display:grid;
-    grid-template-columns:260px 1fr 360px;
-    gap:24px;
+    display:grid; grid-template-columns:260px 1fr 360px; gap:24px;
   }
 
   .equip-box{
@@ -31,31 +26,24 @@
     box-shadow:0 4px 12px rgba(0,0,0,0.08);
   }
   .equip-item{
-    padding:14px; margin-bottom:10px;
-    background:#f8fafc; border-radius:12px;
-    font-weight:700; text-align:center;
-    cursor:pointer; transition:0.15s;
+    padding:14px; margin-bottom:10px; background:#f8fafc; border-radius:12px;
+    font-weight:700; text-align:center; cursor:pointer; transition:0.15s;
     border:1px solid #e5e7eb;
   }
   .equip-item.active{
-    background:#d1fae5;
-    border:2px solid #34d399;
-    font-weight:800;
+    background:#d1fae5; border:2px solid #34d399; font-weight:800;
   }
 
   .ench-list{
     background:#ffffff; border-radius:16px; padding:20px;
-    box-shadow:0 4px 12px rgba(0,0,0,0.07);
-    min-height:760px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.07); min-height:760px;
   }
   .ench-grid{
-    display:grid; grid-template-columns:repeat(3, minmax(0,1fr))); gap:16px;
+    display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:16px;
   }
   .ench-card{
-    display:flex; gap:12px;
-    background:#f9fafb; border-radius:14px;
-    border:1px solid #e5e7eb;
-    padding:14px; cursor:pointer; transition:0.15s;
+    display:flex; gap:12px; background:#f9fafb; border-radius:14px;
+    border:1px solid #e5e7eb; padding:14px; cursor:pointer; transition:0.15s;
   }
   .ench-card:hover{ background:#eef2ff; }
 
@@ -63,18 +51,16 @@
   .ench-sub{ font-size:13px; color:#6b7280; }
 
   .tier-badge{
-    padding:3px 10px; border-radius:6px;
-    font-size:12px; font-weight:700;
-    margin-top:6px; width:max-content;
-    color:#000; background:#ffffff; border:1px solid #ddd;
+    padding:3px 10px; border-radius:6px; font-size:12px; font-weight:700;
+    margin-top:6px; width:max-content; color:#000;
+    background:#ffffff; border:1px solid #ddd;
   }
-  }
-  .grade-신화{ background:#FC54FC; }
-  .grade-전설{ background:#FCA800; }
-  .grade-근본{ background:#FCFC54; }
-  .grade-일반{ background:#FCFCFC; }
-  .grade-특별{ background:#54FC54; }
-  .grade-엘리트{ background:#54FCFC; }
+  .grade-신화{ background:#FC54FC!important; }
+  .grade-전설{ background:#FCA800!important; }
+  .grade-근본{ background:#FCFC54!important; }
+  .grade-일반{ background:#FCFCFC!important; }
+  .grade-특별{ background:#54FC54!important; }
+  .grade-엘리트{ background:#54FCFC!important; }
 
   .slot-box{
     background:#ffffff; border-radius:16px; padding:20px;
@@ -87,24 +73,19 @@
   }
 
   .del-btn{
-    background:#ef4444; color:#fff;
-    border:none; padding:6px 12px;
-    border-radius:8px; cursor:pointer;
-    font-weight:600;
+    background:#ef4444; color:#fff; border:none; padding:6px 12px;
+    border-radius:8px; cursor:pointer; font-weight:600;
   }
 
   .save-item{
-    background:#f9fafb; border-radius:12px;
-    border:1px solid #e5e7eb; padding:10px 12px;
-    margin-bottom:10px;
+    background:#f9fafb; border-radius:12px; border:1px solid #e5e7eb;
+    padding:10px 12px; margin-bottom:10px;
     display:flex; justify-content:space-between; align-items:center;
   }
   #addSaveBtn{
-    padding:10px 14px;
-    background:#34d399; color:white;
-    border:none; border-radius:10px;
-    cursor:pointer; font-size:14px; font-weight:700;
-    width:100%; margin-top:10px;
+    padding:10px 14px; background:#34d399; color:white;
+    border:none; border-radius:10px; cursor:pointer; font-size:14px;
+    font-weight:700; width:100%; margin-top:10px;
   }
 </style>
 </head>
@@ -133,76 +114,60 @@
 </div>
 
 <script>
-const EQUIPS = ["검","활","쇠뇌","삼지창","도끼","삽","괭이","곡괭이","모자","흉갑","바지","신발"];
-const ARMOR = ["모자","흉갑","바지","신발"];
-const TOOLS = ["삽","도끼","괭이","곡괭이"];
-const WEAPONS = ["검","활","쇠뇌","삼지창"];
+const EQUIPS=["검","활","쇠뇌","삼지창","도끼","삽","괭이","곡괭이","모자","흉갑","바지","신발"];
+const ARMOR=["모자","흉갑","바지","신발"]; const TOOLS=["삽","도끼","괭이","곡괭이"]; const WEAPONS=["검","활","쇠뇌","삼지창"];
 
-const SHEET_ID = "13fF_iQfMThiw49QrYSCULF3mT4QVHO4aDsbSDD71DUg";
-const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
-let ENCHANTS = [];
+const SHEET_ID="13fF_iQfMThiw49QrYSCULF3mT4QVHO4aDsbSDD71DUg";
+const SHEET_URL=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
+let ENCHANTS=[];
 
 fetch(SHEET_URL)
-  .then(r => r.text())
-  .then(text => {
-    const json = JSON.parse(text.substr(47).slice(0,-2));
-    ENCHANTS = json.table.rows.map(r => ({
-      name: r.c[0]?.v ?? "",
-      grade: r.c[1]?.v ?? "",
-      tier: r.c[2]?.v ?? "",
-      max: r.c[3]?.v ?? "",
-      items: (r.c[4]?.v ?? "").split(',').map(i => i.trim()),
-      effect: r.c[5]?.v ?? "",
-      extra: r.c[6]?.v ?? ""
+  .then(r=>r.text())
+  .then(text=>{
+    const json=JSON.parse(text.substr(47).slice(0,-2));
+    ENCHANTS=json.table.rows.map(r=>({
+      name:r.c[0]?.v??"", grade:r.c[1]?.v??"", tier:r.c[2]?.v??"",
+      max:r.c[3]?.v??"", items:(r.c[4]?.v??"").split(',').map(i=>i.trim()),
+      effect:r.c[5]?.v??"", extra:r.c[6]?.v??""
     }));
     renderEnchantList();
   });
 
-let currentEquip = null;
-let currentSlots = [];
-let saveSets = JSON.parse(localStorage.getItem("enchSaves") || "[]");
+let currentEquip=null; let currentSlots=[];
+let saveSets=JSON.parse(localStorage.getItem("enchSaves")||"[]");
 
 function renderEquip(){
-  const box = document.getElementById("equipBox");
-  box.innerHTML = "";
-
-  EQUIPS.forEach(eq => {
-    const div = document.createElement("div");
-    div.className = "equip-item" + (currentEquip === eq ? " active" : "");
-    div.textContent = eq;
-    div.onclick = () => { currentEquip = eq; renderEquip(); renderEnchantList(); };
+  const box=document.getElementById("equipBox"); box.innerHTML="";
+  EQUIPS.forEach(eq=>{
+    const div=document.createElement("div");
+    div.className="equip-item"+(currentEquip===eq?" active":"");
+    div.textContent=eq;
+    div.onclick=()=>{ currentEquip=eq; renderEquip(); renderEnchantList(); };
     box.appendChild(div);
   });
 }
-
 function getCategory(equip){
-  if(ARMOR.includes(equip)) return "갑옷";
-  if(TOOLS.includes(equip)) return "도구";
-  if(WEAPONS.includes(equip)) return "무기";
+  if(ARMOR.includes(equip))return"갑옷";
+  if(TOOLS.includes(equip))return"도구";
+  if(WEAPONS.includes(equip))return"무기";
   return null;
 }
 
 function renderEnchantList(){
-  const box = document.getElementById("enchList");
-  if(!currentEquip){ box.textContent = "장비를 선택해주세요."; return; }
-  box.innerHTML = "";
+  const box=document.getElementById("enchList");
+  if(!currentEquip){ box.textContent="장비를 선택해주세요."; return; }
+  box.innerHTML="";
+  const category=getCategory(currentEquip);
+  const filtered=ENCHANTS.filter(e=>e.items.includes(currentEquip)||(category&&e.items.includes(category)));
 
-  const category = getCategory(currentEquip);
-  const filtered = ENCHANTS.filter(e =>
-    e.items.includes(currentEquip) || (category && e.items.includes(category))
-  );
-
-  filtered.forEach(e => {
-    const card = document.createElement("div");
-    card.className = "ench-card";
-
-    card.innerHTML = `
+  filtered.forEach(e=>{
+    const card=document.createElement("div"); card.className="ench-card";
+    card.innerHTML=`
       <img src="0003.png" style="width:40px;height:40px;">
       <div>
         <div class="ench-name">${e.name}</div>
         <div class="ench-sub">${e.grade}</div>
         <div class="tier-badge grade-${e.grade}">티어 ${e.tier}</div>
       </div>`;
-
-    card.onclick = () => addToSlot(e);
-    box.appendChild(card);
+    card.onclick=()=>addToSlot(e);
+    box.append
