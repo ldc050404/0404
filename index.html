@@ -134,7 +134,7 @@ body {
 
 /* ===== 별 아이콘 ===== */
 .star {
-  font-size: 24px !important; /* 1.3배 확대 */
+  font-size: 24px !important;
   cursor: pointer;
   margin-right: 8px;
 }
@@ -180,17 +180,21 @@ body {
   position: relative;
 }
 
+/* 닫기 버튼 */
 .close {
   float: right;
   font-size: 28px;
   cursor: pointer;
 }
 
-/* 모달 안 별 버튼 */
+/* ===== 모달 안 별 버튼 (이름 왼쪽으로 이동됨) ===== */
+.modal-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .modal-star {
-  position: absolute;
-  right: 25px;
-  top: 20px;
   font-size: 28px;
   cursor: pointer;
 }
@@ -301,9 +305,12 @@ body {
 <div id="modal" class="modal">
   <div class="modal-content">
     <span id="closeModal" class="close">&times;</span>
-    <span id="modalStar" class="modal-star off">☆</span>
 
-    <h2 id="mName"></h2>
+    <div class="modal-header">
+      <span id="modalStar" class="modal-star off">☆</span>
+      <h2 id="mName" style="margin:0;"></h2>
+    </div>
+
     <div class="meta" id="mMeta"></div>
     <p class="desc" id="mEffect"></p>
     <p class="extra" id="mExtra"></p>
@@ -343,12 +350,11 @@ fetch(SHEET_URL)
     renderList();
   });
 
-/* ===== 즐겨찾기 확인 ===== */
+/* ===== 즐겨찾기 ===== */
 function isFav(name) {
   return favoriteList.includes(name);
 }
 
-/* ===== 즐겨찾기 토글 ===== */
 function toggleFav(name) {
   if (isFav(name)) {
     favoriteList = favoriteList.filter(n => n !== name);
@@ -383,7 +389,6 @@ function renderList() {
     const favClass = isFav(e.name) ? "on" : "off";
     const favSymbol = isFav(e.name) ? "★" : "☆";
 
-    /* 적용 아이템 → 버튼 UI */
     const itemChips = e.items
       .map(i => `<span class="item-chip" data-item="${i}">${i}</span>`)
       .join("");
@@ -403,14 +408,14 @@ function renderList() {
       <td>${itemChips}</td>
     `;
 
-    /* ===== 별 클릭 ===== */
+    /* 별 클릭 */
     tr.querySelector(".star").onclick = ev => {
       ev.stopPropagation();
       toggleFav(e.name);
       renderList();
     };
 
-    /* ===== 적용 아이템 클릭 (목록에서) ===== */
+    /* 아이템 버튼 */
     tr.querySelectorAll(".item-chip").forEach(chip => {
       chip.onclick = ev => {
         ev.stopPropagation();
@@ -423,7 +428,7 @@ function renderList() {
       };
     });
 
-    /* ===== 모달 열기 ===== */
+    /* 모달 열기 */
     tr.onclick = () => openModal(e);
 
     body.appendChild(tr);
@@ -441,7 +446,6 @@ function openModal(e) {
   document.getElementById("mEffect").textContent = e.effect;
   document.getElementById("mExtra").textContent = e.extra ? `추가: ${e.extra}` : "";
 
-  /* 모달 적용 아이템 버튼 */
   const mItems = document.getElementById("mItems");
   mItems.innerHTML = "적용 아이템: ";
 
@@ -493,7 +497,11 @@ document.getElementById("searchBtn").onclick = () => {
   const filtered = DATA.filter(e => e.name.includes(key));
   const body = document.getElementById("enchList");
   body.innerHTML = "";
-  filtered.forEach(e => displayRow(e));
+
+  filtered.forEach(e => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td>${e.name}</td>`;
+  });
 };
 
 document.getElementById("searchBar").addEventListener("keyup", e => {
