@@ -14,7 +14,16 @@ body {
   background: #ffffff;
   font-family: 'Pretendard', sans-serif;
 }
+/* ===== 티어 정렬 버튼 ===== */
+#tierSortBtn {
+  cursor: pointer;
+  margin-left: 5px;
+  font-size: 15px;
 
+  /* ▼ 추가 ▼ */
+  padding: 4px 8px;
+  display: inline-block;
+}
 /* ===== 작은 좌측 상단 아이콘 (Simulator 이동) ===== */
 .top-icon {
   position: absolute;
@@ -506,16 +515,7 @@ document.querySelectorAll(".tier-btn").forEach(btn=>{
     renderList();
   };
 });
-/* ===== 티어 정렬 버튼 ===== */
-#tierSortBtn {
-  cursor: pointer;
-  margin-left: 5px;
-  font-size: 15px;
 
-  /* ▼ 추가 ▼ */
-  padding: 4px 8px;
-  display: inline-block;
-}
 document.querySelectorAll(".item-btn").forEach(btn=>{
   btn.onclick = ()=>{
     document.querySelectorAll(".item-btn").forEach(b=>b.classList.remove("active"));
@@ -547,5 +547,6 @@ document.querySelector(".logo-img").onclick = () => location.reload();
 
 </body>
 </html>
+
 
 
