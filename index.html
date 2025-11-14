@@ -225,12 +225,12 @@ body {
       <th>인챈트</th>
       <th>등급</th>
 
-      <!-- ★ 티어 정렬 버튼 추가 -->
+      <!-- ★ 티어 정렬 버튼 -->
       <th>
         티어
         <button id="tierSortBtn"
           style="border:none; background:none; cursor:pointer; font-size:15px; margin-left:4px;">
-          ▼
+          ↕
         </button>
       </th>
 
@@ -409,20 +409,20 @@ document.getElementById("tierSortBtn").addEventListener("click", () => {
     // 오름차순
     DATA.sort((a, b) => tierValue(a.tier) - tierValue(b.tier));
     tierSortOrder = "asc";
-    document.getElementById("tierSortBtn").textContent = "▼";
 
   } else if (tierSortOrder === "asc") {
     // 내림차순
     DATA.sort((a, b) => tierValue(b.tier) - tierValue(a.tier));
     tierSortOrder = "desc";
-    document.getElementById("tierSortBtn").textContent = "▲";
 
   } else {
-    // ★ 기본 정렬 복원
+    // 기본 정렬 복원
     DATA = [...DEFAULT_DATA];
     tierSortOrder = "none";
-    document.getElementById("tierSortBtn").textContent = "●";  // 기본 모드 표시
   }
+
+  // ★ 아이콘은 항상 ↕ 그대로 유지
+  document.getElementById("tierSortBtn").textContent = "↕";
 
   renderList(DATA);
 });
