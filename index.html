@@ -15,9 +15,7 @@ body {
   background: #ffffff;
   font-family: 'Pretendard', sans-serif;
 }
-.tier-sort-btn {
-  cursor: pointer;
-}
+
 /* 로고 */
 .logo-img {
   width: 500px;
@@ -25,15 +23,17 @@ body {
   margin: 20px auto;
   display: block;
 }
+
+/* 티어 정렬 ↕ 버튼 */
 .tier-sort-btn {
-  display: inline-block;     /* 회전 변형 시 레이아웃 고정 */
-  width: 16px;               /* 고정된 너비 */
-  text-align: center;        /* 가운데 정렬 */
-}
-.tier-sort-btn {
+  cursor: pointer;
+  display: inline-block;
+  width: 16px;
+  text-align: center;
   transform-origin: 50% 50%;
 }
-/* 검색 */
+
+/* 검색 영역 */
 .search-area {
   text-align: center;
   padding: 30px 0 10px;
@@ -82,7 +82,7 @@ body {
   filter: brightness(1.1);
 }
 
-/* ★ active(선택됨) 상태 = 검정 테두리 */
+/* active = 검정 테두리 */
 .item-btn.active,
 .tier-btn.active {
   outline: 3px solid #000;
@@ -118,7 +118,7 @@ body {
   background: #f3fff0;
 }
 
-/* === 등급 배지 === */
+/* 등급 배지 */
 .grade-badge {
   display: inline-block;
   padding: 6px 14px;
@@ -187,21 +187,7 @@ body {
   color: #777;
 }
 
-/* === 티어 정렬 아이콘 애니메이션 === */
-.rotate {
-  display: inline-block;
-  transition: transform 0.35s ease;
-}
-
-.rotate.asc {
-  transform: rotate(180deg);
-}
-
-.rotate.desc {
-  transform: rotate(360deg);
-}
-
-/* === 모달 아이템 버튼 === */
+/* 모달 내 아이템 버튼 */
 .modal-item-btn {
   display: inline-block;
   margin-right: 8px;
@@ -219,6 +205,19 @@ body {
   background: #e8e8e8;
   border-color: #999;
   transform: translateY(-1px);
+}
+
+/* 아이콘 회전 애니메이션 */
+.rotate {
+  transition: transform 0.35s ease;
+}
+
+.rotate.asc {
+  transform: rotate(180deg);
+}
+
+.rotate.desc {
+  transform: rotate(360deg);
 }
 </style>
 </head>
@@ -269,7 +268,7 @@ body {
       <th>등급</th>
       <th>
         티어
-        <span id="tierSortBtn" class="rotate">↕</span>
+        <span id="tierSortBtn" class="tier-sort-btn rotate">↕</span>
       </th>
       <th>최대 레벨</th>
       <th>적용 아이템</th>
@@ -285,12 +284,12 @@ body {
     <h2 id="mName"></h2>
 
     <div class="meta" id="mMeta"></div>
-
     <p class="desc" id="mEffect"></p>
     <p class="extra" id="mExtra"></p>
     <p class="items" id="mItems"></p>
   </div>
 </div>
+
 <script>
 /* ===========================
    구글시트 데이터 연동
@@ -303,10 +302,10 @@ let DATA = [];
 let currentTierFilter = "전체";
 let currentItemFilter = "전체";
 
-/* 정렬 상태: 0=기본, 1=오름차순, 2=내림차순 */
+/* 0 = 기본, 1 = 오름차순, 2 = 내림차순 */
 let tierSortState = 0;
 
-/* ---- 1. 시트 데이터 로드 ---- */
+/* ---- 시트 데이터 로드 ---- */
 fetch(SHEET_URL)
   .then(res => res.text())
   .then(text => {
@@ -326,35 +325,31 @@ fetch(SHEET_URL)
     renderList(DATA);
   });
 
-/* ---- 티어 정렬 우선순위 ---- */
-function tierValue(tier) {
-  if (tier === "OP") return 0;
-  let n = parseInt(tier);
+/* ---- 티어 비교 우선순위 ---- */
+function tierValue(t) {
+  if (t === "OP") return 0;
+  let n = parseInt(t);
   return isNaN(n) ? 999 : n;
 }
 
-/* ---- 2. 리스트 렌더링 ---- */
+/* ---- 리스트 렌더링 ---- */
 const listBody = document.getElementById("enchList");
 
 function renderList(list) {
   let filtered = [...list];
 
-  // 등급 필터
   if (currentTierFilter !== "전체") {
     filtered = filtered.filter(e => e.grade === currentTierFilter);
   }
 
-  // 아이템 필터
   if (currentItemFilter !== "전체") {
     filtered = filtered.filter(e => e.items.includes(currentItemFilter));
   }
 
-  // 티어 정렬 적용
   if (tierSortState === 1) {
-    // 오름차순
     filtered.sort((a, b) => tierValue(a.tier) - tierValue(b.tier));
-  } else if (tierSortState === 2) {
-    // 내림차순
+  } 
+  else if (tierSortState === 2) {
     filtered.sort((a, b) => tierValue(b.tier) - tierValue(a.tier));
   }
 
@@ -386,7 +381,7 @@ function renderList(list) {
   });
 }
 
-/* ---- 3. 모달 ---- */
+/* ---- 모달 ---- */
 const modal = document.getElementById("modal");
 const closeModal = document.getElementById("closeModal");
 
@@ -400,7 +395,7 @@ function openModal(e) {
   document.getElementById("mEffect").textContent = e.effect;
   document.getElementById("mExtra").textContent = e.extra ? `추가: ${e.extra}` : "";
 
-  /* 적용 아이템 버튼화 */
+  /* 적용 아이템 버튼 */
   const mItems = document.getElementById("mItems");
   mItems.innerHTML = "적용 아이템: ";
 
@@ -408,15 +403,13 @@ function openModal(e) {
     const btn = document.createElement("span");
     btn.textContent = item;
     btn.className = "modal-item-btn";
-    
+
     btn.onclick = ev => {
-      ev.stopPropagation(); // 모달 닫히지 않도록
+      ev.stopPropagation();
+
       currentItemFilter = item;
 
-      // 기존 필터 active 제거
       document.querySelectorAll(".item-btn").forEach(b => b.classList.remove("active"));
-
-      // 해당되는 필터 버튼 active 지정
       const match = document.querySelector(`.item-btn[data-item="${item}"]`);
       if (match) match.classList.add("active");
 
@@ -435,7 +428,7 @@ window.onclick = e => {
   if (e.target === modal) modal.style.display = "none";
 };
 
-/* ---- 4. 검색 ---- */
+/* ---- 검색 ---- */
 document.getElementById("searchBtn").onclick = () => {
   const key = document.getElementById("searchBar").value.trim();
   renderList(DATA.filter(e => e.name.includes(key)));
@@ -445,7 +438,7 @@ document.getElementById("searchBar").addEventListener("keyup", e => {
   if (e.key === "Enter") document.getElementById("searchBtn").click();
 });
 
-/* ---- 5. 등급 필터(active 적용) ---- */
+/* ---- 등급 필터 ---- */
 document.querySelectorAll(".tier-btn").forEach(btn => {
   btn.addEventListener("click", () => {
     document.querySelectorAll(".tier-btn").forEach(b => b.classList.remove("active"));
@@ -456,7 +449,7 @@ document.querySelectorAll(".tier-btn").forEach(btn => {
   });
 });
 
-/* ---- 6. 아이템 필터(active 적용) ---- */
+/* ---- 아이템 필터 ---- */
 document.querySelectorAll(".item-btn").forEach(btn => {
   btn.addEventListener("click", () => {
     document.querySelectorAll(".item-btn").forEach(b => b.classList.remove("active"));
@@ -467,7 +460,7 @@ document.querySelectorAll(".item-btn").forEach(btn => {
   });
 });
 
-/* ---- 7. 티어 정렬 버튼 ---- */
+/* ---- 티어 정렬 버튼 ---- */
 const tierSortBtn = document.getElementById("tierSortBtn");
 
 tierSortBtn.addEventListener("click", () => {
@@ -486,5 +479,3 @@ tierSortBtn.addEventListener("click", () => {
 </script>
 </body>
 </html>
-
-
