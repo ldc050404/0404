@@ -171,7 +171,7 @@ body {
   <button id="searchBtn" class="search-btn">검색</button>
 </section>
 
-<!-- 등급 필터(일반/특별/엘리트 등) -->
+<!-- 등급 필터 -->
 <div class="filters">
   <button class="tier-btn" data-tier="일반" style="background:#FCFCFC;">일반</button>
   <button class="tier-btn" data-tier="특별" style="background:#54FC54;">특별</button>
@@ -243,13 +243,13 @@ fetch(SHEET_URL)
     const rows = json.table.rows;
 
     DATA = rows.map(r => ({
-      name: r.c[0]?.v || "",
-      grade: r.c[1]?.v || "",   // 일반/특별/근본/전설/신화
-      tier: r.c[2]?.v || "",    // OP/1티어/2티어
-      max: r.c[3]?.v || "",
-      items: (r.c[4]?.v || "").split(",").map(i => i.trim()),
-      effect: r.c[5]?.v || "",
-      extra: r.c[6]?.v || ""
+      name: r.c[0]?.v ?? r.c[0]?.f ?? "",
+      grade: r.c[1]?.v ?? r.c[1]?.f ?? "",
+      tier: r.c[2]?.v ?? r.c[2]?.f ?? "",  // ★ OP 완전 지원
+      max: r.c[3]?.v ?? r.c[3]?.f ?? "",
+      items: (r.c[4]?.v ?? r.c[4]?.f ?? "").split(",").map(i => i.trim()),
+      effect: r.c[5]?.v ?? r.c[5]?.f ?? "",
+      extra: r.c[6]?.v ?? r.c[6]?.f ?? ""
     }));
 
     renderList(DATA);
@@ -263,7 +263,7 @@ function renderList(list) {
 
   let filtered = list;
 
-  // 등급 필터 (일반/특별/엘리트/근본/전설/신화)
+  // 등급 필터
   if (currentTierFilter !== "전체")
     filtered = filtered.filter(e => e.grade === currentTierFilter);
 
