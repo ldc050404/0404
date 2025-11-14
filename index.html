@@ -24,6 +24,12 @@ body {
   background: #ffffff;
   font-family: 'Pretendard', sans-serif;
 }
+.logo-img {
+  width: 250px; /* 원하는 비율로 조절 가능, 2.5배 */
+  height: auto;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
 
 /* 상단 네비 */
 .nav {
@@ -184,9 +190,10 @@ body {
 
 <div class="container">
 
-<header class="nav">
-  <h1>Enchantments</h1>
+<header class="nav" style="text-align:center;">
+  <img src="0002.png" class="logo-img" />
 </header>
+
 
 <section class="search-area">
   <input id="searchBar" placeholder="인챈트 이름을 입력하세요...(예: 불멸, 낙뢰, 수확 ...)" />
@@ -478,6 +485,7 @@ renderList(ENCHANTS);
 
 </body>
 </html>
+
 
 
 
