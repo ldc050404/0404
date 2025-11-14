@@ -9,32 +9,25 @@
 <link rel="icon" type="image/png" href="0001.png">
 
 <style>
-/* ===== 기본 스타일 ===== */
 body {
   margin: 0;
-  padding: 0 80px; /* 양옆 공백 (광고 자리 염두) */
+  padding: 0 80px; 
   background: #ffffff;
   font-family: 'Pretendard', sans-serif;
 }
 
 /* 로고 */
-.nav {
-  padding: 0;
-  text-align: center;
-}
 .logo-img {
-  width: 500px; /* 2.5배 확대 느낌 */
+  width: 500px;
   height: auto;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  margin: 20px 0;
 }
 
-/* 검색 영역 */
+/* 검색 */
 .search-area {
   text-align: center;
-  padding: 30px 0 10px;
+  padding: 30px 0 15px;
 }
-
 #searchBar {
   width: 60%;
   max-width: 600px;
@@ -43,7 +36,6 @@ body {
   border: 1px solid #ddd;
   font-size: 16px;
 }
-
 .search-btn {
   margin-left: 10px;
   padding: 14px 20px;
@@ -55,32 +47,30 @@ body {
   cursor: pointer;
 }
 
-/* 티어 필터 버튼 */
-.filters {
+/* 필터 버튼 공통 */
+.filters, .item-filters {
   display: flex;
   justify-content: center;
   gap: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
-
-.tier-btn {
+.tier-btn, .item-btn {
   border: none;
   padding: 8px 18px;
   border-radius: 20px;
   cursor: pointer;
   font-weight: 600;
-  transition: all 0.15s ease-in-out;
-  transform: translateY(0);
+  transition: 0.15s;
 }
-
-/* 마우스 올렸을 때 살짝 떠오르는 애니메이션 */
-.tier-btn:hover {
+.tier-btn:hover, .item-btn:hover {
   transform: translateY(-2px) scale(1.05);
   box-shadow: 0px 4px 14px rgba(0,0,0,0.15);
-  filter: brightness(1.1);
+}
+.active {
+  outline: 3px solid #333;
 }
 
-/* ===== 테이블 ===== */
+/* 테이블 */
 .ench-table {
   width: 80%;
   margin: auto;
@@ -88,50 +78,29 @@ body {
   border-radius: 14px;
   overflow: hidden;
   font-size: 15px;
-  table-layout: fixed; /* 열 너비 고정 */
+  table-layout: fixed;
 }
-
-.ench-table th:nth-child(1) { width: 30%; }
-.ench-table th:nth-child(2) { width: 15%; }
-.ench-table th:nth-child(3) { width: 15%; }
-.ench-table th:nth-child(4) { width: 10%; }
-.ench-table th:nth-child(5) { width: 30%; }
-
-.ench-table thead {
-  background: #f3fff0;
-}
-
 .ench-table th, .ench-table td {
   padding: 16px;
   border-bottom: 1px solid #f1f1f1;
   text-align: center;
 }
-
-/* 첫 번째 열만 왼쪽 정렬 (아이콘 + 텍스트) */
 .ench-table td:first-child {
   text-align: left;
 }
+.ench-table thead { background: #f3fff0; }
+.ench-table tbody tr { cursor: pointer; }
+.ench-table tbody tr:hover { background: #f9f9f9; }
 
-.ench-table tbody tr {
-  cursor: pointer;
-}
-
-.ench-table tbody tr:hover {
-  background: #f9f9f9;
-}
-
-/* ===== 모달 ===== */
+/* 모달 */
 .modal {
   display: none;
   position: fixed;
   z-index: 99999;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
   background: rgba(0,0,0,0.35);
 }
-
 .modal-content {
   background: #fff;
   margin: 12% auto;
@@ -140,78 +109,69 @@ body {
   border-radius: 12px;
   box-shadow: 0px 5px 18px rgba(0,0,0,0.15);
 }
-
 .close {
   float: right;
   font-size: 28px;
   cursor: pointer;
 }
 
-.meta {
-  color: #666;
-  margin-bottom: 15px;
-  font-weight: 600;
-}
-
-.desc {
-  font-size: 17px;
-  line-height: 1.7;
-  color: #333;
-}
-
-.items {
-  font-size: 14px;
-  margin-top: 10px;
-  color: #777;
-}
+.desc { font-size: 17px; line-height: 1.7; color:#333; }
+.items { font-size: 14px; margin-top: 10px; color:#777; }
 </style>
-
-<!-- Google Analytics (측정 ID만 네 걸로 맞춰놨으면 됨) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-F1XZ9V7V54"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-F1XZ9V7V54');
-</script>
 </head>
+
 <body>
 
 <!-- 로고 -->
-<header class="nav">
+<header class="nav" style="text-align:center;">
   <img src="0002.png" class="logo-img" />
 </header>
 
-<!-- 검색 영역 -->
+<!-- 검색 -->
 <section class="search-area">
-  <input id="searchBar" placeholder="인챈트 이름을 입력하세요...(예: 불멸, 낙뢰, 수확 ...)" />
+  <input id="searchBar" placeholder="인챈트 이름을 입력하세요..." />
   <button id="searchBtn" class="search-btn">검색</button>
 </section>
 
-<!-- 등급(일반/특별/...) 필터 버튼 -->
+<!-- 티어 필터 -->
 <div class="filters">
+  <button class="tier-btn active" data-tier="전체">전체보기</button>
   <button class="tier-btn" data-tier="일반" style="background:#FCFCFC;">일반</button>
   <button class="tier-btn" data-tier="특별" style="background:#54FC54;">특별</button>
   <button class="tier-btn" data-tier="엘리트" style="background:#54FCFC;">엘리트</button>
   <button class="tier-btn" data-tier="근본" style="background:#FCFC54;">근본</button>
   <button class="tier-btn" data-tier="전설" style="background:#FCA800;">전설</button>
   <button class="tier-btn" data-tier="신화" style="background:#FC54FC;">신화</button>
-  <button class="tier-btn" data-tier="전체">전체보기</button>
 </div>
 
-<!-- 인챈트 테이블 -->
+<!-- 아이템 필터 -->
+<div class="item-filters">
+  <button class="item-btn active" data-item="전체">전체</button>
+  <button class="item-btn" data-item="검">검</button>
+  <button class="item-btn" data-item="도끼">도끼</button>
+  <button class="item-btn" data-item="활">활</button>
+  <button class="item-btn" data-item="쇠뇌">쇠뇌</button>
+  <button class="item-btn" data-item="삼지창">삼지창</button>
+  <button class="item-btn" data-item="곡괭이">곡괭이</button>
+  <button class="item-btn" data-item="낫">낫</button>
+  <button class="item-btn" data-item="갑옷">갑옷</button>
+  <button class="item-btn" data-item="신발">신발</button>
+  <button class="item-btn" data-item="모자">모자</button>
+  <button class="item-btn" data-item="도구">도구</button>
+</div>
+
+<!-- 테이블 -->
 <table class="ench-table">
   <thead>
     <tr>
       <th>인챈트</th>
-      <!-- 🔥 여기 '티어'가 OP/1/2/3/4/5티어 정렬 -->
-      <th data-sort="grade" style="cursor:pointer;">티어 ⬍</th>
-      <!-- 그리고 여기 '등급'이 일반/특별/엘리트/근본/전설/신화 -->
-      <th>등급</th>
+      <th data-sort="grade" style="cursor:pointer;">등급 ⬍</th>
+      <th>티어</th>
       <th>최대 레벨</th>
       <th>적용 아이템</th>
     </tr>
   </thead>
+
   <tbody id="enchList"></tbody>
 </table>
 
@@ -219,11 +179,10 @@ body {
 <div id="modal" class="modal">
   <div class="modal-content">
     <span id="closeModal" class="close">&times;</span>
-
     <h2 id="mName"></h2>
+
     <div class="meta">
-      <!-- 등급 뱃지 + 티어 텍스트 같이 표시 -->
-      <span id="mTier"></span> • <span id="mGradeTier"></span> • <span id="mMaxLevel"></span>
+      <span id="mTier"></span> • <span id="mMaxLevel"></span>
     </div>
 
     <p id="mEffect" class="desc"></p>
@@ -232,7 +191,9 @@ body {
 </div>
 
 <script>
-/* ===== 색상: 등급(일반/특별/엘리트/근본/전설/신화) ===== */
+/* ----------------------------------------------------------
+   티어 색상
+---------------------------------------------------------- */
 function tierBg(t){
   if(t==="일반") return "#FCFCFC";
   if(t==="특별") return "#54FC54";
@@ -242,34 +203,36 @@ function tierBg(t){
   if(t==="신화") return "#FC54FC";
   return "#eee";
 }
-function tierText(t){
-  return "#000";
-}
+function tierText(){ return "#000"; }
 
-/* ===== 티어(OP/1/2/3/4/5) 텍스트 변환 ===== */
-function convertGrade(g) {
-  if (g.includes("벨런스 붕괴")) return "OP";
-  if (g.includes("최상")) return "1티어";
-  if (g.includes("상") && !g.includes("최상")) return "2티어";
-  if (g.includes("중")) return "3티어";
-  if (g.includes("하") && !g.includes("최하")) return "4티어";
-  if (g.includes("최하")) return "5티어";
+/* ----------------------------------------------------------
+   등급 변환 (OP ~ 5티어)
+---------------------------------------------------------- */
+function convertGrade(g){
+  if(g.includes("벨런스 붕괴")) return "OP";
+  if(g.includes("최상")) return "1티어";
+  if(g.includes("상") && !g.includes("최상")) return "2티어";
+  if(g.includes("중")) return "3티어";
+  if(g.includes("하") && !g.includes("최하")) return "4티어";
+  if(g.includes("최하")) return "5티어";
   return g;
 }
 
-/* ===== 티어 정렬 우선순위 ===== */
-const gradeOrder = {
-  "OP": 0,
-  "1티어": 1,
-  "2티어": 2,
-  "3티어": 3,
-  "4티어": 4,
-  "5티어": 5
-};
+/* ----------------------------------------------------------
+   정렬 기준
+---------------------------------------------------------- */
+const gradeOrder = { "OP":0, "1티어":1, "2티어":2, "3티어":3, "4티어":4, "5티어":5 };
 let gradeSortAsc = true;
 
-/* ===== ENCHANTS 데이터 ===== */
-/* 네가 쓰던 ENCHANTS 그대로 유지 (생략 없이 붙여둔 버전) */
+/* ----------------------------------------------------------
+   아이템 필터 변수
+---------------------------------------------------------- */
+let currentItemFilter = "전체";
+let currentTierFilter = "전체";
+
+/* ----------------------------------------------------------
+   ENCHANTS (너가 넣은 180+개 그대로)
+---------------------------------------------------------- */
 const ENCHANTS = [
   { name:"낙뢰", tier:"일반", grade:"최상", effect:"상대에게 번개를 내리침", maxLevel:3, items:["검","활","쇠뇌","삼지창"] },
   { name:"수중 호흡", tier:"일반", grade:"최상", effect:"상시 수중 호흡 부여", maxLevel:1, items:["모자"] },
@@ -453,125 +416,130 @@ const ENCHANTS = [
   { name:"영혼의 사냥꾼", tier:"신화", grade:"최상", effect:"몬스터 처치 시 영혼 획득", maxLevel:3, items:["검"] }
 ];
 
-/* ===== DOM ===== */
-const listBody   = document.getElementById("enchList");
-const modal      = document.getElementById("modal");
-const closeModal = document.getElementById("closeModal");
-
-/* ===== 리스트 렌더링 ===== */
-function renderList(data) {
+/* ----------------------------------------------------------
+   리스트 렌더링
+---------------------------------------------------------- */
+const listBody = document.getElementById("enchList");
+function renderList(data){
   listBody.innerHTML = "";
-  data.forEach(e => {
-    const row = document.createElement("tr");
 
+  data.forEach(e=>{
+    const row = document.createElement("tr");
     row.innerHTML = `
       <td style="display:flex; align-items:center; gap:10px;">
         <img src="0003.png" style="width:32px; height:32px;" />
         <div>
           <div style="font-weight:600;">${e.name}</div>
-          <div style="font-size:12px; color:#888;">${e.name} 인챈트</div>
+          <div style="font-size:12px;color:#888;">${e.name} 인챈트</div>
         </div>
       </td>
-
-      <!-- 티어(OP/1/2/3/4/5) -->
       <td>${convertGrade(e.grade)}</td>
-
-      <!-- 등급(일반/특별/엘리트/근본/전설/신화) 뱃지 -->
-      <td>
-        <span style="
-          background:${tierBg(e.tier)};
-          color:${tierText(e.tier)};
-          padding:6px 12px;
-          display:inline-block;
-          border-radius:8px;
-          font-weight:700;
-        ">
-          ${e.tier}
-        </span>
-      </td>
-
+      <td><span style="background:${tierBg(e.tier)};
+                       padding:6px 12px;border-radius:8px;
+                       font-weight:700;">
+        ${e.tier}</span></td>
       <td>${e.maxLevel}</td>
       <td>${e.items.join(", ")}</td>
     `;
-
-    row.onclick = () => openModal(e);
+    row.onclick = ()=>openModal(e);
     listBody.appendChild(row);
   });
 }
 
-/* ===== 모달 열기 ===== */
-function openModal(e) {
+/* ----------------------------------------------------------
+   모달
+---------------------------------------------------------- */
+function openModal(e){
   document.getElementById("mName").textContent = e.name;
 
-  // 등급(일반/특별/엘리트/근본/전설/신화) 뱃지
-  document.getElementById("mTier").innerHTML = `
-    <span style="
-      background:${tierBg(e.tier)};
-      color:${tierText(e.tier)};
-      padding:4px 10px;
-      border-radius:6px;
-      font-weight:700;
-      display:inline-block;
-    ">${e.tier}</span>
-  `;
+  document.getElementById("mTier").innerHTML =
+    `<span style="background:${tierBg(e.tier)};
+                  padding:4px 10px;
+                  border-radius:6px;
+                  font-weight:700;">
+      ${e.tier}
+    </span>`;
 
-  // 티어(OP/1/2/3/4/5티어) 텍스트
-  document.getElementById("mGradeTier").textContent = `티어: ${convertGrade(e.grade)}`;
-
-  // 최대 레벨
-  document.getElementById("mMaxLevel").textContent = `최대 레벨 ${e.maxLevel}`;
+  document.getElementById("mMaxLevel").textContent =
+    `티어: ${convertGrade(e.grade)} · 최대 레벨 ${e.maxLevel}`;
 
   document.getElementById("mEffect").textContent = e.effect;
-  document.getElementById("mItems").textContent = `적용 아이템: ${e.items.join(", ")}`;
+  document.getElementById("mItems").textContent = "적용 아이템: " + e.items.join(", ");
 
-  modal.style.display = "block";
+  document.getElementById("modal").style.display = "block";
 }
 
-/* ===== 모달 닫기 ===== */
-closeModal.onclick = () => modal.style.display = "none";
-window.onclick = (e) => {
-  if (e.target === modal) modal.style.display = "none";
-};
+document.getElementById("closeModal").onclick = ()=>modal.style.display="none";
+window.onclick = e=>{ if(e.target===modal) modal.style.display="none"; };
 
-/* ===== 검색 ===== */
-document.getElementById("searchBtn").onclick = () => {
-  const keyword = document.getElementById("searchBar").value.trim();
-  const filtered = ENCHANTS.filter(e =>
-    e.name.includes(keyword)
-  );
+/* ----------------------------------------------------------
+   🔥 필터 통합 함수
+---------------------------------------------------------- */
+function applyFilters(){
+  let keyword = document.getElementById("searchBar").value.trim();
+
+  let filtered = ENCHANTS.filter(e=>{
+
+    if(keyword && !e.name.includes(keyword)) return false;
+    if(currentTierFilter !== "전체" && e.tier !== currentTierFilter) return false;
+    if(currentItemFilter !== "전체" && !e.items.includes(currentItemFilter)) return false;
+
+    return true;
+  });
+
   renderList(filtered);
-};
+}
 
-document.getElementById("searchBar").addEventListener("keyup", e => {
-  if (e.key === "Enter") document.getElementById("searchBtn").click();
+/* ----------------------------------------------------------
+   검색
+---------------------------------------------------------- */
+document.getElementById("searchBtn").onclick = ()=>applyFilters();
+document.getElementById("searchBar").addEventListener("keyup",e=>{
+  if(e.key==="Enter") applyFilters();
 });
 
-/* ===== 등급(일반/특별/...) 필터 버튼 ===== */
-document.querySelectorAll(".tier-btn").forEach(btn => {
-  btn.onclick = () => {
-    const t = btn.dataset.tier;
-    if (t === "전체" || t === "전체보기") {
-      renderList(ENCHANTS);
-    } else {
-      renderList(ENCHANTS.filter(e => e.tier === t));
-    }
+/* ----------------------------------------------------------
+   티어 버튼
+---------------------------------------------------------- */
+document.querySelectorAll(".tier-btn").forEach(btn=>{
+  btn.onclick = ()=>{
+    document.querySelectorAll(".tier-btn").forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active");
+    currentTierFilter = btn.dataset.tier;
+    applyFilters();
   };
 });
 
-/* ===== 티어 정렬 (OP → 1 → ... / 반대로) ===== */
-document.querySelector("th[data-sort='grade']").onclick = () => {
-  gradeSortAsc = !gradeSortAsc; // 방향 토글
+/* ----------------------------------------------------------
+   아이템 버튼
+---------------------------------------------------------- */
+document.querySelectorAll(".item-btn").forEach(btn=>{
+  btn.onclick = ()=>{
+    document.querySelectorAll(".item-btn").forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active");
+    currentItemFilter = btn.dataset.item;
+    applyFilters();
+  };
+});
 
-  const sorted = [...ENCHANTS].sort((a, b) => {
-    const ga = gradeOrder[convertGrade(a.grade)] ?? 999;
-    const gb = gradeOrder[convertGrade(b.grade)] ?? 999;
-    return gradeSortAsc ? (ga - gb) : (gb - ga);
+/* ----------------------------------------------------------
+   정렬
+---------------------------------------------------------- */
+document.querySelector("th[data-sort='grade']").onclick = ()=>{
+  gradeSortAsc = !gradeSortAsc;
+
+  let sorted = [...ENCHANTS].sort((a,b)=>{
+    let ga = gradeOrder[convertGrade(a.grade)] ?? 999;
+    let gb = gradeOrder[convertGrade(b.grade)] ?? 999;
+    return gradeSortAsc ? (ga-gb) : (gb-ga);
   });
 
   renderList(sorted);
 };
 
-/* ===== 초기 렌더 ===== */
+/* ----------------------------------------------------------
+   초기 출력
+---------------------------------------------------------- */
 renderList(ENCHANTS);
 </script>
 
