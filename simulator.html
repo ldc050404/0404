@@ -89,6 +89,16 @@
     border-radius:8px; cursor:pointer; font-weight:600;
   }
 
+  /* 전체 삭제 버튼 */
+  #clearSlotsBtn{
+    width:100%; padding:10px 0;
+    margin-top:10px;
+    background:#ef4444; color:white;
+    border:none; border-radius:10px;
+    cursor:pointer; font-weight:700;
+    font-size:14px;
+  }
+
   /* 저장된 세트 */
   .save-item{
     background:#f9fafb; border-radius:12px; border:1px solid #e5e7eb;
@@ -106,7 +116,7 @@
 
 <body>
 <a href="index.html" style="position:absolute; left:20px; top:20px;">
-  <img src="0003.png" style="width:60px; height:60px; cursor:pointer;">
+  <img src="0003.png" style="width:65px; height:65px; cursor:pointer;">
 </a>
 <h1>Simulator</h1>
 
@@ -123,7 +133,11 @@
   <!-- 슬롯 & 저장 -->
   <div class="slot-box">
     <h3 style="margin-top:0;">슬롯 (최대 14개)</h3>
+
     <div id="slots"></div>
+
+    <!-- ⭐ 추가된 전체 삭제 버튼 ⭐ -->
+    <button id="clearSlotsBtn">전체 슬롯 삭제</button>
 
     <h3 style="margin-top:20px;">저장된 세트</h3>
     <div id="saveList"></div>
@@ -241,6 +255,14 @@ function renderSlots(){
   }
 }
 
+/* ⭐ 전체 삭제 버튼 기능 ⭐ */
+document.getElementById("clearSlotsBtn").onclick = () =>{
+  if(confirm("슬롯을 모두 삭제할까요?")){
+    currentSlots=[];
+    renderSlots();
+  }
+};
+
 /* 세트 미리보기 */
 function openSetPreview(slots){
   const modal=document.createElement("div");
@@ -332,6 +354,3 @@ renderEquip(); renderSlots(); renderSaves();
 
 </body>
 </html>
-
-
-
