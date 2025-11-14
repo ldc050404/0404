@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enchant Simulator</title>
+
+<style>
+body {
+  margin: 0;
+  padding: 40px;
+  background: #f8f8f8;
+  font-family: 'Pretendard', sans-serif;
+}
+
+/* ===== 전체 레이아웃 ===== */
+.container {
+  display: flex;
+  gap: 40px;
+  width: 100%;
+  max-width: 1400px;
+  margin: auto;
+}
+
+/* ===== 장비 슬롯 영역 ===== */
+.slot-panel {
+  width: 320px;
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 20px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+}
+
+.slot-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+
+.slot-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+.slot {
+  width: 130px;
+  height: 130px;
+  background: #f3f3f3;
+  border-radius: 14px;
+  border: 2px dashed #bbb;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 15px;
+  font-weight: 600;
+  color: #555;
+  cursor: pointer;
+  text-align: center;
+  transition: 0.18s;
+}
+
+.slot:hover {
+  background: #ebebeb;
+}
+
+/* 슬롯 안에 인챈트 적용된 경우 */
+.slot.applied {
+  border: 2px solid #2fb24a;
+  background: #eafbed;
+  color: #222;
+}
+
+/* ===== 인챈트 목록 ===== */
+.list-panel {
+  flex: 1;
+  background: white;
+  padding: 20px;
+  border-radius: 18px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+}
+
+.list-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+
+.ench-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 14px;
+}
+
+/* 인챈트 카드 */
+.ench-card {
+  background: #fafafa;
+  border-radius: 14px;
+  border: 1px solid #ddd;
+  padding: 14px;
+  cursor: grab;
+  transition: 0.18s;
+}
+
+.ench-card:hover {
+  background: #f3f3f3;
+}
+
+.ench-name {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.ench-grade {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #000;
+  margin-bottom: 4px;
+}
+
+/* 등급 색상 */
+.ench-신화 { background: #FC54FC; }
+.ench-전설 { background: #FCA800; }
+.ench-근본 { background: #FCFC54; }
+.ench-특별 { background: #54FC54; }
+.ench-엘리트 { background: #54FCFC; }
+.ench-일반 { background: #FCFCFC; }
+
+/* ===== 적용 불가 시 반응 ===== */
+.slot.invalid {
+  background: #ffe6e6;
+  border-color: #ff6b6b;
+}
+
+</style>
+</head>
+<body>
+
+<h1 style="text-align:center; font-size:32px; margin-bottom:30px;">⚒ 커스텀 인챈트 시뮬레이터</h1>
+
+<div class="container">
+
+  <!-- ===== 장비 슬롯 영역 ===== -->
+  <div class="slot-panel">
+    <div class="slot-title">장비 슬롯 (최대 14칸)</div>
+
+    <div class="slot-grid" id="slotGrid">
+      <!-- JS로 슬롯 14개 생성 -->
+    </div>
+  </div>
+
+
+  <!-- ===== 인챈트 목록 영역 ===== -->
+  <div class="list-panel">
+    <div class="list-title">인챈트 목록</div>
+
+    <div class="ench-list" id="enchList">
+      <!-- 인챈트 카드 생성 (JS) -->
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* =============================
+   가짜 인챈트 데이터 (DEMO)
+   나중에 index.html 데이터와 연결할 수 있음
+============================= */
+
+const SAMPLE_DATA = [
+  { name: "낙뢰", grade: "전설", items: ["검", "활", "쇠뇌"] },
+  { name: "불멸", grade: "신화", items: ["갑옷", "흉갑"] },
+  { name: "수확", grade: "특별", items: ["낫", "도구"] },
+  { name: "가속", grade: "엘리트", items: ["신발"] },
+  { name: "야간 투시", grade: "근본", items: ["모자"] },
+  { name: "민첩", grade: "일반", items: ["신발", "바지"] },
+];
+
+/* ==== 슬롯 14개 생성 ==== */
+const slotGrid = document.getElementById("slotGrid");
+
+for (let i = 0; i < 14; i++) {
+  const slot = document.createElement("div");
+  slot.className = "slot";
+  slot.dataset.index = i;
+  slot.textContent = "빈 슬롯";
+  slotGrid.appendChild(slot);
+}
+
+/* ==== 인챈트 카드 생성 ==== */
+const enchList = document.getElementById("enchList");
+
+SAMPLE_DATA.forEach(e => {
+  const card = document.createElement("div");
+  card.className = "ench-card";
+  card.draggable = true;
+  card.dataset.name = e.name;
+  card.dataset.items = JSON.stringify(e.items);
+
+  card.innerHTML = `
+    <div class="ench-name">${e.name}</div>
+    <div class="ench-grade ench-${e.grade}">${e.grade}</div>
+    <div style="font-size:12px; color:#777;">
+      적용: ${e.items.join(", ")}
+    </div>
+  `;
+
+  /* 드래그 시작 이벤트 */
+  card.addEventListener("dragstart", ev => {
+    ev.dataTransfer.setData("enchName", e.name);
+    ev.dataTransfer.setData("enchItems", JSON.stringify(e.items));
+  });
+
+  /* 클릭으로도 적용 가능 */
+  card.onclick = () => {
+    alert("적용할 슬롯을 클릭하세요!");
+    selectedEnchant = {name: e.name, items: e.items};
+  };
+
+  enchList.appendChild(card);
+});
+
+let selectedEnchant = null;
+
+/* ==== 슬롯에 드롭 처리 ==== */
+document.querySelectorAll(".slot").forEach(slot => {
+
+  slot.addEventListener("dragover", ev => ev.preventDefault());
+
+  slot.addEventListener("drop", ev => {
+    const name = ev.dataTransfer.getData("enchName");
+    const items = JSON.parse(ev.dataTransfer.getData("enchItems"));
+
+    applyEnchant(slot, name, items);
+  });
+
+  /* 클릭 적용 */
+  slot.onclick = () => {
+    if (selectedEnchant) {
+      applyEnchant(slot, selectedEnchant.name, selectedEnchant.items);
+      selectedEnchant = null;
+    }
+  };
+});
+
+
+/* =============================
+   인챈트 적용 함수
+============================= */
+
+function applyEnchant(slot, enchName, allowedItems) {
+
+  // DEMO 장비 타입
+  const equipmentType = "신발"; // 나중에 변경 가능
+
+  if (!allowedItems.includes(equipmentType)) {
+    // 적용 불가
+    slot.classList.add("invalid");
+    slot.textContent = "적용 불가";
+    setTimeout(() => {
+      slot.classList.remove("invalid");
+      slot.textContent = "빈 슬롯";
+    }, 700);
+    return;
+  }
+
+  // 적용 성공
+  slot.classList.add("applied");
+  slot.textContent = enchName;
+}
+
+</script>
+
+</body>
+</html>
