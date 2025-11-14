@@ -153,6 +153,7 @@ body {
   cursor: pointer;
 }
 
+/* 모달 내부 텍스트 */
 .meta {
   color: #666;
   margin-bottom: 15px;
@@ -176,6 +177,26 @@ body {
   font-size: 13px;
   margin-top: 10px;
   color: #777;
+}
+
+/* ★ 모달 아이템 버튼 */
+.modal-item-btn {
+  display: inline-block;
+  margin-right: 8px;
+  margin-bottom: 6px;
+  padding: 6px 14px;
+  border-radius: 16px;
+  background: #f3f3f3;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.modal-item-btn:hover {
+  background: #e8e8e8;
+  border-color: #999;
+  transform: translateY(-1px);
 }
 </style>
 </head>
@@ -224,8 +245,6 @@ body {
     <tr>
       <th>인챈트</th>
       <th>등급</th>
-
-      <!-- ★ 티어 정렬 버튼 -->
       <th>
         티어
         <button id="tierSortBtn"
@@ -233,7 +252,6 @@ body {
           ↕
         </button>
       </th>
-
       <th>최대 레벨</th>
       <th>적용 아이템</th>
     </tr>
@@ -246,9 +264,13 @@ body {
   <div class="modal-content">
     <span id="closeModal" class="close">&times;</span>
     <h2 id="mName"></h2>
+
     <div class="meta" id="mMeta"></div>
+
     <p class="desc" id="mEffect"></p>
     <p class="extra" id="mExtra"></p>
+
+    <!-- ★ 버튼 UI로 채워질 영역 -->
     <p class="items" id="mItems"></p>
   </div>
 </div>
@@ -263,10 +285,10 @@ const SHEET_URL =
   `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
 
 let DATA = [];
-let DEFAULT_DATA = [];   // ★ 기본 정렬 저장
+let DEFAULT_DATA = [];   
 let currentTierFilter = "전체";
 let currentItemFilter = "전체";
-let tierSortOrder = "none"; // none → asc → desc
+let tierSortOrder = "none"; 
 
 /* ---- 시트 데이터 로드 ---- */
 fetch(SHEET_URL)
@@ -285,8 +307,7 @@ fetch(SHEET_URL)
       extra: (r.c[6]?.v ?? "")
     }));
 
-    DEFAULT_DATA = [...DATA]; // ★ 기본 저장
-
+    DEFAULT_DATA = [...DATA]; 
     renderList(DATA);
   });
 
@@ -351,15 +372,35 @@ function openModal(e) {
      • 티어: ${e.tier} • 최대 레벨 ${e.max}`;
 
   document.getElementById("mEffect").textContent = e.effect;
-  document.getElementById("mItems").textContent =
-    `적용 아이템: ${e.items.join(", ")}`;
   document.getElementById("mExtra").textContent =
     e.extra ? `추가: ${e.extra}` : "";
+
+  /* ★ 적용 아이템 버튼 생성 (모달 닫히지 않음) */
+  const itemsArea = document.getElementById("mItems");
+  itemsArea.innerHTML = "";
+
+  e.items.forEach(item => {
+    const btn = document.createElement("button");
+    btn.textContent = item;
+    btn.className = "modal-item-btn";
+
+    btn.onclick = () => {
+      document.querySelectorAll(".item-btn").forEach(b => b.classList.remove("active"));
+      const target = document.querySelector(`.item-btn[data-item="${item}"]`);
+      if (target) target.classList.add("active");
+
+      currentItemFilter = item;
+      renderList(DATA);
+    };
+
+    itemsArea.appendChild(btn);
+  });
 
   modal.style.display = "block";
 }
 
 closeModal.onclick = () => (modal.style.display = "none");
+
 window.onclick = e => {
   if (e.target === modal) modal.style.display = "none";
 };
@@ -377,8 +418,7 @@ document.getElementById("searchBar").addEventListener("keyup", e => {
 /* ---- 등급 필터 ---- */
 document.querySelectorAll(".tier-btn").forEach(btn => {
   btn.addEventListener("click", () => {
-    document.querySelectorAll(".tier-btn")
-      .forEach(b => b.classList.remove("active"));
+    document.querySelectorAll(".tier-btn").forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
 
     currentTierFilter = btn.dataset.tier;
@@ -389,9 +429,7 @@ document.querySelectorAll(".tier-btn").forEach(btn => {
 /* ---- 아이템 필터 ---- */
 document.querySelectorAll(".item-btn").forEach(btn => {
   btn.addEventListener("click", () => {
-
-    document.querySelectorAll(".item-btn")
-      .forEach(b => b.classList.remove("active"));
+    document.querySelectorAll(".item-btn").forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
 
     currentItemFilter = btn.dataset.item;
@@ -399,31 +437,23 @@ document.querySelectorAll(".item-btn").forEach(btn => {
   });
 });
 
-/* ===========================================
-   ★ 티어 정렬 버튼 (오름 → 내림 → 기본)
-=========================================== */
-
+/* ---- 티어 정렬 버튼 ---- */
 document.getElementById("tierSortBtn").addEventListener("click", () => {
 
   if (tierSortOrder === "none") {
-    // 오름차순
     DATA.sort((a, b) => tierValue(a.tier) - tierValue(b.tier));
     tierSortOrder = "asc";
 
   } else if (tierSortOrder === "asc") {
-    // 내림차순
     DATA.sort((a, b) => tierValue(b.tier) - tierValue(a.tier));
     tierSortOrder = "desc";
 
   } else {
-    // 기본 정렬 복원
     DATA = [...DEFAULT_DATA];
     tierSortOrder = "none";
   }
 
-  // ★ 아이콘은 항상 ↕ 그대로 유지
   document.getElementById("tierSortBtn").textContent = "↕";
-
   renderList(DATA);
 });
 
