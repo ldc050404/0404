@@ -73,7 +73,7 @@ body {
   filter: brightness(1.1);
 }
 
-/* ★ active(선택됨) 상태 = 검정 테두리 */
+/* ★ active = 검정 테두리 */
 .item-btn.active,
 .tier-btn.active {
   outline: 3px solid #000;
@@ -109,7 +109,7 @@ body {
   background: #f3fff0;
 }
 
-/* === 등급 배지 === */
+/* 등급 배지 */
 .grade-badge {
   display: inline-block;
   padding: 6px 14px;
@@ -199,7 +199,6 @@ body {
   <button class="tier-btn" data-tier="근본" style="background:#FCFC54;">근본</button>
   <button class="tier-btn" data-tier="전설" style="background:#FCA800;">전설</button>
   <button class="tier-btn" data-tier="신화" style="background:#FC54FC;">신화</button>
-  
 </div>
 
 <!-- 아이템 필터 -->
@@ -225,7 +224,16 @@ body {
     <tr>
       <th>인챈트</th>
       <th>등급</th>
-      <th>티어</th>
+
+      <!-- ★ 티어 정렬 버튼 추가 -->
+      <th>
+        티어 
+        <button id="tierSortBtn" 
+          style="border:none; background:none; cursor:pointer; font-size:16px;">
+          ▼
+        </button>
+      </th>
+
       <th>최대 레벨</th>
       <th>적용 아이템</th>
     </tr>
@@ -258,6 +266,14 @@ const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tq
 let DATA = [];
 let currentTierFilter = "전체";
 let currentItemFilter = "전체";
+let tierSortOrder = "asc"; // asc → 오름차순, desc → 내림차순
+
+/* 티어 우선순위 숫자로 변환 */
+function tierValue(tier) {
+  if (tier === "OP") return 0;
+  if (!isNaN(Number(tier))) return Number(tier);
+  return 999;
+}
 
 /* ---- 1. 시트 데이터 로드 ---- */
 fetch(SHEET_URL)
@@ -287,12 +303,10 @@ function renderList(list) {
 
   let filtered = list;
 
-  // 등급 필터
   if (currentTierFilter !== "전체") {
     filtered = filtered.filter(e => e.grade === currentTierFilter);
   }
 
-  // 아이템 필터
   if (currentItemFilter !== "전체") {
     filtered = filtered.filter(e => e.items.includes(currentItemFilter));
   }
@@ -346,7 +360,6 @@ function openModal(e) {
 }
 
 closeModal.onclick = () => (modal.style.display = "none");
-
 window.onclick = e => {
   if (e.target === modal) modal.style.display = "none";
 };
@@ -361,13 +374,11 @@ document.getElementById("searchBar").addEventListener("keyup", e => {
   if (e.key === "Enter") document.getElementById("searchBtn").click();
 });
 
-/* ---- 5. 등급 필터(active 적용) ---- */
+/* ---- 5. 등급 필터 ---- */
 document.querySelectorAll(".tier-btn").forEach(btn => {
   btn.addEventListener("click", () => {
-
     document.querySelectorAll(".tier-btn")
       .forEach(b => b.classList.remove("active"));
-
     btn.classList.add("active");
 
     currentTierFilter = btn.dataset.tier;
@@ -375,21 +386,34 @@ document.querySelectorAll(".tier-btn").forEach(btn => {
   });
 });
 
-/* ---- 6. 아이템 필터(active 적용) ---- */
+/* ---- 6. 아이템 필터 ---- */
 document.querySelectorAll(".item-btn").forEach(btn => {
   btn.addEventListener("click", () => {
-
     document.querySelectorAll(".item-btn")
       .forEach(b => b.classList.remove("active"));
-
     btn.classList.add("active");
 
     currentItemFilter = btn.dataset.item;
     renderList(DATA);
   });
 });
+
+/* ---- 7. 티어 정렬 버튼 ---- */
+document.getElementById("tierSortBtn").addEventListener("click", () => {
+
+  if (tierSortOrder === "asc") {
+    DATA.sort((a, b) => tierValue(a.tier) - tierValue(b.tier));
+    tierSortOrder = "desc";
+    document.getElementById("tierSortBtn").textContent = "▲";
+  } else {
+    DATA.sort((a, b) => tierValue(b.tier) - tierValue(a.tier));
+    tierSortOrder = "asc";
+    document.getElementById("tierSortBtn").textContent = "▼";
+  }
+
+  renderList(DATA);
+});
 </script>
 
 </body>
 </html>
-
