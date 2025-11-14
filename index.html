@@ -15,40 +15,7 @@ body {
   font-family: 'Pretendard', sans-serif;
 }
 
-/* ============================
-      티어 정렬 버튼 안정화
-============================ */
-#tierSortBtn {
-  cursor: pointer;
-  display: inline-block;
-  width: 16px;
-  min-width: 16px;
-  height: 16px;
-  line-height: 16px;
-  text-align: center;
-  vertical-align: middle;
-
-  transition: transform 0.25s ease;
-}
-
-#tierSortBtn.asc {
-  transform: translateY(-3px);
-}
-
-#tierSortBtn.desc {
-  transform: translateY(3px);
-}
-
-/* 티어 열 흔들림 제거 */
-.ench-table th:nth-child(3),
-.ench-table td:nth-child(3) {
-  width: 80px;
-  min-width: 80px;
-  max-width: 80px;
-  text-align: center;
-}
-
-/* 로고 */
+/* ===== 로고 ===== */
 .logo-img {
   width: 500px;
   height: auto;
@@ -56,7 +23,7 @@ body {
   display: block;
 }
 
-/* 검색 */
+/* ===== 검색 ===== */
 .search-area {
   text-align: center;
   padding: 30px 0 10px;
@@ -82,7 +49,7 @@ body {
   cursor: pointer;
 }
 
-/* 필터 */
+/* ===== 필터 ===== */
 .filters {
   display: flex;
   justify-content: center;
@@ -90,7 +57,7 @@ body {
   margin-bottom: 20px;
 }
 
-.tier-btn, .item-btn {
+.tier-btn, .item-btn, .fav-btn {
   border: none;
   padding: 8px 18px;
   border-radius: 20px;
@@ -99,20 +66,19 @@ body {
   transition: all 0.15s ease-in-out;
 }
 
-.tier-btn:hover, .item-btn:hover {
+.tier-btn:hover, .item-btn:hover, .fav-btn:hover {
   transform: translateY(-2px) scale(1.05);
   box-shadow: 0px 4px 14px rgba(0,0,0,0.15);
   filter: brightness(1.1);
 }
 
+.tier-btn.active,
 .item-btn.active,
-.tier-btn.active {
+.fav-btn.active {
   outline: 3px solid #000;
 }
 
-/* ============================
-            테이블
-============================ */
+/* ===== 테이블 ===== */
 .ench-table {
   width: 80%;
   margin: auto;
@@ -142,7 +108,14 @@ body {
   background: #f3fff0;
 }
 
-/* 등급 배지 */
+/* 티어 열 width 고정 */
+.ench-table th:nth-child(3),
+.ench-table td:nth-child(3) {
+  width: 80px;
+  text-align: center;
+}
+
+/* ===== 등급 배지 ===== */
 .grade-badge {
   display: inline-block;
   padding: 6px 14px;
@@ -159,7 +132,22 @@ body {
 .grade-특별 { background: #54FC54; }
 .grade-엘리트 { background: #54FCFC; }
 
-/* 모달 */
+/* ===== 별 아이콘 ===== */
+.star {
+  font-size: 18px;
+  cursor: pointer;
+  margin-right: 6px;
+}
+
+.star.off {
+  color: #ccc;
+}
+
+.star.on {
+  color: #FFD700;
+}
+
+/* ===== 모달 ===== */
 .modal {
   display: none;
   position: fixed;
@@ -178,6 +166,7 @@ body {
   width: 50%;
   border-radius: 12px;
   box-shadow: 0px 5px 18px rgba(0,0,0,0.15);
+  position: relative;
 }
 
 .close {
@@ -185,6 +174,18 @@ body {
   font-size: 28px;
   cursor: pointer;
 }
+
+/* 모달 안 별 버튼 */
+.modal-star {
+  position: absolute;
+  right: 25px;
+  top: 20px;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.modal-star.off { color: #ccc; }
+.modal-star.on { color: #FFD700; }
 
 .meta {
   color: #666;
@@ -225,11 +226,6 @@ body {
   font-weight: 600;
 }
 
-.modal-item-btn:hover {
-  background: #e8e8e8;
-  border-color: #999;
-  transform: translateY(-1px);
-}
 </style>
 </head>
 <body>
@@ -241,6 +237,15 @@ body {
   <button id="searchBtn" class="search-btn">검색</button>
 </section>
 
+<!-- 즐겨찾기 토글 -->
+<div class="filters">
+  <button id="favToggle" class="fav-btn">
+    <span id="favToggleIcon" class="star off">☆</span>
+    즐겨찾기
+  </button>
+</div>
+
+<!-- 등급 필터 -->
 <div class="filters">
   <button class="tier-btn active" data-tier="전체">전체</button>
   <button class="tier-btn" data-tier="일반" style="background:#FCFCFC;">일반</button>
@@ -251,6 +256,7 @@ body {
   <button class="tier-btn" data-tier="신화" style="background:#FC54FC;">신화</button>
 </div>
 
+<!-- 아이템 필터 -->
 <div class="filters">
   <button class="item-btn active" data-item="전체">전체</button>
   <button class="item-btn" data-item="검">검</button>
@@ -272,10 +278,7 @@ body {
     <tr>
       <th>인챈트</th>
       <th>등급</th>
-      <th>
-        티어
-        <span id="tierSortBtn">↕</span>
-      </th>
+      <th>티어</th>
       <th>최대 레벨</th>
       <th>적용 아이템</th>
     </tr>
@@ -286,6 +289,8 @@ body {
 <div id="modal" class="modal">
   <div class="modal-content">
     <span id="closeModal" class="close">&times;</span>
+    <span id="modalStar" class="modal-star off">☆</span>
+
     <h2 id="mName"></h2>
     <div class="meta" id="mMeta"></div>
     <p class="desc" id="mEffect"></p>
@@ -293,24 +298,20 @@ body {
     <p class="items" id="mItems"></p>
   </div>
 </div>
-<script>
-/* ============================
-      구글 시트 데이터
-============================ */
 
+<script>
+/* ===== 데이터 로드 ===== */
 const SHEET_ID = "13fF_iQfMThiw49QrYSCULF3mT4QVHO4aDsbSDD71DUg";
 const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
 
 let DATA = [];
+let favoriteList = JSON.parse(localStorage.getItem("favorites") || "[]");
+
 let currentTierFilter = "전체";
 let currentItemFilter = "전체";
+let favOnlyMode = false;
 
-/* 0 = 기본, 1 = 오름차순, 2 = 내림차순 */
-let tierSortState = 0;
-
-/* ============================
-      데이터 불러오기
-============================ */
+/* ===== 구글 시트 불러오기 ===== */
 fetch(SHEET_URL)
   .then(res => res.text())
   .then(text => {
@@ -318,77 +319,86 @@ fetch(SHEET_URL)
     const rows = json.table.rows;
 
     DATA = rows.map(r => ({
-      name:  r.c[0]?.v ?? "",
+      name: r.c[0]?.v ?? "",
       grade: r.c[1]?.v ?? "",
-      tier:  r.c[2]?.v ?? "",
-      max:   r.c[3]?.v ?? "",
+      tier: r.c[2]?.v ?? "",
+      max: r.c[3]?.v ?? "",
       items: (r.c[4]?.v ?? "").split(",").map(i => i.trim()),
       effect: r.c[5]?.v ?? "",
-      extra:  r.c[6]?.v ?? ""
+      extra: r.c[6]?.v ?? ""
     }));
 
-    renderList(DATA);
+    renderList();
   });
 
-/* 티어 숫자 변환 */
-function tierValue(t) {
-  if (t === "OP") return 0;
-  const n = parseInt(t);
-  return isNaN(n) ? 999 : n;
+/* ===== 즐겨찾기 확인 ===== */
+function isFav(name) {
+  return favoriteList.includes(name);
 }
 
-/* ============================
-      리스트 출력
-============================ */
-function renderList(list) {
-  let filtered = [...list];
+/* ===== 즐겨찾기 토글 ===== */
+function toggleFav(name) {
+  if (isFav(name)) {
+    favoriteList = favoriteList.filter(n => n !== name);
+  } else {
+    favoriteList.push(name);
+  }
+  localStorage.setItem("favorites", JSON.stringify(favoriteList));
+}
+
+/* ===== 리스트 렌더링 ===== */
+function renderList() {
+  let list = [...DATA];
+
+  if (favOnlyMode) {
+    list = list.filter(e => favoriteList.includes(e.name));
+  }
 
   if (currentTierFilter !== "전체") {
-    filtered = filtered.filter(e => e.grade === currentTierFilter);
+    list = list.filter(e => e.grade === currentTierFilter);
   }
 
   if (currentItemFilter !== "전체") {
-    filtered = filtered.filter(e => e.items.includes(currentItemFilter));
+    list = list.filter(e => e.items.includes(currentItemFilter));
   }
 
-  if (tierSortState === 1) {
-    filtered.sort((a, b) => tierValue(a.tier) - tierValue(b.tier));
-  } else if (tierSortState === 2) {
-    filtered.sort((a, b) => tierValue(b.tier) - tierValue(a.tier));
-  }
+  const body = document.getElementById("enchList");
+  body.innerHTML = "";
 
-  const listBody = document.getElementById("enchList");
-  listBody.innerHTML = "";
-
-  filtered.forEach(e => {
+  list.forEach(e => {
     const tr = document.createElement("tr");
+
+    const favClass = isFav(e.name) ? "on" : "off";
+    const favSymbol = isFav(e.name) ? "★" : "☆";
 
     tr.innerHTML = `
       <td style="display:flex; align-items:center; gap:10px;">
+        <span class="star ${favClass}" data-name="${e.name}">${favSymbol}</span>
         <img src="0003.png" style="width:32px; height:32px;">
         <div>
           <div style="font-weight:600">${e.name}</div>
           <div style="font-size:12px; color:#888;">${e.name} 인챈트</div>
         </div>
       </td>
-
-      <td>
-        <span class="grade-badge grade-${e.grade}">${e.grade}</span>
-      </td>
-
+      <td><span class="grade-badge grade-${e.grade}">${e.grade}</span></td>
       <td>${e.tier}</td>
       <td>${e.max}</td>
       <td>${e.items.join(", ")}</td>
     `;
 
+    /* 별 클릭 방지 (모달 열리는 것 막음) */
+    tr.querySelector(".star").onclick = ev => {
+      ev.stopPropagation();
+      toggleFav(e.name);
+      renderList();
+    };
+
     tr.onclick = () => openModal(e);
-    listBody.appendChild(tr);
+    body.appendChild(tr);
   });
 }
 
-/* ============================
-          모달
-============================ */
+/* ===== 모달 ===== */
 const modal = document.getElementById("modal");
 
 function openModal(e) {
@@ -399,95 +409,85 @@ function openModal(e) {
   document.getElementById("mEffect").textContent = e.effect;
   document.getElementById("mExtra").textContent = e.extra ? `추가: ${e.extra}` : "";
 
-  /* 적용 아이템 버튼 */
   const mItems = document.getElementById("mItems");
   mItems.innerHTML = "적용 아이템: ";
-
   e.items.forEach(item => {
     const btn = document.createElement("span");
     btn.textContent = item;
     btn.className = "modal-item-btn";
-
     btn.onclick = ev => {
-      ev.stopPropagation(); // 모달 유지
-
+      ev.stopPropagation();
       currentItemFilter = item;
       document.querySelectorAll(".item-btn").forEach(b => b.classList.remove("active"));
-
-      const match = document.querySelector(`.item-btn[data-item="${item}"]`);
-      if (match) match.classList.add("active");
-
-      renderList(DATA);
+      document.querySelector(`.item-btn[data-item="${item}"]`).classList.add("active");
+      renderList();
     };
-
     mItems.appendChild(btn);
   });
+
+  /* 모달 별 상태 */
+  const modalStar = document.getElementById("modalStar");
+  modalStar.className = "modal-star " + (isFav(e.name) ? "on" : "off");
+  modalStar.textContent = isFav(e.name) ? "★" : "☆";
+
+  modalStar.onclick = () => {
+    toggleFav(e.name);
+    modalStar.className = "modal-star " + (isFav(e.name) ? "on" : "off");
+    modalStar.textContent = isFav(e.name) ? "★" : "☆";
+    renderList();
+  };
 
   modal.style.display = "block";
 }
 
-document.getElementById("closeModal").onclick = () => {
-  modal.style.display = "none";
-};
+document.getElementById("closeModal").onclick = () => (modal.style.display = "none");
+window.onclick = e => { if (e.target === modal) modal.style.display = "none"; };
 
-window.onclick = e => {
-  if (e.target === modal) modal.style.display = "none";
-};
-
-/* ============================
-        검색
-============================ */
+/* ===== 검색 ===== */
 document.getElementById("searchBtn").onclick = () => {
   const key = document.getElementById("searchBar").value.trim();
-  renderList(DATA.filter(e => e.name.includes(key)));
+  if (!key) return renderList();
+  const filtered = DATA.filter(e => e.name.includes(key));
+  document.getElementById("enchList").innerHTML = "";
+  filtered.forEach(e => displayRow(e));
 };
-
 document.getElementById("searchBar").addEventListener("keyup", e => {
   if (e.key === "Enter") document.getElementById("searchBtn").click();
 });
 
-/* ============================
-    등급 필터 버튼
-============================ */
+/* ===== 등급 필터 ===== */
 document.querySelectorAll(".tier-btn").forEach(btn => {
   btn.onclick = () => {
     document.querySelectorAll(".tier-btn").forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
-
     currentTierFilter = btn.dataset.tier;
-    renderList(DATA);
+    renderList();
   };
 });
 
-/* ============================
-    아이템 필터 버튼
-============================ */
+/* ===== 아이템 필터 ===== */
 document.querySelectorAll(".item-btn").forEach(btn => {
   btn.onclick = () => {
     document.querySelectorAll(".item-btn").forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
-
     currentItemFilter = btn.dataset.item;
-    renderList(DATA);
+    renderList();
   };
 });
 
-/* ============================
-      티어 정렬 버튼
-============================ */
-const tierSortBtn = document.getElementById("tierSortBtn");
+/* ===== 즐겨찾기 토글 버튼 ===== */
+document.getElementById("favToggle").onclick = () => {
+  favOnlyMode = !favOnlyMode;
 
-tierSortBtn.onclick = () => {
-  tierSortState = (tierSortState + 1) % 3;
+  const icon = document.getElementById("favToggleIcon");
+  icon.textContent = favOnlyMode ? "★" : "☆";
+  icon.className = "star " + (favOnlyMode ? "on" : "off");
 
-  tierSortBtn.classList.remove("asc", "desc");
+  document.getElementById("favToggle").classList.toggle("active");
 
-  if (tierSortState === 1) {
-    tierSortBtn.classList.add("asc");
-  } else if (tierSortState === 2) {
-    tierSortBtn.classList.add("desc");
-  }
-
-  renderList(DATA);
+  renderList();
 };
 </script>
+
+</body>
+</html>
