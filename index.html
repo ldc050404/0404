@@ -290,7 +290,21 @@ body {
   <div class="modal-content">
     <span id="closeModal" class="close">&times;</span>
     <span id="modalStar" class="modal-star off">☆</span>
+<!-- 모달 -->
+<div id="modal" class="modal">
+  <div class="modal-content">
+    <span id="closeModal" class="close">&times;</span>
 
+    <!-- ⭐ 모달 즐겨찾기 버튼 (추가해야 정상 작동) -->
+    <span id="modalStar" class="modal-star off">☆</span>
+
+    <h2 id="mName"></h2>
+    <div class="meta" id="mMeta"></div>
+    <p class="desc" id="mEffect"></p>
+    <p class="extra" id="mExtra"></p>
+    <p class="items" id="mItems"></p>
+  </div>
+</div>
     <h2 id="mName"></h2>
     <div class="meta" id="mMeta"></div>
     <p class="desc" id="mEffect"></p>
@@ -491,3 +505,4 @@ document.getElementById("favToggle").onclick = () => {
 
 </body>
 </html>
+
