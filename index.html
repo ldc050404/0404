@@ -11,7 +11,7 @@
 <style>
 body {
   margin: 0;
-  padding: 0 80px; 
+  padding: 0 80px;
   background: #ffffff;
   font-family: 'Pretendard', sans-serif;
 }
@@ -20,14 +20,16 @@ body {
 .logo-img {
   width: 500px;
   height: auto;
-  margin: 20px 0;
+  margin: 20px auto 20px auto;
+  display: block;
 }
 
 /* 검색 */
 .search-area {
   text-align: center;
-  padding: 30px 0 15px;
+  padding: 30px 0 10px;
 }
+
 #searchBar {
   width: 60%;
   max-width: 600px;
@@ -36,6 +38,7 @@ body {
   border: 1px solid #ddd;
   font-size: 16px;
 }
+
 .search-btn {
   margin-left: 10px;
   padding: 14px 20px;
@@ -47,27 +50,31 @@ body {
   cursor: pointer;
 }
 
-/* 필터 버튼 공통 */
-.filters, .item-filters {
+/* 필터 */
+.filters {
   display: flex;
   justify-content: center;
   gap: 10px;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
+
 .tier-btn, .item-btn {
   border: none;
   padding: 8px 18px;
   border-radius: 20px;
   cursor: pointer;
   font-weight: 600;
-  transition: 0.15s;
+  transition: all 0.15s ease-in-out;
 }
+
 .tier-btn:hover, .item-btn:hover {
   transform: translateY(-2px) scale(1.05);
   box-shadow: 0px 4px 14px rgba(0,0,0,0.15);
+  filter: brightness(1.1);
 }
-.active {
-  outline: 3px solid #333;
+
+.item-btn.active {
+  outline: 3px solid #2fb24a;
 }
 
 /* 테이블 */
@@ -80,83 +87,114 @@ body {
   font-size: 15px;
   table-layout: fixed;
 }
+
 .ench-table th, .ench-table td {
   padding: 16px;
   border-bottom: 1px solid #f1f1f1;
   text-align: center;
 }
+
 .ench-table td:first-child {
   text-align: left;
 }
-.ench-table thead { background: #f3fff0; }
-.ench-table tbody tr { cursor: pointer; }
-.ench-table tbody tr:hover { background: #f9f9f9; }
+
+.ench-table tbody tr:hover {
+  background: #fafafa;
+  cursor: pointer;
+}
+
+.ench-table thead {
+  background: #f3fff0;
+}
 
 /* 모달 */
 .modal {
   display: none;
   position: fixed;
   z-index: 99999;
-  left: 0; top: 0;
-  width: 100%; height: 100%;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
   background: rgba(0,0,0,0.35);
 }
+
 .modal-content {
   background: #fff;
-  margin: 12% auto;
+  margin: 8% auto;
   padding: 30px;
   width: 50%;
   border-radius: 12px;
   box-shadow: 0px 5px 18px rgba(0,0,0,0.15);
 }
+
 .close {
   float: right;
   font-size: 28px;
   cursor: pointer;
 }
 
-.desc { font-size: 17px; line-height: 1.7; color:#333; }
-.items { font-size: 14px; margin-top: 10px; color:#777; }
+.meta {
+  color: #666;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.desc {
+  font-size: 17px;
+  line-height: 1.7;
+  color: #333;
+}
+
+.extra {
+  font-size: 14px;
+  margin-top: 10px;
+  color: #444;
+  font-weight: 500;
+}
+
+.items {
+  font-size: 13px;
+  margin-top: 10px;
+  color: #777;
+}
+
 </style>
 </head>
-
 <body>
 
 <!-- 로고 -->
-<header class="nav" style="text-align:center;">
-  <img src="0002.png" class="logo-img" />
-</header>
+<img src="0002.png" class="logo-img">
 
 <!-- 검색 -->
 <section class="search-area">
-  <input id="searchBar" placeholder="인챈트 이름을 입력하세요..." />
+  <input id="searchBar" placeholder="인챈트 검색 (예: 불멸, 낙뢰, 수확 ...)" />
   <button id="searchBtn" class="search-btn">검색</button>
 </section>
 
-<!-- 티어 필터 -->
+<!-- 등급 필터 -->
 <div class="filters">
-  <button class="tier-btn active" data-tier="전체">전체</button>
   <button class="tier-btn" data-tier="일반" style="background:#FCFCFC;">일반</button>
   <button class="tier-btn" data-tier="특별" style="background:#54FC54;">특별</button>
   <button class="tier-btn" data-tier="엘리트" style="background:#54FCFC;">엘리트</button>
   <button class="tier-btn" data-tier="근본" style="background:#FCFC54;">근본</button>
   <button class="tier-btn" data-tier="전설" style="background:#FCA800;">전설</button>
   <button class="tier-btn" data-tier="신화" style="background:#FC54FC;">신화</button>
+  <button class="tier-btn" data-tier="전체">전체보기</button>
 </div>
 
 <!-- 아이템 필터 -->
-<div class="item-filters">
+<div class="filters">
   <button class="item-btn active" data-item="전체">전체</button>
   <button class="item-btn" data-item="검">검</button>
   <button class="item-btn" data-item="도끼">도끼</button>
   <button class="item-btn" data-item="활">활</button>
   <button class="item-btn" data-item="쇠뇌">쇠뇌</button>
   <button class="item-btn" data-item="삼지창">삼지창</button>
-  <button class="item-btn" data-item="곡괭이">곡괭이</button>
-  <button class="item-btn" data-item="낫">낫</button>
   <button class="item-btn" data-item="갑옷">갑옷</button>
   <button class="item-btn" data-item="신발">신발</button>
   <button class="item-btn" data-item="모자">모자</button>
+  <button class="item-btn" data-item="낫">낫</button>
   <button class="item-btn" data-item="도구">도구</button>
 </div>
 
@@ -165,13 +203,12 @@ body {
   <thead>
     <tr>
       <th>인챈트</th>
-      <th data-sort="grade" style="cursor:pointer;">등급 ⬍</th>
+      <th>등급</th>
       <th>티어</th>
       <th>최대 레벨</th>
       <th>적용 아이템</th>
     </tr>
   </thead>
-
   <tbody id="enchList"></tbody>
 </table>
 
@@ -181,368 +218,130 @@ body {
     <span id="closeModal" class="close">&times;</span>
     <h2 id="mName"></h2>
 
-    <div class="meta">
-      <span id="mTier"></span> • <span id="mMaxLevel"></span>
-    </div>
+    <div class="meta" id="mMeta"></div>
 
-    <p id="mEffect" class="desc"></p>
-    <p id="mItems" class="items"></p>
+    <p class="desc" id="mEffect"></p>
+    <p class="extra" id="mExtra"></p>
+    <p class="items" id="mItems"></p>
   </div>
 </div>
 
 <script>
-/* ----------------------------------------------------------
-   티어 색상
----------------------------------------------------------- */
-function tierBg(t){
-  if(t==="일반") return "#FCFCFC";
-  if(t==="특별") return "#54FC54";
-  if(t==="엘리트") return "#54FCFC";
-  if(t==="근본") return "#FCFC54";
-  if(t==="전설") return "#FCA800";
-  if(t==="신화") return "#FC54FC";
-  return "#eee";
-}
-function tierText(){ return "#000"; }
+// ====== ★ 구글 시트 불러오기 ★ ======
+const SHEET_ID = "13fF_iQfMThiw49QrYSCULF3mT4QVHO4aDsbSDD71DUg";
+const SHEET_URL =
+  `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
 
-/* ----------------------------------------------------------
-   등급 변환 (OP ~ 5티어)
----------------------------------------------------------- */
-function convertGrade(g){
-  if(g.includes("벨런스 붕괴")) return "OP";
-  if(g.includes("최상")) return "1티어";
-  if(g.includes("상") && !g.includes("최상")) return "2티어";
-  if(g.includes("중")) return "3티어";
-  if(g.includes("하") && !g.includes("최하")) return "4티어";
-  if(g.includes("최하")) return "5티어";
-  return g;
-}
-
-/* ----------------------------------------------------------
-   정렬 기준
----------------------------------------------------------- */
-const gradeOrder = { "OP":0, "1티어":1, "2티어":2, "3티어":3, "4티어":4, "5티어":5 };
-let gradeSortAsc = true;
-
-/* ----------------------------------------------------------
-   아이템 필터 변수
----------------------------------------------------------- */
-let currentItemFilter = "전체";
+let DATA = [];
 let currentTierFilter = "전체";
+let currentItemFilter = "전체";
 
-/* ----------------------------------------------------------
-   ENCHANTS (너가 넣은 180+개 그대로)
----------------------------------------------------------- */
-const ENCHANTS = [
-  { name:"낙뢰", tier:"일반", grade:"최상", effect:"상대에게 번개를 내리침", maxLevel:3, items:["검","활","쇠뇌","삼지창"] },
-  { name:"수중 호흡", tier:"일반", grade:"최상", effect:"상시 수중 호흡 부여", maxLevel:1, items:["모자"] },
-  { name:"재련", tier:"일반", grade:"벨런스 붕괴 수준", effect:"일정 확률로 채굴한 블록 재련 (최대 레벨일 경우 100% 발동)", maxLevel:3, items:["곡괭이"] },
-  { name:"숙련", tier:"일반", grade:"중", effect:"광물로부터 더 많은 경험치를 획득", maxLevel:5, items:["도구"] },
-  { name:"광부", tier:"일반", grade:"벨런스 붕괴 수준", effect:"일정 확률로 블록 파괴 후 성급함 효과 획득", maxLevel:3, items:["도구"] },
-  { name:"호흡 보충", tier:"일반", grade:"하", effect:"일정 확률로 물속에서 채굴 시 공기 회복", maxLevel:2, items:["곡괭이"] },
-  { name:"야시경", tier:"일반", grade:"벨런스 붕괴 수준", effect:"착용 시 상시 야간투시", maxLevel:1, items:["모자"] },
-  { name:"참수", tier:"일반", grade:"중(위더 스켈레톤 한정 벨붕)", effect:"처치 시 상대 머리 드랍 확률 증가", maxLevel:3, items:["검","도끼"] },
-  { name:"밀어내기", tier:"일반", grade:"최하", effect:"일정 확률로 밀치기 발동", maxLevel:5, items:["검"] },
-  { name:"팅커벨", tier:"일반", grade:"하", effect:"파티클과 소리 효과 제공", maxLevel:3, items:["검"] },
-  { name:"좀비 학살자", tier:"일반", grade:"하", effect:"좀비 추가 피해", maxLevel:5, items:["검","도끼"] },
-  { name:"스켈레톤 학살자", tier:"일반", grade:"하", effect:"스켈레톤 추가 피해", maxLevel:3, items:["검","도끼"] },
-  { name:"재수확", tier:"특별", grade:"최상", effect:"일정 확률로 작물을 캘 때 다시 심음", maxLevel:1, items:["낫"] }, 
-  { name:"헌터", tier:"특별", grade:"하", effect:"일정 확률로 상대에게 굶주림 효과 부여", maxLevel:4, items:["무기"] }, 
-  { name:"광전사", tier:"특별", grade:"벨런스 붕괴 수준", effect:"일정 확률로 공격 시 힘과 채굴 피로 획득", maxLevel:5, items:["검","도끼"] }, 
-  { name:"반사", tier:"특별", grade:"상", effect:"적의 데미지를 흡수하고 반사", maxLevel:5, items:["갑옷"] }, 
-  { name:"피해 흡수", tier:"특별", grade:"상", effect:"적의 데미지 흡수 확률 증가", maxLevel:4, items:["갑옷"] }, 
-  { name:"폭발 화살", tier:"특별", grade:"중", effect:"화살이 폭발할 확률 증가", maxLevel:5, items:["활"] }, 
-  { name:"폭발 석궁", tier:"특별", grade:"중", effect:"화살이 폭발할 확률 증가", maxLevel:5, items:["쇠뇌"] },
-  { name:"부스터", tier:"특별", grade:"상", effect:"일정 확률로 공격 시 성급함 효과 획득", maxLevel:3, items:["검","도끼"] },
-  { name:"화염 갑옷", tier:"특별", grade:"최하", effect:"공격 받을 시 상대에게 화염 효과 확률 증가", maxLevel:4, items:["갑옷"] }, 
-  { name:"전투식량", tier:"특별", grade:"???", effect:"전투 중 배고픔 회복 확률 증가", maxLevel:4, items:["검","도끼"] }, 
-  { name:"염력", tier:"특별", grade:"벨런스 붕괴 수준", effect:"도구로 블록을 부수면 바로 인벤토리로 획득", maxLevel:4, items:["도구"] },
-  { name:"폭발적 최후", tier:"특별", grade:"???", effect:"죽음에 가까울 때 크리퍼를 경비원으로 소환", maxLevel:8, items:["갑옷"] },
-  { name:"도살자", tier:"특별", grade:"하", effect:"온순한 몹에게 가하는 피해 증가", maxLevel:4, items:["검","도끼"] }, 
-  { name:"사냥꾼", tier:"특별", grade:"하", effect:"온순한 몹에게 가하는 피해 증가", maxLevel:4, items:["활","쇠뇌","삼지창"] },
-  { name:"무자비", tier:"특별", grade:"상", effect:"적대적 몹에게 가하는 피해 증가", maxLevel:4, items:["활","쇠뇌","삼지창"] }, 
-  { name:"독침", tier:"특별", grade:"상", effect:"일정 확률로 독 효과 부여", maxLevel:3, items:["활","쇠뇌","삼지창"] },
-  { name:"소멸", tier:"특별", grade:"상", effect:"일정 확률로 위더 효과 부여", maxLevel:5, items:["활","쇠뇌","삼지창"] }, 
-  { name:"포식", tier:"특별", grade:"상", effect:"일정 확률로 몹 처치 시 허기 회복", maxLevel:3, items:["무기"] }, 
-  { name:"투창", tier:"엘리트", grade:"상", effect:"일정 확률로 가한 데미지 2배", maxLevel:4, items:["삼지창"] },
-  { name:"독 갈고리", tier:"엘리트", grade:"하", effect:"갈고리에 독 효과 추가", maxLevel:3, items:["낚싯대"] }, 
-  { name:"화염 갈고리", tier:"엘리트", grade:"하", effect:"갈고리에 화염 효과 추가", maxLevel:3, items:["낚싯대"] }, 
-  { name:"광맥 채굴", tier:"엘리트", grade:"벨런스 붕괴 수준", effect:"광물 광맥 전체 채굴", maxLevel:3, items:["곡괭이"] },
-  { name:"엔더 학살자", tier:"엘리트", grade:"하", effect:"엔더맨·엔더 드래곤에게 가하는 피해 증가", maxLevel:5, items:["무기"] }, 
-  { name:"거미 학살자", tier:"엘리트", grade:"하", effect:"거미에게 가하는 피해 증가", maxLevel:3, items:["검","도끼"] },
-  { name:"낚시꾼", tier:"엘리트", grade:"중", effect:"낚시로부터 많은 경험치 획득", maxLevel:3, items:["낚싯대"] },
-  { name:"포획", tier:"엘리트", grade:"최하", effect:"맞은 몹을 끌어당김", maxLevel:3, items:["낚싯대"] },
-  { name:"사신", tier:"엘리트", grade:"상", effect:"일정 확률로 피해를 줄 때 위더·실명 효과 부여", maxLevel:4, items:["도끼"] },
-  { name:"네더 학살자", tier:"엘리트", grade:"하", effect:"네더 몬스터에게 추가 피해", maxLevel:5, items:["무기"] }, 
-  { name:"실명", tier:"엘리트", grade:"하", effect:"일정 확률로 피해를 줄 때 실명 효과 부여", maxLevel:3, items:["검"] }, 
-  { name:"유혹", tier:"엘리트", grade:"최하", effect:"공격 시 몬스터를 자신에게 끌어당김", maxLevel:3, items:["검"] },
-  { name:"빙결", tier:"엘리트", grade:"상", effect:"일정 확률로 공격받았을 때 상대에게 슬로우", maxLevel:3, items:["갑옷"] }, 
-  { name:"쇼크", tier:"엘리트", grade:"상", effect:"적에게 번개 효과 부여 및 일정 확률로 슬로우", maxLevel:4, items:["검","도끼"] },
-  { name:"독사", tier:"엘리트", grade:"중", effect:"공격 시 일정 확률로 독 효과 부여", maxLevel:3, items:["검","도끼"] }, 
-  { name:"포이즌", tier:"엘리트", grade:"중", effect:"공격자에게 일정 확률로 독 효과 부여", maxLevel:4, items:["갑옷"] }, 
-  { name:"명장", tier:"엘리트", grade:"중", effect:"무기와 도구의 내구성 향상", maxLevel:10, items:["무기","도구"] }, 
-  { name:"덫", tier:"엘리트", grade:"상", effect:"일정 확률로 슬로우 및 채굴 피로 부여", maxLevel:4, items:["활"] },
-  { name:"스프링", tier:"엘리트", grade:"최하", effect:"점프 강화 상시 부여 (인첸트 레벨 = 점프 강화 레벨)", maxLevel:3, items:["신발"] },
-  { name:"좀비 소환", tier:"엘리트", grade:"하", effect:"일정 확률로 공격받을 시 좀비 무리 생성", maxLevel:10, items:["신발"] },
-  { name:"탈진", tier:"엘리트", grade:"상", effect:"공격 시 나약함 부여", maxLevel:6, items:["갑옷"] }, 
-  { name:"위더", tier:"엘리트", grade:"중", effect:"일정 확률로 위더 효과 부여", maxLevel:5, items:["갑옷"] },
-  { name:"스모크", tier:"엘리트", grade:"???", effect:"사망 직전 연막탄 생성, 시야 방해", maxLevel:8, items:["모자"] }, 
-  { name:"헬파이어", tier:"엘리트", grade:"중", effect:"일정 확률로 ‘발화’ 발동", maxLevel:3, items:["검","도끼"] },
-  { name:"소화", tier:"엘리트", grade:"???", effect:"불타는 상태일 때 스스로 불을 끌 확률 증가", maxLevel:3, items:["바지"] },
-  { name:"반항", tier:"엘리트", grade:"최하", effect:"체력이 낮을 때 공격자를 밀침", maxLevel:5, items:["흉갑"] }, 
-  { name:"흡혈귀", tier:"엘리트", grade:"상", effect:"크리티컬 공격 후 일정 확률로 체력 3 회복", maxLevel:3, items:["검"] }, 
-  { name:"궁수 사냥꾼", tier:"엘리트", grade:"하", effect:"타격 시 활을 사용하는 플레이어에게 추가 피해", maxLevel:5, items:["검"] },
-  { name:"검사 사냥꾼", tier:"엘리트", grade:"하", effect:"타격 시 검을 사용하는 플레이어에게 추가 피해", maxLevel:5, items:["활","쇠뇌","삼지창"] },
-  { name:"로켓 탈출", tier:"엘리트", grade:"최하", effect:"체력이 낮을 때 공중으로 날아감", maxLevel:3, items:["신발"] },
-  { name:"백어택", tier:"엘리트", grade:"???", effect:"피격 시 일정 확률로 공격자 뒤로 순간이동", maxLevel:8, items:["갑옷"] },
-  { name:"저주", tier:"엘리트", grade:"하", effect:"일정 확률로 상대에게 채굴 피로 부여", maxLevel:2, items:["갑옷"] }, 
-  { name:"제트팩", tier:"엘리트", grade:"상", effect:"일정 확률로 폭죽 사용 시 스피드 부스트", maxLevel:3, items:["겉날개"] }, 
-  { name:"사수", tier:"엘리트", grade:"최상", effect:"쇠뇌 피해 증가", maxLevel:4, items:["쇠뇌"] }, 
-  { name:"포세이돈(엘리트)", tier:"엘리트", grade:"최상", effect:"삼지창 피해 증가", maxLevel:4, items:["삼지창"] },
-  { name:"광산 적응", tier:"엘리트", grade:"상", effect:"채굴 시 일정 확률로 허기 회복", maxLevel:3, items:["곡괭이"] }, 
-  { name:"폭팔 화살", tier:"엘리트", grade:"???", effect:"화살이 화염구로 변함", maxLevel:5, items:["쇠뇌"] },
-  { name:"치명타", tier:"엘리트", grade:"최상", effect:"크리티컬 피해 증가", maxLevel:3, items:["검"] },
-  { name:"불꽃(엘리트)", tier:"엘리트", grade:"상", effect:"상대를 불태움", maxLevel:3, items:["삼지창"] },
-  { name:"강타", tier:"엘리트", grade:"상", effect:"일정 확률로 강하게 공격", maxLevel:4, items:["도끼"] },
-  { name:"고정 공격", tier:"엘리트", grade:"중", effect:"일정 확률로 몹에게 넉백을 가하지 않음", maxLevel:3, items:["검"] },
-  { name:"서리", tier:"엘리트", grade:"중", effect:"밤에 몹을 얼림", maxLevel:3, items:["검"] },
-  { name:"매혹", tier:"엘리트", grade:"하", effect:"공격 시 플레이어를 끌어당김", maxLevel:3, items:["검"] }, 
-  { name:"수확", tier:"근본", grade:"하", effect:"일정 확률로 3×3 범위를 수확", maxLevel:9, items:["낫"] }, 
-  { name:"밀 파종", tier:"근본", grade:"하", effect:"Shift+우클릭으로 3×3 범위에 씨앗 심기", maxLevel:3, items:["낫"] },
-  { name:"감자 파종", tier:"근본", grade:"하", effect:"Shift+우클릭으로 3×3 범위에 감자 심기", maxLevel:3, items:["낫"] }, 
-  { name:"당근 파종", tier:"근본", grade:"하", effect:"Shift+우클릭으로 3×3 범위에 당근 심기", maxLevel:3, items:["낫"] },
-  { name:"낙법", tier:"근본", grade:"상", effect:"일정 확률로 낙하 피해 무효화", maxLevel:3, items:["신발"] },
-  { name:"사슬 낚시대", tier:"근본", grade:"하", effect:"갈고리에 추가 데미지", maxLevel:9, items:["낚싯대"] },
-  { name:"행운의 낚시꾼", tier:"근본", grade:"중", effect:"낚시 시 행운 증가 확률 있음", maxLevel:3, items:["낚싯대"] },
-  { name:"과다 출혈", tier:"근본", grade:"상", effect:"일정 확률로 상대를 느리게 하고 출혈 부여", maxLevel:5, items:["검"] },
-  { name:"벌목", tier:"근본", grade:"최하", effect:"일정 확률로 한 번에 나무를 베어냄", maxLevel:3, items:["도끼"] },
-  { name:"백스텝", tier:"근본", grade:"최하", effect:"일정 확률로 상대에게서 멀어지며 재생 효과 획득", maxLevel:4, items:["무기"] }, 
-  { name:"도끼병", tier:"근본", grade:"최하", effect:"일정 반경 내 플레이어에게 피해", maxLevel:7, items:["도끼"] },
-  { name:"범위공격", tier:"근본", grade:"최하", effect:"일정 반경 내 몹에게 피해", maxLevel:7, items:["검","도끼"] }, 
-  { name:"구원", tier:"근본", grade:"상", effect:"데미지를 받을 때 치료", maxLevel:5, items:["갑옷"] }, 
-  { name:"화살 반사", tier:"근본", grade:"상", effect:"일정 확률로 적이 발사한 화살 방어", maxLevel:4, items:["갑옷"] },
-  { name:"화살 차단", tier:"근본", grade:"중", effect:"해당 인첸트 아이템을 들고 있으면 화살 튕김", maxLevel:6, items:["도끼"] },
-  { name:"약화", tier:"근본", grade:"하", effect:"일정 확률로 상대에게 채굴 피로 부여", maxLevel:1, items:["도끼"] },
-  { name:"방해", tier:"근본", grade:"하", effect:"일정 확률로 상대에게 채굴 피로 부여", maxLevel:2, items:["검"] },
-  { name:"정화", tier:"근본", grade:"중", effect:"일정 확률로 해로운 포션 효과 해제", maxLevel:4, items:["검"] },
-  { name:"넉백(근본)", tier:"근본", grade:"최하", effect:"일정 확률로 맞았을 때 자신이 밀려남", maxLevel:4, items:["갑옷"] },
-  { name:"패링", tier:"근본", grade:"중", effect:"공격을 무효화하고 최대 4의 피해를 줌", maxLevel:3, items:["검"] },
-  { name:"대지파괴", tier:"근본", grade:"최하", effect:"일정 확률로 3×3 범위 채굴", maxLevel:9, items:["곡괭이","삽"] },
-  { name:"터널링", tier:"근본", grade:"최하", effect:"바라보는 방향으로 터널 또는 계단 생성", maxLevel:9, items:["곡괭이","삽"] },
-  { name:"회피", tier:"근본", grade:"???", effect:"일정 확률로 물리 공격 회피 (웅크릴 때 확률 증가)", maxLevel:5, items:["갑옷"] },
-  { name:"수호자", tier:"근본", grade:"최하", effect:"일정 확률로 아군 철 골렘 소환", maxLevel:10, items:["갑옷"] },
-  { name:"얼음의 검", tier:"근본", grade:"상", effect:"일정 확률로 상대에게 구속 효과 부여", maxLevel:3, items:["검"] },
-  { name:"강화", tier:"근본", grade:"중", effect:"받는 데미지 감소", maxLevel:4, items:["겉날개"] },
-  { name:"식량 주입", tier:"근본", grade:"최상", effect:"일정 확률로 초마다 허기 회복", maxLevel:3, items:["모자"] },
-  { name:"이프리트의 펜던트", tier:"근본", grade:"최상", effect:"영구적인 화염 저항", maxLevel:1, items:["갑옷"] },
-  { name:"신궁", tier:"근본", grade:"최상", effect:"활로 입히는 데미지 증가", maxLevel:5, items:["활"] },
-  { name:"보우마스터", tier:"근본", grade:"최상", effect:"활을 들고 있는 상대에게 추가 피해", maxLevel:4, items:["활"] },
-  { name:"인내", tier:"근본", grade:"중", effect:"방어 시 일정 확률로 저항 효과 획득", maxLevel:2, items:["갑옷"] },
-  { name:"은신", tier:"근본", grade:"하", effect:"체력이 낮을 때 투명화 효과 획득", maxLevel:4, items:["갑옷"] },
-  { name:"혼란", tier:"근본", grade:"하", effect:"일정 확률로 멀미 효과 부여", maxLevel:4, items:["검"] },
-  { name:"분해", tier:"근본", grade:"하", effect:"공격마다 더 많은 갑옷 내구도 피해", maxLevel:4, items:["검"] },
-  { name:"파쇄", tier:"근본", grade:"하", effect:"공격마다 더 많은 갑옷 내구도 피해", maxLevel:4, items:["도끼"] },
-  { name:"중갑", tier:"근본", grade:"중", effect:"인첸트 레벨당 화살 피해 2% 감소", maxLevel:5, items:["갑옷"] },
-  { name:"지옥불", tier:"근본", grade:"???", effect:"화살이 화염구로 변함", maxLevel:5, items:["활"] },
-  { name:"궁수 사냥꾼(근본)", tier:"근본", grade:"하", effect:"활을 든 플레이어에게 주는 피해 증가", maxLevel:4, items:["검"] },
-  { name:"아이템 셔플", tier:"근본", grade:"중", effect:"상대의 단축바를 무작위로 섞음", maxLevel:5, items:["검"] },
-  { name:"도끼방어", tier:"근본", grade:"하", effect:"도끼 피해 감소 (레벨당 2%)", maxLevel:4, items:["갑옷"] },
-  { name:"검술사", tier:"근본", grade:"상", effect:"검을 들고 있을 때 받는 피해 최대 22% 감소", maxLevel:5, items:["갑옷"] },
-  { name:"네더마스터", tier:"근본", grade:"하", effect:"네더 몹에게 2배 피해", maxLevel:3, items:["검"] },
-  { name:"엔드마스터", tier:"근본", grade:"하", effect:"엔드 몹에게 2배 피해", maxLevel:3, items:["검"] },
-  { name:"폭발 면역", tier:"근본", grade:"???", effect:"일정 확률로 폭발 피해 면역 및 회복 확률 증가", maxLevel:3, items:["갑옷"] },
-  { name:"블레이즈 소환수", tier:"근본", grade:"???", effect:"일정 확률로 우호적 블레이즈 소환", maxLevel:10, items:["갑옷"] },
-  { name:"출혈", tier:"근본", grade:"???", effect:"상대에게 출혈 부여", maxLevel:6, items:["도끼"] },
-  { name:"소각", tier:"근본", grade:"중", effect:"주변 몹 전체에게 화염 효과 부여", maxLevel:3, items:["검"] },
-  { name:"화살비", tier:"근본", grade:"???", effect:"상대에게 화살 비 생성", maxLevel:3, items:["활"] },
-  { name:"헤드샷", tier:"근본", grade:"???", effect:"머리를 맞출 경우 2배 피해", maxLevel:5, items:["활"] },
-  { name:"공수 부대", tier:"근본", grade:"중", effect:"낙하 피해 시 신속 효과 획득", maxLevel:3, items:["신발"] },
-  { name:"지면 강타", tier:"근본", grade:"최하", effect:"낙하 피해 시 주변 몹에게 피해", maxLevel:3, items:["신발"] },
-  { name:"밤의 사냥꾼", tier:"근본", grade:"하", effect:"밤에 몹에게 가하는 피해 증가", maxLevel:3, items:["검"] },
-  { name:"수호자의 뿔피리", tier:"근본", grade:"???", effect:"위험 시 동맹 소환", maxLevel:3, items:["염소 뿔"] },
-  { name:"롱기누스의 창", tier:"전설", grade:"상", effect:"근접 공격 시 적에게 출혈 부여", maxLevel:4, items:["삼지창"] },
-  { name:"날개", tier:"전설", grade:"벨런스 붕괴 수준", effect:"착용 시 비행 가능", maxLevel:1, items:["신발"] },
-  { name:"아수 학살자", tier:"전설", grade:"최상", effect:"적대적 몬스터에게 가하는 피해 증가", maxLevel:4, items:["검","도끼"] },
-  { name:"운디네의 가호", tier:"전설", grade:"중", effect:"일정 확률로 낚시 보상 2배", maxLevel:3, items:["낚싯대"] },
-  { name:"경화", tier:"전설", grade:"하", effect:"플레이어에게 공격받을 경우 일정 확률로 내구도 회복", maxLevel:3, items:["갑옷"] },
-  { name:"긴급 수리", tier:"전설", grade:"하", effect:"몹에게 공격받을 경우 일정 확률로 내구도 회복", maxLevel:3, items:["갑옷"] },
-  { name:"실수", tier:"전설", grade:"하", effect:"일정 확률로 활 피격 시 주변 적에게 폭발", maxLevel:3, items:["흉갑"] },
-  { name:"소환 방해", tier:"전설", grade:"???", effect:"상대의 소환수 출현을 방해할 확률 증가", maxLevel:3, items:["갑옷"] },
-  { name:"반격", tier:"전설", grade:"???", effect:"처치 후 일정 체력 회복", maxLevel:3, items:["무기"] },
-  { name:"뇌운", tier:"전설", grade:"상", effect:"연속 3회 공격 시 몬스터에게 벼락", maxLevel:3, items:["무기"] },
-  { name:"용암 걷기", tier:"전설", grade:"최상", effect:"용암 위를 걸을 수 있음", maxLevel:1, items:["신발"] },
-  { name:"수면 걷기", tier:"전설", grade:"최상", effect:"물 위를 걸을 수 있음", maxLevel:1, items:["신발"] },
-  { name:"수중 학살자", tier:"전설", grade:"하", effect:"물속에서 가하는 피해 2배", maxLevel:4, items:["신발"] },
-  { name:"심판", tier:"전설", grade:"중", effect:"일정 확률로 상대에게 독 부여, 자신은 재생 효과", maxLevel:5, items:["겉날개"] },
-  { name:"전환", tier:"전설", grade:"중", effect:"일정 확률로 상대에게 독 부여, 자신은 재생 효과", maxLevel:5, items:["갑옷"] },
-  { name:"성화", tier:"전설", grade:"상", effect:"나약함 및 위더 효과 방어", maxLevel:5, items:["갑옷"] },
-  { name:"혼돈", tier:"전설", grade:"상", effect:"나약함 및 위더 효과 부여", maxLevel:5, items:["삼지창"] },
-  { name:"에어본", tier:"전설", grade:"최하", effect:"일정 확률로 공격자를 공중으로 날림", maxLevel:6, items:["신발"] },
-  { name:"축복의 갑옷", tier:"전설", grade:"상", effect:"일정 확률로 받는 데미지 감소", maxLevel:6, items:["흉갑"] },
-  { name:"일격", tier:"전설", grade:"하", effect:"일정 확률로 추가 피해", maxLevel:4, items:["도끼"] },
-  { name:"개안", tier:"전설", grade:"하", effect:"피격 시 실명 해제 + 야간투시 획득", maxLevel:3, items:["갑옷"] },
-  { name:"이중타격", tier:"전설", grade:"상", effect:"일정 확률로 2번 타격", maxLevel:3, items:["검"] },
-  { name:"기어", tier:"전설", grade:"최상", effect:"장착 시 신속 효과", maxLevel:3, items:["신발"] },
-  { name:"화염 군주", tier:"전설", grade:"하", effect:"일정 범위의 플레이어에게 화염 부여", maxLevel:3, items:["도끼"] },
-  { name:"제노사이드", tier:"전설", grade:"중", effect:"일정 확률로 일정 범위의 몹을 즉사시킴", maxLevel:5, items:["검"] },
-  { name:"탐구자", tier:"전설", grade:"최상", effect:"일정 확률로 몹이 드랍하는 경험치 증가", maxLevel:4, items:["검"] },
-  { name:"흡혈", tier:"전설", grade:"최상", effect:"일정 확률로 공격 시 체력 회복", maxLevel:5, items:["검"] },
-  { name:"추가 체력", tier:"전설", grade:"최상", effect:"추가 체력 부여", maxLevel:3, items:["갑옷"] },
-  { name:"장갑", tier:"전설", grade:"하", effect:"인첸트 레벨당 검 피해 2% 감소", maxLevel:4, items:["갑옷"] },
-  { name:"등가교환", tier:"전설", grade:"???", effect:"무기를 수리하여 피해를 줄이는 대가를 치르세요", maxLevel:5, items:["도끼"] },
-  { name:"영속", tier:"전설", grade:"최상", effect:"내구도 무한", maxLevel:1, items:["무기"] },
-  { name:"무장 해체", tier:"전설", grade:"하", effect:"일정 확률로 상대의 갑옷을 벗김", maxLevel:8, items:["검"] },
-  { name:"트리아이나", tier:"전설", grade:"???", effect:"삼지창으로 머리를 맞추면 2배 피해", maxLevel:5, items:["삼지창"] },
-  { name:"포세이돈(전설)", tier:"전설", grade:"상", effect:"삼지창 근접 피해 증가", maxLevel:3, items:["삼지창"] },
-  { name:"도약", tier:"전설", grade:"최하", effect:"검을 들고 허공 우클릭 시 위로 점프", maxLevel:3, items:["검"] },
-  { name:"순간 가속", tier:"전설", grade:"상", effect:"우클릭으로 자신을 부스트", maxLevel:3, items:["겉날개"] },
-  { name:"낙뢰 군주", tier:"전설", grade:"하", effect:"근처 플레이어에게 벼락", maxLevel:3, items:["검"] },
-  { name:"블록화", tier:"신화", grade:"최상", effect:"일정 확률로 광물 블록이 보석 블록으로 변함", maxLevel:1, items:["곡괭이"] },
-  { name:"명장(신화)", tier:"신화", grade:"상", effect:"도구를 더 빠르게 사용 가능", maxLevel:3, items:["도구"] },
-  { name:"복원", tier:"신화", grade:"하", effect:"아이템 파괴 시 일정 확률로 인첸트를 잃고 절반 내구도로 복구", maxLevel:4, items:["도구"] },
-  { name:"불멸", tier:"신화", grade:"중", effect:"일정 확률로 갑옷이 내구도 피해를 받지 않음", maxLevel:4, items:["갑옷"] },
-  { name:"내구성 무한", tier:"신화", grade:"최상", effect:"도구 내구도 무한", maxLevel:1, items:["도구"] },
-  { name:"영혼 결속", tier:"신화", grade:"중", effect:"일정 확률로 사망해도 아이템 유지", maxLevel:3, items:["무기","도구","활"] },
-  { name:"무장 해제(신화)", tier:"신화", grade:"하", effect:"일정 확률로 상대 무기 해제", maxLevel:3, items:["검"] },
-  { name:"부활", tier:"신화", grade:"최상", effect:"일정 확률로 사망 시 부활", maxLevel:3, items:["흉갑"] },
-  { name:"공포", tier:"신화", grade:"???", effect:"공격 시 일정 확률로 상대의 모자를 호박으로 변경", maxLevel:5, items:["무기"] },
-  { name:"극살", tier:"신화", grade:"???", effect:"일정 확률로 2배 피해 + 실명 부여 (발동마다 영혼 40 소모)", maxLevel:4, items:["무기"] },
-  { name:"돌진", tier:"신화", grade:"상", effect:"이륙 시 일정 확률로 스피드 부스트 (영혼 10 소모)", maxLevel:3, items:["겉날개"] },
-  { name:"복제", tier:"신화", grade:"최상", effect:"몬스터 드랍 아이템 2배 (영혼 5 소모)", maxLevel:5, items:["무기"] },
-  { name:"다중 채굴", tier:"신화", grade:"최상", effect:"광물 2배 등장 (영혼 5 소모)", maxLevel:5, items:["곡괭이"] },
-  { name:"영혼의 주인", tier:"신화", grade:"하", effect:"플레이어 처치 시 획득 영혼 증가", maxLevel:3, items:["검"] },
-  { name:"영혼의 도끼", tier:"신화", grade:"하", effect:"플레이어 처치 시 획득 영혼 증가", maxLevel:3, items:["도끼"] },
-  { name:"영혼의 채굴자", tier:"신화", grade:"최상", effect:"광질 시 영혼 획득", maxLevel:3, items:["곡괭이"] },
-  { name:"영혼의 사냥꾼", tier:"신화", grade:"최상", effect:"몬스터 처치 시 영혼 획득", maxLevel:3, items:["검"] }
-];
+// ---- 1. 시트 데이터 로드 ----
+fetch(SHEET_URL)
+  .then(res => res.text())
+  .then(text => {
+    const json = JSON.parse(text.substr(47).slice(0, -2));
+    const rows = json.table.rows;
 
-/* ----------------------------------------------------------
-   리스트 렌더링
----------------------------------------------------------- */
+    DATA = rows.map(r => ({
+      name: r.c[0]?.v || "",
+      grade: r.c[1]?.v || "",
+      tier: r.c[2]?.v || "",
+      max: r.c[3]?.v || "",
+      items: r.c[4]?.v.split(",").map(i => i.trim()),
+      effect: r.c[5]?.v || "",
+      extra: r.c[6]?.v || ""
+    }));
+
+    renderList(DATA);
+  });
+
+// ---- 2. 리스트 렌더링 ----
 const listBody = document.getElementById("enchList");
-function renderList(data){
+
+function renderList(list) {
   listBody.innerHTML = "";
 
-  data.forEach(e=>{
-    const row = document.createElement("tr");
-    row.innerHTML = `
+  let filtered = list;
+
+  if (currentTierFilter !== "전체")
+    filtered = filtered.filter(e => e.grade === currentTierFilter);
+
+  if (currentItemFilter !== "전체")
+    filtered = filtered.filter(e => e.items.includes(currentItemFilter));
+
+  filtered.forEach(e => {
+    const tr = document.createElement("tr");
+
+    tr.innerHTML = `
       <td style="display:flex; align-items:center; gap:10px;">
-        <img src="0003.png" style="width:32px; height:32px;" />
+        <img src="0003.png" style="width:32px; height:32px;">
         <div>
-          <div style="font-weight:600;">${e.name}</div>
-          <div style="font-size:12px;color:#888;">${e.name} 인챈트</div>
+          <div style="font-weight:600">${e.name}</div>
+          <div style="font-size:12px; color:#888;">${e.name} 인챈트</div>
         </div>
       </td>
-      <td>${convertGrade(e.grade)}</td>
-      <td><span style="background:${tierBg(e.tier)};
-                       padding:6px 12px;border-radius:8px;
-                       font-weight:700;">
-        ${e.tier}</span></td>
-      <td>${e.maxLevel}</td>
+      <td>${e.grade}</td>
+      <td>${e.tier}</td>
+      <td>${e.max}</td>
       <td>${e.items.join(", ")}</td>
     `;
-    row.onclick = ()=>openModal(e);
-    listBody.appendChild(row);
+
+    tr.onclick = () => openModal(e);
+    listBody.appendChild(tr);
   });
 }
 
-/* ----------------------------------------------------------
-   모달
----------------------------------------------------------- */
-function openModal(e){
+// ---- 3. 모달 ----
+const modal = document.getElementById("modal");
+const closeModal = document.getElementById("closeModal");
+
+function openModal(e) {
   document.getElementById("mName").textContent = e.name;
-
-  document.getElementById("mTier").innerHTML =
-    `<span style="background:${tierBg(e.tier)};
-                  padding:4px 10px;
-                  border-radius:6px;
-                  font-weight:700;">
-      ${e.tier}
-    </span>`;
-
-  document.getElementById("mMaxLevel").textContent =
-    `티어: ${convertGrade(e.grade)} · 최대 레벨 ${e.maxLevel}`;
-
+  document.getElementById("mMeta").textContent =
+    `${e.grade} • 티어: ${e.tier} • 최대 레벨 ${e.max}`;
   document.getElementById("mEffect").textContent = e.effect;
-  document.getElementById("mItems").textContent = "적용 아이템: " + e.items.join(", ");
+  document.getElementById("mItems").textContent = `적용 아이템: ${e.items.join(", ")}`;
+  document.getElementById("mExtra").textContent =
+    e.extra ? `추가: ${e.extra}` : "";
 
-  document.getElementById("modal").style.display = "block";
+  modal.style.display = "block";
 }
 
-document.getElementById("closeModal").onclick = ()=>modal.style.display="none";
-window.onclick = e=>{ if(e.target===modal) modal.style.display="none"; };
-
-/* ----------------------------------------------------------
-   🔥 필터 통합 함수
----------------------------------------------------------- */
-function applyFilters(){
-  let keyword = document.getElementById("searchBar").value.trim();
-
-  let filtered = ENCHANTS.filter(e=>{
-
-    if(keyword && !e.name.includes(keyword)) return false;
-    if(currentTierFilter !== "전체" && e.tier !== currentTierFilter) return false;
-    if(currentItemFilter !== "전체" && !e.items.includes(currentItemFilter)) return false;
-
-    return true;
-  });
-
-  renderList(filtered);
-}
-
-/* ----------------------------------------------------------
-   검색
----------------------------------------------------------- */
-document.getElementById("searchBtn").onclick = ()=>applyFilters();
-document.getElementById("searchBar").addEventListener("keyup",e=>{
-  if(e.key==="Enter") applyFilters();
-});
-
-/* ----------------------------------------------------------
-   티어 버튼
----------------------------------------------------------- */
-document.querySelectorAll(".tier-btn").forEach(btn=>{
-  btn.onclick = ()=>{
-    document.querySelectorAll(".tier-btn").forEach(b=>b.classList.remove("active"));
-    btn.classList.add("active");
-    currentTierFilter = btn.dataset.tier;
-    applyFilters();
-  };
-});
-
-/* ----------------------------------------------------------
-   아이템 버튼
----------------------------------------------------------- */
-document.querySelectorAll(".item-btn").forEach(btn=>{
-  btn.onclick = ()=>{
-    document.querySelectorAll(".item-btn").forEach(b=>b.classList.remove("active"));
-    btn.classList.add("active");
-    currentItemFilter = btn.dataset.item;
-    applyFilters();
-  };
-});
-
-/* ----------------------------------------------------------
-   정렬
----------------------------------------------------------- */
-document.querySelector("th[data-sort='grade']").onclick = ()=>{
-  gradeSortAsc = !gradeSortAsc;
-
-  let sorted = [...ENCHANTS].sort((a,b)=>{
-    let ga = gradeOrder[convertGrade(a.grade)] ?? 999;
-    let gb = gradeOrder[convertGrade(b.grade)] ?? 999;
-    return gradeSortAsc ? (ga-gb) : (gb-ga);
-  });
-
-  renderList(sorted);
+closeModal.onclick = () => (modal.style.display = "none");
+window.onclick = e => {
+  if (e.target === modal) modal.style.display = "none";
 };
 
-/* ----------------------------------------------------------
-   초기 출력
----------------------------------------------------------- */
-renderList(ENCHANTS);
+// ---- 4. 검색 ----
+document.getElementById("searchBtn").onclick = () => {
+  const key = document.getElementById("searchBar").value.trim();
+  renderList(DATA.filter(e => e.name.includes(key)));
+};
+
+document.getElementById("searchBar").addEventListener("keyup", e => {
+  if (e.key === "Enter") document.getElementById("searchBtn").click();
+});
+
+// ---- 5. 등급 필터 ----
+document.querySelectorAll(".tier-btn").forEach(btn => {
+  btn.onclick = () => {
+    currentTierFilter = btn.dataset.tier;
+    renderList(DATA);
+  };
+});
+
+// ---- 6. 아이템 필터 ----
+document.querySelectorAll(".item-btn").forEach(btn => {
+  btn.onclick = () => {
+    document.querySelectorAll(".item-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+
+    currentItemFilter = btn.dataset.item;
+    renderList(DATA);
+  };
+});
 </script>
 
 </body>
 </html>
-
