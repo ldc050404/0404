@@ -15,6 +15,17 @@ body {
   font-family: 'Pretendard', sans-serif;
 }
 
+/* ===== 작은 좌측 상단 아이콘 ===== */
+.top-icon {
+  position: absolute;
+  left: 20px;
+  top: 20px;
+  width: 64px;
+  height: 64px;
+  cursor: pointer;
+  z-index: 9999;
+}
+
 /* ===== 로고 ===== */
 .logo-img {
   width: 500px;
@@ -130,7 +141,7 @@ body {
   font-size: 13px;
   font-weight: 700;
   color: #000;
-  cursor: pointer; /* 필터 기능 위해 손가락 커서 */
+  cursor: pointer;
 }
 
 .grade-신화 { background: #FC54FC; }
@@ -150,7 +161,7 @@ body {
 .star.off { color: #ccc; }
 .star.on { color: #FFD700; }
 
-/* 적용 아이템 버튼 (목록) */
+/* 적용 아이템 버튼 */
 .item-chip {
   display: inline-block;
   padding: 6px 12px;
@@ -225,9 +236,13 @@ body {
 
 <body>
 
-<a href="simulator.html">
-  <img src="0003.png" class="logo-img" style="cursor:pointer;">
+<!-- ▣ 좌측 상단 시뮬레이터 이동 버튼 -->
+<a href="simulator.html" class="top-icon">
+  <img src="0003.png" style="width:100%; height:100%; object-fit:contain;">
 </a>
+
+<!-- 메인 로고 -->
+<img src="0002.png" class="logo-img">
 
 <section class="search-area">
   <input id="searchBar" placeholder="인챈트 검색 (예: 불멸, 낙뢰, 수확 ...)" />
@@ -509,7 +524,6 @@ document.getElementById("searchBtn").onclick = () => {
   body.innerHTML = "";
 
   filtered.forEach(e => {
-    // 검색만 따로 렌더링할 필요 없이 openModal은 동일하게 유지
     const tr = document.createElement("tr");
     tr.innerHTML = `
       <td>${e.name}</td>
@@ -571,5 +585,3 @@ document.getElementById("tierSortBtn").onclick = () => {
 
 </body>
 </html>
-
-
