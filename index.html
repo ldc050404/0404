@@ -25,7 +25,14 @@ body {
   margin: 20px auto;
   display: block;
 }
-
+.tier-sort-btn {
+  display: inline-block;     /* 회전 변형 시 레이아웃 고정 */
+  width: 16px;               /* 고정된 너비 */
+  text-align: center;        /* 가운데 정렬 */
+}
+.tier-sort-btn {
+  transform-origin: 50% 50%;
+}
 /* 검색 */
 .search-area {
   text-align: center;
@@ -479,4 +486,5 @@ tierSortBtn.addEventListener("click", () => {
 </script>
 </body>
 </html>
+
 
