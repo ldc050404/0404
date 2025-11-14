@@ -15,11 +15,6 @@ body {
   background: #ffffff;
   font-family: 'Pretendard', sans-serif;
 }
-.ench-table th:nth-child(3),
-.ench-table td:nth-child(3) {
-  width: 80px;          /* 티어 칸 고정 폭 */
-  text-align: center;   /* 정렬 고정 */
-}
 
 /* 로고 */
 .logo-img {
@@ -29,16 +24,27 @@ body {
   display: block;
 }
 
-/* 티어 정렬 ↕ 버튼 */
-.tier-sort-btn {
+/* ============================
+   티어 헤더 안정화 (흔들림 해결)
+============================ */
+.th-tier {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+}
+
+#tierSortBtn {
   cursor: pointer;
+  width: 14px;
+  min-width: 14px;
   display: inline-block;
-  width: 16px;
   text-align: center;
   transform-origin: 50% 50%;
 }
 
-/* 검색 영역 */
+/* 검색 */
 .search-area {
   text-align: center;
   padding: 30px 0 10px;
@@ -112,6 +118,12 @@ body {
 
 .ench-table td:first-child {
   text-align: left;
+}
+
+/* 티어 칸 고정 폭 (추가 안정화) */
+.ench-table th:nth-child(3),
+.ench-table td:nth-child(3) {
+  width: 80px;
 }
 
 .ench-table tbody tr:hover {
@@ -192,7 +204,7 @@ body {
   color: #777;
 }
 
-/* 모달 내 아이템 버튼 */
+/* 모달 아이템 필터 버튼 */
 .modal-item-btn {
   display: inline-block;
   margin-right: 8px;
@@ -212,18 +224,13 @@ body {
   transform: translateY(-1px);
 }
 
-/* 아이콘 회전 애니메이션 */
+/* 티어 정렬 회전 */
 .rotate {
   transition: transform 0.35s ease;
 }
+.rotate.asc { transform: rotate(180deg); }
+.rotate.desc { transform: rotate(360deg); }
 
-.rotate.asc {
-  transform: rotate(180deg);
-}
-
-.rotate.desc {
-  transform: rotate(360deg);
-}
 </style>
 </head>
 <body>
@@ -272,8 +279,10 @@ body {
       <th>인챈트</th>
       <th>등급</th>
       <th>
-        티어
-        <span id="tierSortBtn" class="tier-sort-btn rotate">↕</span>
+        <div class="th-tier">
+          <span>티어</span>
+          <span id="tierSortBtn" class="rotate">↕</span>
+        </div>
       </th>
       <th>최대 레벨</th>
       <th>적용 아이템</th>
@@ -307,10 +316,10 @@ let DATA = [];
 let currentTierFilter = "전체";
 let currentItemFilter = "전체";
 
-/* 0 = 기본, 1 = 오름차순, 2 = 내림차순 */
+/* 0 = 기본, 1 = 오름, 2 = 내림 */
 let tierSortState = 0;
 
-/* ---- 시트 데이터 로드 ---- */
+/* ---- 시트 로드 ---- */
 fetch(SHEET_URL)
   .then(res => res.text())
   .then(text => {
@@ -330,7 +339,7 @@ fetch(SHEET_URL)
     renderList(DATA);
   });
 
-/* ---- 티어 비교 우선순위 ---- */
+/* ---- 티어 비교 함수 ---- */
 function tierValue(t) {
   if (t === "OP") return 0;
   let n = parseInt(t);
@@ -353,8 +362,7 @@ function renderList(list) {
 
   if (tierSortState === 1) {
     filtered.sort((a, b) => tierValue(a.tier) - tierValue(b.tier));
-  } 
-  else if (tierSortState === 2) {
+  } else if (tierSortState === 2) {
     filtered.sort((a, b) => tierValue(b.tier) - tierValue(a.tier));
   }
 
@@ -400,7 +408,6 @@ function openModal(e) {
   document.getElementById("mEffect").textContent = e.effect;
   document.getElementById("mExtra").textContent = e.extra ? `추가: ${e.extra}` : "";
 
-  /* 적용 아이템 버튼 */
   const mItems = document.getElementById("mItems");
   mItems.innerHTML = "적용 아이템: ";
 
@@ -428,10 +435,7 @@ function openModal(e) {
 }
 
 closeModal.onclick = () => (modal.style.display = "none");
-
-window.onclick = e => {
-  if (e.target === modal) modal.style.display = "none";
-};
+window.onclick = e => { if (e.target === modal) modal.style.display = "none"; };
 
 /* ---- 검색 ---- */
 document.getElementById("searchBtn").onclick = () => {
@@ -465,7 +469,7 @@ document.querySelectorAll(".item-btn").forEach(btn => {
   });
 });
 
-/* ---- 티어 정렬 버튼 ---- */
+/* ---- 티어 정렬 ---- */
 const tierSortBtn = document.getElementById("tierSortBtn");
 
 tierSortBtn.addEventListener("click", () => {
@@ -473,15 +477,12 @@ tierSortBtn.addEventListener("click", () => {
 
   tierSortBtn.classList.remove("asc", "desc");
 
-  if (tierSortState === 1) {
-    tierSortBtn.classList.add("asc");
-  } else if (tierSortState === 2) {
-    tierSortBtn.classList.add("desc");
-  }
+  if (tierSortState === 1) tierSortBtn.classList.add("asc");
+  else if (tierSortState === 2) tierSortBtn.classList.add("desc");
 
   renderList(DATA);
 });
 </script>
+
 </body>
 </html>
-
