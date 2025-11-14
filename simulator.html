@@ -1,278 +1,1084 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Enchant Simulator</title>
+
+<link rel="icon" type="image/png" href="0001.png">
 
 <style>
 body {
   margin: 0;
-  padding: 40px;
-  background: #f8f8f8;
+  padding: 0;
+  background: #ffffff;
   font-family: 'Pretendard', sans-serif;
+}
+
+/* ===== 상단 네비게이션 ===== */
+.top-nav {
+  width: 100%;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding-left: 30px;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.top-nav img {
+  width: 64px;
+  height: 64px;
+  cursor: pointer;
+}
+
+.top-nav-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: #222;
 }
 
 /* ===== 전체 레이아웃 ===== */
 .container {
   display: flex;
-  gap: 40px;
   width: 100%;
-  max-width: 1400px;
-  margin: auto;
+  height: calc(100vh - 80px);
 }
 
-/* ===== 장비 슬롯 영역 ===== */
-.slot-panel {
-  width: 320px;
-  background: #ffffff;
-  border-radius: 18px;
+/* ===== 좌측 장비 선택 패널 ===== */
+.left-panel {
+  width: 240px;
   padding: 20px;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+  border-right: 1px solid #e5e5e5;
+  overflow-y: auto;
 }
 
-.slot-title {
-  font-size: 22px;
+.left-title {
+  font-size: 20px;
   font-weight: 700;
   margin-bottom: 15px;
 }
 
-.slot-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 14px;
-}
-
-.slot {
-  width: 130px;
-  height: 130px;
-  background: #f3f3f3;
-  border-radius: 14px;
-  border: 2px dashed #bbb;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.equip-btn {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: #f5f5f5;
+  border: 1px solid #ddd;
   font-size: 15px;
-  font-weight: 600;
-  color: #555;
+  margin-bottom: 10px;
   cursor: pointer;
-  text-align: center;
-  transition: 0.18s;
+  text-align: left;
+  transition: 0.15s ease-in-out;
 }
 
-.slot:hover {
+.equip-btn:hover {
   background: #ebebeb;
 }
 
-/* 슬롯 안에 인챈트 적용된 경우 */
-.slot.applied {
+.equip-btn.active {
   border: 2px solid #2fb24a;
-  background: #eafbed;
-  color: #222;
+  background: #eaffea;
 }
 
-/* ===== 인챈트 목록 ===== */
-.list-panel {
+/* ===== 중앙 슬롯 영역 ===== */
+.center-panel {
   flex: 1;
-  background: white;
-  padding: 20px;
-  border-radius: 18px;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+  padding: 30px 40px;
+  overflow-y: auto;
 }
 
-.list-title {
+.center-title {
   font-size: 22px;
   font-weight: 700;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
-.ench-list {
+.slots-box {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  grid-template-columns: repeat(5, 1fr);
   gap: 14px;
+  max-width: 600px;
+}
+
+.slot {
+  width: 110px;
+  height: 110px;
+  border: 2px dashed #bbb;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 13px;
+  color: #888;
+  cursor: pointer;
+  position: relative;
+  transition: 0.2s ease;
+}
+
+.slot:hover {
+  background: #fafafa;
+}
+
+.slot-filled {
+  border: 2px solid #2fb24a !important;
+  background: #f8fff8;
+}
+
+/* 슬롯 내부 인챈트 카드 */
+.slot-enchant {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  right: 8px;
+  bottom: 8px;
+  background: white;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  font-size: 13px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+/* 제거 버튼 */
+.remove-btn {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: #ff6767;
+  color: white;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  font-size: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+/* ===== 오른쪽 인챈트 목록 ===== */
+.right-panel {
+  width: 420px;
+  border-left: 1px solid #e5e5e5;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.right-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 15px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  margin-bottom: 14px;
 }
 
 /* 인챈트 카드 */
-.ench-card {
-  background: #fafafa;
-  border-radius: 14px;
-  border: 1px solid #ddd;
-  padding: 14px;
-  cursor: grab;
-  transition: 0.18s;
-}
-
-.ench-card:hover {
-  background: #f3f3f3;
-}
-
-.ench-name {
-  font-size: 16px;
-  font-weight: 600;
-  margin-bottom: 6px;
-}
-
-.ench-grade {
-  display: inline-block;
-  padding: 4px 10px;
+.enchant-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
   border-radius: 12px;
-  font-size: 12px;
-  font-weight: bold;
-  color: #000;
-  margin-bottom: 4px;
+  border: 1px solid #ddd;
+  background: #fff;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: 0.15s ease-in-out;
 }
 
-/* 등급 색상 */
-.ench-신화 { background: #FC54FC; }
-.ench-전설 { background: #FCA800; }
-.ench-근본 { background: #FCFC54; }
-.ench-특별 { background: #54FC54; }
-.ench-엘리트 { background: #54FCFC; }
-.ench-일반 { background: #FCFCFC; }
-
-/* ===== 적용 불가 시 반응 ===== */
-.slot.invalid {
-  background: #ffe6e6;
-  border-color: #ff6b6b;
+.enchant-card:hover {
+  background: #f5f5f5;
 }
 
+.enchant-icon {
+  width: 40px;
+  height: 40px;
+}
+
+/* 저장 / 불러오기 */
+.save-box {
+  margin-top: 20px;
+  border-top: 1px solid #ddd;
+  padding-top: 20px;
+}
+
+.save-btn {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 10px;
+  background: #2fb24a;
+  color: white;
+  border: none;
+  font-size: 15px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.load-btn {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 10px;
+  background: #f3f3f3;
+  color: #333;
+  border: 1px solid #ccc;
+  font-size: 15px;
+  cursor: pointer;
+}
 </style>
 </head>
+
 <body>
 
-<h1 style="text-align:center; font-size:32px; margin-bottom:30px;">⚒ 커스텀 인챈트 시뮬레이터</h1>
+<!-- ===== 상단 네비게이션 ===== -->
+<div class="top-nav">
+  <a href="index.html">
+    <img src="0003.png">
+  </a>
+  <div class="top-nav-title">Enchantment Simulator</div>
+</div>
 
 <div class="container">
 
-  <!-- ===== 장비 슬롯 영역 ===== -->
-  <div class="slot-panel">
-    <div class="slot-title">장비 슬롯 (최대 14칸)</div>
+  <!-- ===== 좌측 장비 선택 영역 ===== -->
+  <div class="left-panel">
+    <div class="left-title">장비 선택</div>
 
-    <div class="slot-grid" id="slotGrid">
-      <!-- JS로 슬롯 14개 생성 -->
+    <button class="equip-btn" data-equip="검">⚔ 검</button>
+    <button class="equip-btn" data-equip="활">🏹 활</button>
+    <button class="equip-btn" data-equip="쇠뇌">🏹 쇠뇌</button>
+    <button class="equip-btn" data-equip="삼지창">🔱 삼지창</button>
+    <button class="equip-btn" data-equip="도끼">🪓 도끼</button>
+    <button class="equip-btn" data-equip="삽">⛏ 삽</button>
+    <button class="equip-btn" data-equip="괭이">🪠 괭이</button>
+    <button class="equip-btn" data-equip="모자">🎩 모자</button>
+    <button class="equip-btn" data-equip="흉갑">🥋 흉갑</button>
+    <button class="equip-btn" data-equip="바지">👖 바지</button>
+    <button class="equip-btn" data-equip="신발">👟 신발</button>
+  </div>
+
+  <!-- ===== 중앙 슬롯 영역 ===== -->
+  <div class="center-panel">
+    <div class="center-title">인챈트 슬롯 (최대 10개)</div>
+
+    <div class="slots-box" id="slotsBox">
+      <!-- JS에서 슬롯 10개 생성 -->
     </div>
   </div>
 
+  <!-- ===== 오른쪽 인챈트 목록 ===== -->
+  <div class="right-panel">
+    <div class="right-title">인챈트 목록</div>
 
-  <!-- ===== 인챈트 목록 영역 ===== -->
-  <div class="list-panel">
-    <div class="list-title">인챈트 목록</div>
+    <input type="text" class="search-box" id="searchEnchant" placeholder="인챈트 검색">
 
-    <div class="ench-list" id="enchList">
-      <!-- 인챈트 카드 생성 (JS) -->
+    <div id="enchantList"></div>
+
+    <div class="save-box">
+      <button class="save-btn" id="saveBuild">저장하기</button>
+      <button class="load-btn" id="loadBuild">불러오기</button>
     </div>
   </div>
 
 </div>
 
+<!-- 뒤에서 PART 2/4 에서 JS 추가됨 -->
 <script>
-/* =============================
-   가짜 인챈트 데이터 (DEMO)
-   나중에 index.html 데이터와 연결할 수 있음
-============================= */
+</script>
 
-const SAMPLE_DATA = [
-  { name: "낙뢰", grade: "전설", items: ["검", "활", "쇠뇌"] },
-  { name: "불멸", grade: "신화", items: ["갑옷", "흉갑"] },
-  { name: "수확", grade: "특별", items: ["낫", "도구"] },
-  { name: "가속", grade: "엘리트", items: ["신발"] },
-  { name: "야간 투시", grade: "근본", items: ["모자"] },
-  { name: "민첩", grade: "일반", items: ["신발", "바지"] },
-];
+</body>
+</html>
+<script>
+// =============================================
+// 0. 전역 변수
+// =============================================
+let CURRENT_EQUIP = null;            // 현재 선택중인 장비
+let SLOT_DATA = Array(10).fill(null); // 10개 슬롯 데이터 구조
+let ENCHANT_DATA = [];               // 시트에서 불러온 전체 인챈트
+let SAVE_SLOTS = [];                 // 저장된 세트들
 
-/* ==== 슬롯 14개 생성 ==== */
-const slotGrid = document.getElementById("slotGrid");
+// =============================================
+// 1. 슬롯 10개 자동 생성
+// =============================================
+const slotBox = document.getElementById("slotsBox");
 
-for (let i = 0; i < 14; i++) {
+for (let i = 0; i < 10; i++) {
   const slot = document.createElement("div");
   slot.className = "slot";
   slot.dataset.index = i;
-  slot.textContent = "빈 슬롯";
-  slotGrid.appendChild(slot);
+  slot.innerHTML = "+";
+
+  // 슬롯 클릭 → 비워진 상태라면 무시 (인챈트는 오른쪽 카드 클릭으로만 장착)
+  slot.onclick = () => {
+    if (!SLOT_DATA[i]) return;
+  };
+
+  slotBox.appendChild(slot);
 }
 
-/* ==== 인챈트 카드 생성 ==== */
-const enchList = document.getElementById("enchList");
+// =============================================
+// 2. 장비 선택 버튼
+// =============================================
+document.querySelectorAll(".equip-btn").forEach(btn => {
+  btn.onclick = () => {
+    document.querySelectorAll(".equip-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
 
-SAMPLE_DATA.forEach(e => {
-  const card = document.createElement("div");
-  card.className = "ench-card";
-  card.draggable = true;
-  card.dataset.name = e.name;
-  card.dataset.items = JSON.stringify(e.items);
+    CURRENT_EQUIP = btn.dataset.equip;
 
-  card.innerHTML = `
-    <div class="ench-name">${e.name}</div>
-    <div class="ench-grade ench-${e.grade}">${e.grade}</div>
-    <div style="font-size:12px; color:#777;">
-      적용: ${e.items.join(", ")}
-    </div>
-  `;
-
-  /* 드래그 시작 이벤트 */
-  card.addEventListener("dragstart", ev => {
-    ev.dataTransfer.setData("enchName", e.name);
-    ev.dataTransfer.setData("enchItems", JSON.stringify(e.items));
-  });
-
-  /* 클릭으로도 적용 가능 */
-  card.onclick = () => {
-    alert("적용할 슬롯을 클릭하세요!");
-    selectedEnchant = {name: e.name, items: e.items};
-  };
-
-  enchList.appendChild(card);
-});
-
-let selectedEnchant = null;
-
-/* ==== 슬롯에 드롭 처리 ==== */
-document.querySelectorAll(".slot").forEach(slot => {
-
-  slot.addEventListener("dragover", ev => ev.preventDefault());
-
-  slot.addEventListener("drop", ev => {
-    const name = ev.dataTransfer.getData("enchName");
-    const items = JSON.parse(ev.dataTransfer.getData("enchItems"));
-
-    applyEnchant(slot, name, items);
-  });
-
-  /* 클릭 적용 */
-  slot.onclick = () => {
-    if (selectedEnchant) {
-      applyEnchant(slot, selectedEnchant.name, selectedEnchant.items);
-      selectedEnchant = null;
-    }
+    // 장비 선택 시 인챈트 목록 필터링
+    renderEnchantList();
   };
 });
 
+// =============================================
+// 3. Google Sheet 데이터 불러오기
+// =============================================
+const SHEET_ID = "13fF_iQfMThiw49QrYSCULF3mT4QVHO4aDsbSDD71DUg";
+const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
 
-/* =============================
-   인챈트 적용 함수
-============================= */
+fetch(SHEET_URL)
+  .then(res => res.text())
+  .then(txt => {
+    const json = JSON.parse(txt.substr(47).slice(0, -2));
+    ENCHANT_DATA = json.table.rows.map(r => ({
+      name: r.c[0]?.v ?? "",
+      grade: r.c[1]?.v ?? "",
+      tier: r.c[2]?.v ?? "",
+      max: r.c[3]?.v ?? "",
+      items: (r.c[4]?.v ?? "").split(",").map(i => i.trim()),
+      effect: r.c[5]?.v ?? "",
+      extra: r.c[6]?.v ?? ""
+    }));
 
-function applyEnchant(slot, enchName, allowedItems) {
+    renderEnchantList();
+  });
 
-  // DEMO 장비 타입
-  const equipmentType = "신발"; // 나중에 변경 가능
+// =============================================
+// 4. 인챈트 목록 렌더링 (장비 필터링 적용)
+// =============================================
+function renderEnchantList() {
+  const box = document.getElementById("enchantList");
+  box.innerHTML = "";
 
-  if (!allowedItems.includes(equipmentType)) {
-    // 적용 불가
-    slot.classList.add("invalid");
-    slot.textContent = "적용 불가";
-    setTimeout(() => {
-      slot.classList.remove("invalid");
-      slot.textContent = "빈 슬롯";
-    }, 700);
+  let list = [...ENCHANT_DATA];
+
+  // 장비 선택 필터 적용
+  if (CURRENT_EQUIP) {
+    list = list.filter(e => e.items.includes(CURRENT_EQUIP));
+  }
+
+  // 검색 필터
+  const keyword = document.getElementById("searchEnchant").value.trim();
+  if (keyword) {
+    list = list.filter(e => e.name.includes(keyword));
+  }
+
+  // 카드 렌더링
+  list.forEach(e => {
+    const card = document.createElement("div");
+    card.className = "enchant-card";
+
+    card.innerHTML = `
+      <img src="0003.png" class="enchant-icon">
+      <div>
+        <div style="font-weight:600">${e.name}</div>
+        <div style="font-size:12px; color:#888;">${e.grade} • 티어 ${e.tier}</div>
+      </div>
+    `;
+
+    // 클릭 → 슬롯에 장착
+    card.onclick = () => tryAddEnchant(e);
+
+    box.appendChild(card);
+  });
+}
+
+// 검색 입력 시 자동 갱신
+document.getElementById("searchEnchant").oninput = () => renderEnchantList();
+
+// =============================================
+// 5. 슬롯에 인챈트 장착하기
+// =============================================
+function tryAddEnchant(enchant) {
+  // 빈 슬롯 찾기
+  const emptyIndex = SLOT_DATA.findIndex(s => s === null);
+  if (emptyIndex === -1) {
+    alert("슬롯이 가득 찼습니다!");
     return;
   }
 
-  // 적용 성공
-  slot.classList.add("applied");
-  slot.textContent = enchName;
+  SLOT_DATA[emptyIndex] = enchant;
+  applySlotUI();
 }
 
+// =============================================
+// 6. 슬롯 UI 갱신
+// =============================================
+function applySlotUI() {
+  document.querySelectorAll(".slot").forEach(slot => {
+    const idx = parseInt(slot.dataset.index);
+    const data = SLOT_DATA[idx];
+
+    slot.innerHTML = ""; // 초기화
+    slot.classList.remove("slot-filled");
+
+    if (!data) {
+      slot.innerHTML = "+";
+      return;
+    }
+
+    // 채워진 슬롯 UI
+    slot.classList.add("slot-filled");
+
+    const card = document.createElement("div");
+    card.className = "slot-enchant";
+    card.innerHTML = `
+      <div style="font-weight:600; margin-bottom:4px;">${data.name}</div>
+      <div style="font-size:12px; color:#555;">${data.grade} • 티어 ${data.tier}</div>
+    `;
+
+    // 제거 버튼 X
+    const remove = document.createElement("div");
+    remove.className = "remove-btn";
+    remove.textContent = "×";
+
+    remove.onclick = (ev) => {
+      ev.stopPropagation();
+      SLOT_DATA[idx] = null;
+      applySlotUI();
+    };
+
+    slot.appendChild(card);
+    slot.appendChild(remove);
+  });
+}
+</script>
+<script>
+// =============================================
+// 7. 저장 기능 관련 전역 변수
+// =============================================
+const SAVE_KEY = "simulator_saves_v1";
+LOAD_SAVEDATA();
+
+// =============================================
+// 8. 저장된 세트 로드 (localStorage)
+// =============================================
+function LOAD_SAVEDATA() {
+  const raw = localStorage.getItem(SAVE_KEY);
+  SAVE_SLOTS = raw ? JSON.parse(raw) : [];
+  renderSaveList();
+}
+
+// =============================================
+// 9. 저장된 세트 전체 리스트 렌더링
+// =============================================
+function renderSaveList() {
+  const box = document.getElementById("saveList");
+  box.innerHTML = "";
+
+  if (SAVE_SLOTS.length === 0) {
+    box.innerHTML = `<div style="text-align:center; padding:20px; color:#888;">저장된 세트가 없습니다.</div>`;
+    return;
+  }
+
+  SAVE_SLOTS.forEach((set, idx) => {
+    const row = document.createElement("div");
+    row.className = "save-row";
+
+    row.innerHTML = `
+      <div class="save-name">${set.name}</div>
+      <button class="save-load-btn" data-index="${idx}">불러오기</button>
+      <button class="save-delete-btn" data-index="${idx}">삭제</button>
+    `;
+
+    box.appendChild(row);
+  });
+
+  // 로드 이벤트
+  document.querySelectorAll(".save-load-btn").forEach(btn => {
+    btn.onclick = () => loadSave(btn.dataset.index);
+  });
+
+  // 삭제 이벤트
+  document.querySelectorAll(".save-delete-btn").forEach(btn => {
+    btn.onclick = () => deleteSave(btn.dataset.index);
+  });
+}
+
+// =============================================
+// 10. 저장 버튼 클릭
+// =============================================
+document.getElementById("saveButton").onclick = () => {
+  const name = prompt("세트 이름을 입력하세요:", "");
+
+  if (!name || name.trim() === "") {
+    alert("이름을 입력해야 저장됩니다.");
+    return;
+  }
+
+  // 현재 슬롯 상태 저장
+  const newSet = {
+    name,
+    slots: SLOT_DATA.map(s => s ? { ...s } : null),
+    equip: CURRENT_EQUIP
+  };
+
+  SAVE_SLOTS.push(newSet);
+  localStorage.setItem(SAVE_KEY, JSON.stringify(SAVE_SLOTS));
+  renderSaveList();
+
+  alert("저장되었습니다!");
+};
+
+// =============================================
+// 11. 저장된 세트 불러오기
+// =============================================
+function loadSave(idx) {
+  const save = SAVE_SLOTS[idx];
+
+  if (!save) return;
+
+  SLOT_DATA = save.slots.map(s => s ? { ...s } : null);
+  CURRENT_EQUIP = save.equip;
+
+  // 장비 버튼 반영
+  document.querySelectorAll(".equip-btn").forEach(b => b.classList.remove("active"));
+  if (CURRENT_EQUIP) {
+    const btn = document.querySelector(`.equip-btn[data-equip="${CURRENT_EQUIP}"]`);
+    if (btn) btn.classList.add("active");
+  }
+
+  applySlotUI();
+  renderEnchantList();
+
+  alert("세트를 불러왔습니다!");
+}
+
+// =============================================
+// 12. 저장된 세트 삭제
+// =============================================
+function deleteSave(idx) {
+  if (!confirm("정말 삭제하시겠습니까?")) return;
+
+  SAVE_SLOTS.splice(idx, 1);
+  localStorage.setItem(SAVE_KEY, JSON.stringify(SAVE_SLOTS));
+  renderSaveList();
+}
+</script>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulator - Enchantments</title>
+
+<link rel="icon" type="image/png" href="0001.png">
+
+<style>
+body {
+  margin: 0;
+  padding: 0 40px;
+  background: #ffffff;
+  font-family: 'Pretendard', sans-serif;
+}
+
+/* ===== 상단 홈 버튼 ===== */
+.top-home {
+  position: absolute;
+  left: 20px;
+  top: 20px;
+  width: 90px;
+  height: 90px;
+  cursor: pointer;
+}
+
+/* ===== 제목 ===== */
+.title {
+  text-align: center;
+  margin-top: 40px;
+  font-size: 42px;
+  font-weight: 800;
+  color: #222;
+}
+
+/* ===== 장비 버튼 ===== */
+.equip-selector {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 25px 0;
+}
+
+.equip-btn {
+  padding: 12px 22px;
+  font-size: 15px;
+  border-radius: 14px;
+  border: 1px solid #ccc;
+  background: #f7f7f7;
+  cursor: pointer;
+  transition: 0.15s;
+}
+
+.equip-btn:hover {
+  background: #eaeaea;
+}
+
+.equip-btn.active {
+  background: #2fb24a;
+  color: white;
+}
+
+/* ===== 슬롯 영역 ===== */
+.slot-box {
+  width: 90%;
+  margin: 25px auto;
+  padding: 20px;
+  border-radius: 18px;
+  background: #f3fff0;
+  box-shadow: 0 0 10px rgba(0,0,0,0.06);
+}
+
+.slot-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 14px;
+  padding: 20px;
+}
+
+.slot {
+  height: 80px;
+  background: white;
+  border-radius: 14px;
+  border: 2px dashed #ccc;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  transition: 0.15s;
+}
+
+.slot:hover {
+  border-color: #2fb24a;
+}
+
+.slot .remove-btn {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  background: #ff5c5c;
+  width: 22px;
+  height: 22px;
+  color: white;
+  font-size: 13px;
+  border-radius: 4px;
+  text-align: center;
+  cursor: pointer;
+  line-height: 22px;
+}
+
+/* ===== 인챈트 목록 ===== */
+.enchant-list {
+  width: 90%;
+  margin: 30px auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.enchant-card {
+  background: #ffffff;
+  border-radius: 14px;
+  border: 1px solid #ddd;
+  padding: 16px;
+  display: flex;
+  gap: 12px;
+  cursor: grab;
+  transition: 0.15s;
+}
+
+.enchant-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.enchant-icon {
+  width: 42px;
+  height: 42px;
+}
+
+.enchant-info {
+  flex: 1;
+}
+
+.enchant-name {
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.enchant-grade {
+  font-size: 13px;
+  margin-top: 4px;
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+/* 등급색 */
+.grade-신화 { background:#FC54FC; }
+.grade-전설 { background:#FCA800; }
+.grade-근본 { background:#FCFC54; }
+.grade-특별 { background:#54FC54; }
+.grade-엘리트 { background:#54FCFC; }
+.grade-일반 { background:#FCFCFC; }
+
+/* ===== 저장/불러오기 패널 ===== */
+.save-panel {
+  width: 90%;
+  margin: 30px auto 80px auto;
+  background: #fff;
+  padding: 20px;
+  border-radius: 14px;
+  border: 1px solid #ddd;
+}
+
+.save-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+
+.save-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.save-name {
+  font-weight: 600;
+}
+
+.save-load-btn,
+.save-delete-btn {
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+}
+
+.save-load-btn { background:#2fb24a; color:white; }
+.save-delete-btn { background:#ff5959; color:white; }
+
+.save-btn-main {
+  margin-top: 18px;
+  padding: 12px 22px;
+  background:#2fb24a;
+  color:white;
+  border-radius: 10px;
+  cursor:pointer;
+  border:none;
+  font-weight:700;
+}
+
+.save-btn-main:hover {
+  filter: brightness(1.1);
+}
+
+@media (max-width:800px){
+  .enchant-list { grid-template-columns: repeat(2,1fr); }
+}
+@media (max-width:600px){
+  .slot-grid { grid-template-columns: repeat(2,1fr); }
+  .enchant-list { grid-template-columns: repeat(1,1fr); }
+}
+</style>
+</head>
+
+<body>
+
+<!-- 홈 버튼 -->
+<a href="index.html">
+  <img src="0003.png" class="top-home">
+</a>
+
+<h1 class="title">Enchant Simulator</h1>
+
+<!-- 장비 선택 -->
+<div class="equip-selector">
+  <button class="equip-btn" data-equip="검">검</button>
+  <button class="equip-btn" data-equip="활">활</button>
+  <button class="equip-btn" data-equip="쇠뇌">쇠뇌</button>
+  <button class="equip-btn" data-equip="삼지창">삼지창</button>
+  <button class="equip-btn" data-equip="모자">모자</button>
+  <button class="equip-btn" data-equip="흉갑">흉갑</button>
+  <button class="equip-btn" data-equip="바지">바지</button>
+  <button class="equip-btn" data-equip="신발">신발</button>
+  <button class="equip-btn" data-equip="괭이">괭이</button>
+  <button class="equip-btn" data-equip="삽">삽</button>
+</div>
+
+<!-- 슬롯 박스 -->
+<div class="slot-box">
+  <div class="slot-grid" id="slotGrid"></div>
+</div>
+
+<!-- 인챈트 목록 -->
+<div id="enchantList" class="enchant-list"></div>
+
+<!-- 저장/불러오기 패널 -->
+<div class="save-panel">
+  <div class="save-title">💾 저장된 세트 목록</div>
+  <div id="saveList"></div>
+  <button id="saveButton" class="save-btn-main">현재 세트 저장하기</button>
+</div>
+
+<script>
+/* ================================
+   1. 시트 데이터 로드
+================================ */
+const SHEET_ID = "13fF_iQfMThiw49QrYSCULF3mT4QVHO4aDsbSDD71DUg";
+const SHEET_URL =
+  `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
+
+let RAW_ENCHANTS = [];
+let CURRENT_EQUIP = null;
+
+/* 슬롯 10칸 */
+let SLOT_DATA = Array(10).fill(null);
+
+let SAVE_SLOTS = [];
+
+/* ===== 시트 로드 ===== */
+fetch(SHEET_URL)
+  .then(r => r.text())
+  .then(txt => {
+    const json = JSON.parse(txt.substr(47).slice(0, -2));
+    RAW_ENCHANTS = json.table.rows.map(r => ({
+      name: r.c[0]?.v ?? "",
+      grade: r.c[1]?.v ?? "",
+      tier: r.c[2]?.v ?? "",
+      max: r.c[3]?.v ?? "",
+      items: (r.c[4]?.v ?? "").split(",").map(i => i.trim())
+    }));
+    renderEnchantList();
+  });
+
+/* ================================
+   2. 장비 선택
+================================ */
+document.querySelectorAll(".equip-btn").forEach(btn => {
+  btn.onclick = () => {
+    document.querySelectorAll(".equip-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    CURRENT_EQUIP = btn.dataset.equip;
+    renderEnchantList();
+  };
+});
+
+/* ================================
+   3. 슬롯 렌더링
+================================ */
+const slotGrid = document.getElementById("slotGrid");
+renderSlots();
+
+function renderSlots() {
+  slotGrid.innerHTML = "";
+
+  SLOT_DATA.forEach((slot, i) => {
+    const div = document.createElement("div");
+    div.className = "slot";
+    div.dataset.index = i;
+
+    if (slot) {
+      div.innerHTML = `
+        <div>${slot.name}</div>
+        <div class="remove-btn" data-remove="${i}">X</div>
+      `;
+    } else {
+      div.innerHTML = `<div style="color:#aaa;">+ 빈 슬롯</div>`;
+    }
+
+    div.onclick = (ev) => {
+      if (ev.target.dataset.remove !== undefined) return;
+    };
+
+    slotGrid.appendChild(div);
+  });
+
+  document.querySelectorAll(".remove-btn").forEach(btn => {
+    btn.onclick = ev => {
+      ev.stopPropagation();
+      SLOT_DATA[btn.dataset.remove] = null;
+      renderSlots();
+    };
+  });
+}
+
+/* ================================
+   4. 인챈트 목록 렌더링
+================================ */
+function renderEnchantList() {
+  const wrap = document.getElementById("enchantList");
+  wrap.innerHTML = "";
+
+  let list = [...RAW_ENCHANTS];
+
+  if (CURRENT_EQUIP) {
+    list = list.filter(e => e.items.includes(CURRENT_EQUIP));
+  }
+
+  list.forEach(e => {
+    const card = document.createElement("div");
+    card.className = "enchant-card";
+    card.draggable = true;
+
+    card.innerHTML = `
+      <img src="0003.png" class="enchant-icon">
+      <div class="enchant-info">
+        <div class="enchant-name">${e.name}</div>
+        <div class="enchant-grade grade-${e.grade}">${e.grade}</div>
+      </div>
+    `;
+
+    card.ondragstart = ev => {
+      ev.dataTransfer.setData("text/plain", e.name);
+    };
+
+    card.onclick = () => {
+      for (let i = 0; i < SLOT_DATA.length; i++) {
+        if (!SLOT_DATA[i]) {
+          SLOT_DATA[i] = e;
+          break;
+        }
+      }
+      applySlotUI();
+    };
+
+    wrap.appendChild(card);
+  });
+}
+
+/* 슬롯 적용 */
+function applySlotUI() {
+  renderSlots();
+}
+
+/* ================================
+   5. 드래그 앤 드롭
+================================ */
+slotGrid.ondragover = ev => ev.preventDefault();
+
+slotGrid.ondrop = ev => {
+  ev.preventDefault();
+  const name = ev.dataTransfer.getData("text/plain");
+
+  const enchant = RAW_ENCHANTS.find(e => e.name === name);
+  if (!enchant) return;
+
+  for (let i = 0; i < SLOT_DATA.length; i++) {
+    if (!SLOT_DATA[i]) {
+      SLOT_DATA[i] = enchant;
+      break;
+    }
+  }
+  renderSlots();
+};
+
+/* ================================
+   6. 저장/불러오기 (PART 3 전체 탑재)
+================================ */
+const SAVE_KEY = "simulator_saves_v1";
+
+LOAD_SAVEDATA();
+
+function LOAD_SAVEDATA() {
+  const raw = localStorage.getItem(SAVE_KEY);
+  SAVE_SLOTS = raw ? JSON.parse(raw) : [];
+  renderSaveList();
+}
+
+function renderSaveList() {
+  const box = document.getElementById("saveList");
+  box.innerHTML = "";
+
+  if (SAVE_SLOTS.length === 0) {
+    box.innerHTML = `<div style="padding:10px; color:#aaa; text-align:center;">저장된 세트가 없습니다.</div>`;
+    return;
+  }
+
+  SAVE_SLOTS.forEach((set, i) => {
+    const row = document.createElement("div");
+    row.className = "save-row";
+
+    row.innerHTML = `
+      <div class="save-name">${set.name}</div>
+      <button class="save-load-btn" data-index="${i}">불러오기</button>
+      <button class="save-delete-btn" data-index="${i}">삭제</button>
+    `;
+
+    box.appendChild(row);
+  });
+
+  document.querySelectorAll(".save-load-btn").forEach(btn => {
+    btn.onclick = () => loadSave(btn.dataset.index);
+  });
+
+  document.querySelectorAll(".save-delete-btn").forEach(btn => {
+    btn.onclick = () => deleteSave(btn.dataset.index);
+  });
+}
+
+document.getElementById("saveButton").onclick = () => {
+  const name = prompt("세트 이름을 입력하세요:", "");
+
+  if (!name) return;
+
+  const newSet = {
+    name,
+    slots: SLOT_DATA.map(s => s ? { ...s } : null),
+    equip: CURRENT_EQUIP
+  };
+
+  SAVE_SLOTS.push(newSet);
+  localStorage.setItem(SAVE_KEY, JSON.stringify(SAVE_SLOTS));
+  renderSaveList();
+};
+
+function loadSave(i) {
+  const data = SAVE_SLOTS[i];
+
+  SLOT_DATA = data.slots.map(s => s ? { ...s } : null);
+  CURRENT_EQUIP = data.equip;
+
+  document.querySelectorAll(".equip-btn").forEach(b => b.classList.remove("active"));
+  const eqBtn = document.querySelector(`.equip-btn[data-equip="${CURRENT_EQUIP}"]`);
+  if (eqBtn) eqBtn.classList.add("active");
+
+  renderSlots();
+  renderEnchantList();
+}
+
+function deleteSave(i) {
+  if (!confirm("삭제할까요?")) return;
+  SAVE_SLOTS.splice(i, 1);
+  localStorage.setItem(SAVE_KEY, JSON.stringify(SAVE_SLOTS));
+  renderSaveList();
+}
 </script>
 
 </body>
