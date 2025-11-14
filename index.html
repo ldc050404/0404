@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Enchantments</title>
 
-<!-- 파비콘 -->
 <link rel="icon" type="image/png" href="0001.png">
 
 <style>
@@ -53,6 +52,7 @@ body {
 /* 필터 */
 .filters {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   gap: 10px;
   margin-bottom: 20px;
@@ -158,6 +158,23 @@ body {
   margin-top: 10px;
   color: #777;
 }
+
+/* 티어 색상 (op.gg 스타일) */
+.tier-badge {
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-weight: 700;
+  display: inline-block;
+  color: #fff;
+}
+
+.tier-op { background: #FF4555; }
+.tier-1 { background: #1A8CFF; }
+.tier-2 { background: #00C8A4; }
+.tier-3 { background: #E6A93A; }
+.tier-4 { background: #9EA3AD; }
+.tier-5 { background: #8A5A3B; }
+
 </style>
 </head>
 <body>
@@ -171,14 +188,14 @@ body {
   <button id="searchBtn" class="search-btn">검색</button>
 </section>
 
-<!-- 등급 필터(일반/특별/엘리트 등) -->
+<!-- 등급 필터 -->
 <div class="filters">
-  <button class="tier-btn" data-tier="일반" style="background:#FCFCFC;">일반</button>
-  <button class="tier-btn" data-tier="특별" style="background:#54FC54;">특별</button>
-  <button class="tier-btn" data-tier="엘리트" style="background:#54FCFC;">엘리트</button>
-  <button class="tier-btn" data-tier="근본" style="background:#FCFC54;">근본</button>
-  <button class="tier-btn" data-tier="전설" style="background:#FCA800;">전설</button>
-  <button class="tier-btn" data-tier="신화" style="background:#FC54FC;">신화</button>
+  <button class="tier-btn" data-tier="OP" style="background:#FF4555; color:white;">OP</button>
+  <button class="tier-btn" data-tier="1티어" style="background:#1A8CFF; color:white;">1티어</button>
+  <button class="tier-btn" data-tier="2티어" style="background:#00C8A4; color:white;">2티어</button>
+  <button class="tier-btn" data-tier="3티어" style="background:#E6A93A; color:white;">3티어</button>
+  <button class="tier-btn" data-tier="4티어" style="background:#9EA3AD; color:white;">4티어</button>
+  <button class="tier-btn" data-tier="5티어" style="background:#8A5A3B; color:white;">5티어</button>
   <button class="tier-btn" data-tier="전체">전체보기</button>
 </div>
 
@@ -190,20 +207,21 @@ body {
   <button class="item-btn" data-item="활">활</button>
   <button class="item-btn" data-item="쇠뇌">쇠뇌</button>
   <button class="item-btn" data-item="삼지창">삼지창</button>
+  <button class="item-btn" data-item="흉갑">흉갑</button>
   <button class="item-btn" data-item="갑옷">갑옷</button>
+  <button class="item-btn" data-item="바지">바지</button>
   <button class="item-btn" data-item="신발">신발</button>
   <button class="item-btn" data-item="모자">모자</button>
   <button class="item-btn" data-item="낫">낫</button>
   <button class="item-btn" data-item="도구">도구</button>
 </div>
 
-<!-- 테이블 -->
 <table class="ench-table">
   <thead>
     <tr>
       <th>인챈트</th>
-      <th>등급</th>
       <th>티어</th>
+      <th>등급</th>
       <th>최대 레벨</th>
       <th>적용 아이템</th>
     </tr>
@@ -215,27 +233,24 @@ body {
 <div id="modal" class="modal">
   <div class="modal-content">
     <span id="closeModal" class="close">&times;</span>
+
     <h2 id="mName"></h2>
-
-    <div class="meta" id="mMeta"></div>
-
-    <p class="desc" id="mEffect"></p>
-    <p class="extra" id="mExtra"></p>
-    <p class="items" id="mItems"></p>
+    <div id="mMeta" class="meta"></div>
+    <p id="mEffect" class="desc"></p>
+    <p id="mExtra" class="extra"></p>
+    <p id="mItems" class="items"></p>
   </div>
 </div>
 
 <script>
-// ====== ★ 구글 시트 연결 ★ ======
 const SHEET_ID = "13fF_iQfMThiw49QrYSCULF3mT4QVHO4aDsbSDD71DUg";
-const SHEET_URL =
-  `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
+const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
 
 let DATA = [];
 let currentTierFilter = "전체";
 let currentItemFilter = "전체";
 
-// ---- 1. 시트 데이터 로드 ----
+// 1) 시트 로드
 fetch(SHEET_URL)
   .then(res => res.text())
   .then(text => {
@@ -244,10 +259,10 @@ fetch(SHEET_URL)
 
     DATA = rows.map(r => ({
       name: r.c[0]?.v || "",
-      grade: r.c[1]?.v || "",   // 일반/특별/근본/전설/신화
-      tier: r.c[2]?.v || "",    // OP/1티어/2티어
+      tier: r.c[1]?.v || "",
+      grade: r.c[2]?.v || "",
       max: r.c[3]?.v || "",
-      items: (r.c[4]?.v || "").split(",").map(i => i.trim()),
+      items: r.c[4]?.v?.split(",").map(i => i.trim()) || [],
       effect: r.c[5]?.v || "",
       extra: r.c[6]?.v || ""
     }));
@@ -255,19 +270,27 @@ fetch(SHEET_URL)
     renderList(DATA);
   });
 
-// ---- 2. 리스트 렌더링 ----
-const listBody = document.getElementById("enchList");
+// 티어 → CSS 클래스
+function tierClass(tier) {
+  if (tier === "OP") return "tier-op";
+  if (tier === "1티어") return "tier-1";
+  if (tier === "2티어") return "tier-2";
+  if (tier === "3티어") return "tier-3";
+  if (tier === "4티어") return "tier-4";
+  if (tier === "5티어") return "tier-5";
+  return "";
+}
 
+// 2) 리스트 렌더링
 function renderList(list) {
-  listBody.innerHTML = "";
+  const body = document.getElementById("enchList");
+  body.innerHTML = "";
 
   let filtered = list;
 
-  // 등급 필터 (일반/특별/엘리트/근본/전설/신화)
   if (currentTierFilter !== "전체")
-    filtered = filtered.filter(e => e.grade === currentTierFilter);
+    filtered = filtered.filter(e => e.tier === currentTierFilter);
 
-  // 아이템 필터
   if (currentItemFilter !== "전체")
     filtered = filtered.filter(e => e.items.includes(currentItemFilter));
 
@@ -282,40 +305,48 @@ function renderList(list) {
           <div style="font-size:12px; color:#888;">${e.name} 인챈트</div>
         </div>
       </td>
+
+      <td>
+        <span class="tier-badge ${tierClass(e.tier)}">${e.tier}</span>
+      </td>
+
       <td>${e.grade}</td>
-      <td>${e.tier}</td>
       <td>${e.max}</td>
       <td>${e.items.join(", ")}</td>
     `;
 
     tr.onclick = () => openModal(e);
-    listBody.appendChild(tr);
+    body.appendChild(tr);
   });
 }
 
-// ---- 3. 모달 ----
-const modal = document.getElementById("modal");
-const closeModal = document.getElementById("closeModal");
-
+// 3) 모달
 function openModal(e) {
   document.getElementById("mName").textContent = e.name;
-  document.getElementById("mMeta").textContent =
-    `${e.grade} • 티어: ${e.tier} • 최대 레벨 ${e.max}`;
+
+  document.getElementById("mMeta").innerHTML =
+    `<span class="tier-badge ${tierClass(e.tier)}">${e.tier}</span>
+     • 등급: ${e.grade}
+     • 최대 레벨 ${e.max}`;
+
   document.getElementById("mEffect").textContent = e.effect;
+  document.getElementById("mExtra").textContent =
+    e.extra ? `추가 설명: ${e.extra}` : "";
   document.getElementById("mItems").textContent =
     `적용 아이템: ${e.items.join(", ")}`;
-  document.getElementById("mExtra").textContent =
-    e.extra ? `추가: ${e.extra}` : "";
 
-  modal.style.display = "block";
+  document.getElementById("modal").style.display = "block";
 }
 
-closeModal.onclick = () => (modal.style.display = "none");
+document.getElementById("closeModal").onclick =
+  () => document.getElementById("modal").style.display = "none";
+
 window.onclick = e => {
-  if (e.target === modal) modal.style.display = "none";
+  if (e.target === document.getElementById("modal"))
+    document.getElementById("modal").style.display = "none";
 };
 
-// ---- 4. 검색 ----
+// 4) 검색
 document.getElementById("searchBtn").onclick = () => {
   const key = document.getElementById("searchBar").value.trim();
   renderList(DATA.filter(e => e.name.includes(key)));
@@ -325,7 +356,7 @@ document.getElementById("searchBar").addEventListener("keyup", e => {
   if (e.key === "Enter") document.getElementById("searchBtn").click();
 });
 
-// ---- 5. 등급 필터 ----
+// 5) 등급 필터
 document.querySelectorAll(".tier-btn").forEach(btn => {
   btn.onclick = () => {
     currentTierFilter = btn.dataset.tier;
@@ -333,11 +364,10 @@ document.querySelectorAll(".tier-btn").forEach(btn => {
   };
 });
 
-// ---- 6. 아이템 필터 ----
+// 6) 아이템 필터
 document.querySelectorAll(".item-btn").forEach(btn => {
   btn.onclick = () => {
-    document.querySelectorAll(".item-btn")
-      .forEach(b => b.classList.remove("active"));
+    document.querySelectorAll(".item-btn").forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
 
     currentItemFilter = btn.dataset.item;
