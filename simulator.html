@@ -136,7 +136,6 @@
 
     <div id="slots"></div>
 
-    <!-- ⭐ 추가된 전체 삭제 버튼 ⭐ -->
     <button id="clearSlotsBtn">전체 슬롯 삭제</button>
 
     <h3 style="margin-top:20px;">저장된 세트</h3>
@@ -148,7 +147,13 @@
 
 <script>
 /* 장비 */
-const EQUIPS=["검","활","쇠뇌","삼지창","도끼","삽","괭이","곡괭이","모자","흉갑","바지","신발"];
+const EQUIPS=[
+  "검","활","쇠뇌","삼지창",
+  "도끼","삽","괭이","곡괭이",
+  "모자","흉갑","바지","신발",
+  "염소 뿔","겉날개"
+];
+
 const ARMOR=["모자","흉갑","바지","신발"];
 const TOOLS=["삽","도끼","괭이","곡괭이"];
 const WEAPONS=["검","활","쇠뇌","삼지창"];
@@ -193,7 +198,7 @@ function getCategory(equip){
   if(ARMOR.includes(equip))return"갑옷";
   if(TOOLS.includes(equip))return"도구";
   if(WEAPONS.includes(equip))return"무기";
-  return null;
+  return null;  /* 염소 뿔/겉날개는 null */
 }
 
 /* 인챈트 리스트 */
@@ -205,7 +210,8 @@ function renderEnchantList(){
   const cat=getCategory(currentEquip);
 
   const filtered=ENCHANTS.filter(e=> 
-    e.items.includes(currentEquip) || (cat && e.items.includes(cat))
+    e.items.includes(currentEquip) ||      /* 자기 전용 인챈트 */
+    (cat && e.items.includes(cat))         /* 대분류 인챈트 */
   );
 
   filtered.forEach(e=>{
@@ -255,8 +261,8 @@ function renderSlots(){
   }
 }
 
-/* ⭐ 전체 삭제 버튼 기능 ⭐ */
-document.getElementById("clearSlotsBtn").onclick = () =>{
+/* 전체 삭제 */
+document.getElementById("clearSlotsBtn").onclick=()=>{
   if(confirm("슬롯을 모두 삭제할까요?")){
     currentSlots=[];
     renderSlots();
@@ -354,5 +360,3 @@ renderEquip(); renderSlots(); renderSaves();
 
 </body>
 </html>
-
-
