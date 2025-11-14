@@ -50,22 +50,29 @@
   .ench-card:hover{ background:#eef2ff; }
 
   .ench-name{ font-size:18px; font-weight:800; }
-  .ench-sub{ font-size:13px; color:#6b7280; }
 
-  /* 티어 (색 없음!) */
-  .tier-badge{
-    padding:3px 10px; border-radius:6px; font-size:12px; font-weight:700;
-    margin-top:6px; width:max-content; color:#000;
-    background:#ffffff; border:1px solid #ddd;
+  /* 등급 텍스트 */
+  .ench-sub{
+    font-size:13px; color:#333;
+    padding:3px 8px; width:max-content;
+    border-radius:6px; font-weight:700;
+    margin-top:2px;
   }
 
-  /* 등급 색 */
-  .grade-신화{ background:#FC54FC!important; }
-  .grade-전설{ background:#FCA800!important; }
-  .grade-근본{ background:#FCFC54!important; }
-  .grade-일반{ background:#FCFCFC!important; }
-  .grade-특별{ background:#54FC54!important; }
-  .grade-엘리트{ background:#54FCFC!important; }
+  .grade-신화{ background:#FC54FC; }
+  .grade-전설{ background:#FCA800; }
+  .grade-근본{ background:#FCFC54; }
+  .grade-일반{ background:#FCFCFC; border:1px solid #d0d0d0; }
+  .grade-특별{ background:#54FC54; border:1px solid #2fb42f; }
+  .grade-엘리트{ background:#54FCFC; border:1px solid #36c6c6; }
+
+  /* 티어(색 없음) */
+  .tier-badge{
+    padding:3px 10px; border-radius:6px; 
+    font-size:12px; font-weight:700;
+    margin-top:6px; width:max-content;
+    background:#ffffff; border:1px solid #ddd; color:#222;
+  }
 
   /* 슬롯 */
   .slot-box{
@@ -82,11 +89,12 @@
     border-radius:8px; cursor:pointer; font-weight:600;
   }
 
-  /* 저장 영역 */
+  /* 저장된 세트 */
   .save-item{
     background:#f9fafb; border-radius:12px; border:1px solid #e5e7eb;
     padding:10px 12px; margin-bottom:10px;
     display:flex; justify-content:space-between; align-items:center;
+    cursor:pointer;
   }
   #addSaveBtn{
     padding:10px 14px; background:#34d399; color:white;
@@ -101,20 +109,25 @@
   <img src="0003.png" style="width:90px; height:90px; cursor:pointer;">
 </a>
 <h1>Simulator</h1>
+
 <div class="layout">
 
+  <!-- 장비 리스트 -->
   <div class="equip-box" id="equipBox"></div>
 
+  <!-- 인챈트 리스트 -->
   <div class="ench-list">
     <div class="ench-grid" id="enchList">장비를 선택해주세요.</div>
   </div>
 
+  <!-- 슬롯 & 저장 -->
   <div class="slot-box">
     <h3 style="margin-top:0;">슬롯 (최대 14개)</h3>
     <div id="slots"></div>
 
     <h3 style="margin-top:20px;">저장된 세트</h3>
     <div id="saveList"></div>
+
     <button id="addSaveBtn">+ 새 세트 저장</button>
   </div>
 </div>
@@ -135,7 +148,7 @@ let currentEquip=null;
 let currentSlots=[];
 let saveSets=JSON.parse(localStorage.getItem("enchSaves")||"[]");
 
-/* 시트 로드 */
+/* 시트 불러오기 */
 fetch(SHEET_URL)
   .then(r=>r.text())
   .then(text=>{
@@ -169,7 +182,7 @@ function getCategory(equip){
   return null;
 }
 
-/* 인챈트 카드 */
+/* 인챈트 리스트 */
 function renderEnchantList(){
   const box=document.getElementById("enchList");
   if(!currentEquip){ box.textContent="장비를 선택해주세요."; return; }
@@ -177,14 +190,13 @@ function renderEnchantList(){
   box.innerHTML="";
   const cat=getCategory(currentEquip);
 
-  const filtered=ENCHANTS.filter(e=>
+  const filtered=ENCHANTS.filter(e=> 
     e.items.includes(currentEquip) || (cat && e.items.includes(cat))
   );
 
   filtered.forEach(e=>{
-    const card=document.createElement("div"); 
+    const card=document.createElement("div");
     card.className="ench-card";
-
     card.innerHTML=`
       <img src="0003.png" style="width:40px;height:40px;">
       <div>
@@ -221,9 +233,7 @@ function renderSlots(){
         <span>${currentSlots[i].name}</span>
         <button class="del-btn">X</button>
       `;
-      slot.querySelector(".del-btn").onclick=()=>{
-        currentSlots.splice(i,1); renderSlots();
-      };
+      slot.querySelector(".del-btn").onclick=()=>{ currentSlots.splice(i,1); renderSlots(); };
     } else {
       slot.innerHTML=`<span style="color:#888">빈 슬롯</span>`;
     }
@@ -244,7 +254,9 @@ function openSetPreview(slots){
     width:420px;max-height:600px;overflow-y:auto;background:#fff;
     border-radius:14px;padding:20px;box-shadow:0 10px 30px rgba(0,0,0,0.25);
   `;
+
   box.innerHTML=`<h2 style="margin-top:0;">세트 구성</h2>`;
+
   slots.forEach(s=>{
     const row=document.createElement("div");
     row.style.cssText=`
@@ -268,7 +280,9 @@ function openSetPreview(slots){
     border:none;color:#fff;font-size:15px;border-radius:10px;cursor:pointer;
   `;
   close.onclick=()=>document.body.removeChild(modal);
-  box.appendChild(close); modal.appendChild(box);
+
+  box.appendChild(close);
+  modal.appendChild(box);
   document.body.appendChild(modal);
 }
 
@@ -315,5 +329,6 @@ document.getElementById("addSaveBtn").onclick=saveSet;
 /* 초기 렌더링 */
 renderEquip(); renderSlots(); renderSaves();
 </script>
+
 </body>
 </html>
