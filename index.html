@@ -3,202 +3,569 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Enchant Simulator</title>
+<title>Enchantments</title>
+
+<link rel="icon" type="image/png" href="0001.png">
+
 <style>
-  body{
-    margin:0; background:#0d0f14; color:#fff; font-family:'Pretendard',sans-serif;
-    display:flex; flex-direction:column; align-items:center; padding:20px;
-  }
-  h1{ margin:10px 0 20px; }
-  .layout{
-    display:grid; grid-template-columns:260px 1fr 300px;
-    gap:20px; width:100%; max-width:1500px;
-  }
-  /* 왼쪽 장비 선택 */
-  .equip-box{
-    background:#151821; border:1px solid #333; padding:15px; border-radius:12px;
-    height:760px; overflow-y:auto;
-  }
-  .equip-item{
-    padding:12px; margin-bottom:8px; background:#1b1f2a; border-radius:8px;
-    cursor:pointer; transition:0.12s;
-  }
-  .equip-item:hover{ background:#242938; }
-  .equip-item.active{ border:2px solid #2fb24a; }
+body {
+  margin: 0;
+  padding: 0 80px;
+  background: #ffffff;
+  font-family: 'Pretendard', sans-serif;
+}
 
-  /* 중앙 인챈트 리스트 */
-  .ench-list{
-    background:#151821; border:1px solid #333; padding:15px; border-radius:12px;
-    height:760px; overflow-y:auto;
-  }
-  .ench-card{
-    display:flex; gap:12px; background:#1b1f2a; padding:12px; margin-bottom:10px;
-    border-radius:10px; cursor:pointer; transition:0.12s;
-  }
-  .ench-card:hover{ background:#242938; }
-  .ench-info{ display:flex; flex-direction:column; }
-  .ench-name{ font-size:17px; font-weight:700; }
-  .ench-sub{ font-size:12px; color:#aaa; margin-top:2px; }
+/* ===== 로고 ===== */
+.logo-img {
+  width: 500px;
+  height: auto;
+  margin: 20px auto;
+  display: block;
+}
 
-  /* 오른쪽 슬롯 */
-  .slot-box{
-    background:#151821; border:1px solid #333; padding:15px; border-radius:12px;
-    height:760px; overflow-y:auto;
-  }
-  .slot{
-    background:#1b1f2a; padding:10px; margin-bottom:10px;
-    border-radius:8px; display:flex; justify-content:space-between; align-items:center;
-  }
-  .slot-empty{ color:#777; }
-  .del-btn{
-    background:#c33; border:none; padding:5px 10px; border-radius:6px; cursor:pointer;
-  }
+/* ===== 검색 ===== */
+.search-area {
+  text-align: center;
+  padding: 30px 0 10px;
+}
 
-  /* 저장 시스템 */
-  .save-area{ margin-top:20px; }
-  .save-item{
-    background:#1b1f2a; padding:10px; margin-bottom:8px; border-radius:8px;
-    display:flex; justify-content:space-between; align-items:center;
-  }
-  .add-save{
-    margin-top:10px; padding:8px 12px; border:none; border-radius:8px;
-    background:#2fb24a; color:#000; cursor:pointer;
-  }
+#searchBar {
+  width: 60%;
+  max-width: 600px;
+  padding: 14px 18px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  font-size: 16px;
+}
+
+.search-btn {
+  margin-left: 10px;
+  padding: 14px 20px;
+  background: #2fb24a;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+/* ===== 필터 ===== */
+.filters {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.tier-btn, .item-btn, .fav-btn {
+  border: none;
+  padding: 8px 18px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.15s ease-in-out;
+}
+
+.tier-btn:hover, .item-btn:hover, .fav-btn:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0px 4px 14px rgba(0,0,0,0.15);
+  filter: brightness(1.1);
+}
+
+.tier-btn.active,
+.item-btn.active,
+.fav-btn.active {
+  outline: 3px solid #000;
+}
+
+/* ===== 테이블 ===== */
+.ench-table {
+  width: 80%;
+  margin: auto;
+  border-collapse: collapse;
+  border-radius: 14px;
+  overflow: hidden;
+  font-size: 15px;
+  table-layout: fixed;
+}
+
+.ench-table th, .ench-table td {
+  padding: 16px;
+  border-bottom: 1px solid #f1f1f1;
+  text-align: center;
+}
+
+.ench-table td:first-child {
+  text-align: left;
+}
+
+.ench-table tbody tr:hover {
+  background: #fafafa;
+  cursor: pointer;
+}
+
+.ench-table thead {
+  background: #f3fff0;
+}
+
+/* 티어 열 width 고정 */
+.ench-table th:nth-child(3),
+.ench-table td:nth-child(3) {
+  width: 80px;
+  text-align: center;
+}
+
+/* ===== 티어 정렬 버튼 ===== */
+#tierSortBtn {
+  cursor: pointer;
+  margin-left: 5px;
+  font-size: 15px;
+}
+
+/* ===== 등급 배지 ===== */
+.grade-badge {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #000;
+  cursor: pointer; /* 필터 기능 위해 손가락 커서 */
+}
+
+.grade-신화 { background: #FC54FC; }
+.grade-전설 { background: #FCA800; }
+.grade-근본 { background: #FCFC54; }
+.grade-일반 { background: #FCFCFC; }
+.grade-특별 { background: #54FC54; }
+.grade-엘리트 { background: #54FCFC; }
+
+/* ===== 별 아이콘 ===== */
+.star {
+  font-size: 24px !important;
+  cursor: pointer;
+  margin-right: 8px;
+}
+
+.star.off { color: #ccc; }
+.star.on { color: #FFD700; }
+
+/* 적용 아이템 버튼 (목록) */
+.item-chip {
+  display: inline-block;
+  padding: 6px 12px;
+  margin: 2px;
+  background: #f3f3f3;
+  border: 1px solid #ccc;
+  border-radius: 14px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.item-chip:hover {
+  background: #e8e8e8;
+}
+
+/* ===== 모달 ===== */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 99999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.35);
+}
+
+.modal-content {
+  background: #fff;
+  margin: 8% auto;
+  padding: 30px;
+  width: 50%;
+  border-radius: 12px;
+  box-shadow: 0px 5px 18px rgba(0,0,0,0.15);
+  position: relative;
+}
+
+.close {
+  float: right;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+/* 모달 제목 + 즐겨찾기 */
+.modal-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.modal-star {
+  font-size: 28px;
+  cursor: pointer;
+}
+
+.modal-star.off { color: #ccc; }
+.modal-star.on { color: #FFD700; }
+
+.modal-item-btn {
+  display: inline-block;
+  padding: 6px 14px;
+  margin-right: 6px;
+  margin-bottom: 6px;
+  border-radius: 14px;
+  background: #f3f3f3;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  font-size: 13px;
+}
 </style>
 </head>
+
 <body>
-<h1>🔮 인챈트 시뮬레이터</h1>
-<div class="layout">
-  <div class="equip-box" id="equipBox"></div>
-  <div class="ench-list" id="enchList">장비를 먼저 선택해주세요.</div>
-  <div class="slot-box">
-    <h3>장비 인챈트 슬롯 (최대 14개)</h3>
-    <div id="slots"></div>
-    <div class="save-area">
-      <h3>💾 저장된 세트</h3>
-      <div id="saveList"></div>
-      <button class="add-save" id="addSaveBtn">+ 새 세트 저장</button>
+
+<img src="0002.png" class="logo-img">
+
+<section class="search-area">
+  <input id="searchBar" placeholder="인챈트 검색 (예: 불멸, 낙뢰, 수확 ...)" />
+  <button id="searchBtn" class="search-btn">검색</button>
+</section>
+
+<!-- 즐겨찾기 -->
+<div class="filters">
+  <button id="favToggle" class="fav-btn">
+    <span id="favToggleIcon" class="star off">☆</span>
+    즐겨찾기
+  </button>
+</div>
+
+<!-- 등급 필터 -->
+<div class="filters">
+  <button class="tier-btn active" data-tier="전체">전체</button>
+  <button class="tier-btn" data-tier="일반" style="background:#FCFCFC;">일반</button>
+  <button class="tier-btn" data-tier="특별" style="background:#54FC54;">특별</button>
+  <button class="tier-btn" data-tier="엘리트" style="background:#54FCFC;">엘리트</button>
+  <button class="tier-btn" data-tier="근본" style="background:#FCFC54;">근본</button>
+  <button class="tier-btn" data-tier="전설" style="background:#FCA800;">전설</button>
+  <button class="tier-btn" data-tier="신화" style="background:#FC54FC;">신화</button>
+</div>
+
+<!-- 아이템 필터 -->
+<div class="filters">
+  <button class="item-btn active" data-item="전체">전체</button>
+  <button class="item-btn" data-item="검">검</button>
+  <button class="item-btn" data-item="도끼">도끼</button>
+  <button class="item-btn" data-item="활">활</button>
+  <button class="item-btn" data-item="쇠뇌">쇠뇌</button>
+  <button class="item-btn" data-item="삼지창">삼지창</button>
+  <button class="item-btn" data-item="갑옷">갑옷</button>
+  <button class="item-btn" data-item="흉갑">흉갑</button>
+  <button class="item-btn" data-item="바지">바지</button>
+  <button class="item-btn" data-item="신발">신발</button>
+  <button class="item-btn" data-item="모자">모자</button>
+  <button class="item-btn" data-item="낫">낫</button>
+  <button class="item-btn" data-item="도구">도구</button>
+</div>
+
+<!-- ===== 테이블 ===== -->
+<table class="ench-table">
+  <thead>
+    <tr>
+      <th>인챈트</th>
+      <th>등급</th>
+      <th>
+        티어
+        <span id="tierSortBtn">↕</span>
+      </th>
+      <th>최대 레벨</th>
+      <th>적용 아이템</th>
+    </tr>
+  </thead>
+  <tbody id="enchList"></tbody>
+</table>
+
+<!-- ===== 모달 ===== -->
+<div id="modal" class="modal">
+  <div class="modal-content">
+    <span id="closeModal" class="close">&times;</span>
+
+    <div class="modal-header">
+      <span id="modalStar" class="modal-star off">☆</span>
+      <h2 id="mName" style="margin:0;"></h2>
     </div>
+
+    <div class="meta" id="mMeta"></div>
+    <p class="desc" id="mEffect"></p>
+    <p class="extra" id="mExtra"></p>
+    <p class="items" id="mItems"></p>
   </div>
 </div>
 
 <script>
-// 장비 목록
-const EQUIPS = ["검","활","쇠뇌","삼지창","도끼","삽","괭이","모자","흉갑","바지"];
+/* ===== 시트 데이터 ===== */
+const SHEET_ID = "13fF_iQfMThiw49QrYSCULF3mT4QVHO4aDsbSDD71DUg";
+const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
 
-// 임시 인챈트 데이터 구조 (스프레드시트 연동 시 교체 예정)
-const ENCHANTS = [
-  {name:"낙뢰", grade:"일반", tier:3, items:["검","활","쇠뇌","삼지창"]},
-  {name:"수중 호흡", grade:"일반", tier:1, items:["모자"]},
-  {name:"재련", grade:"일반", tier:3, items:["괭이"]},
-];
+let DATA = [];
+let favoriteList = JSON.parse(localStorage.getItem("favorites") || "[]");
 
-let currentEquip = null;
-let currentSlots = []; // 최대 14
-let saveSets = JSON.parse(localStorage.getItem("enchSaves")||"[]");
+let currentTierFilter = "전체";
+let currentItemFilter = "전체";
+let favOnlyMode = false;
 
-// UI 렌더링
-function renderEquip(){
-  const box = document.getElementById("equipBox");
-  box.innerHTML="";
-  EQUIPS.forEach(eq=>{
-    const div=document.createElement("div");
-    div.className="equip-item"+(currentEquip===eq?" active":"");
-    div.textContent=eq;
-    div.onclick=()=>{ currentEquip=eq; renderEquip(); renderEnchantList(); };
-    box.appendChild(div);
+/* ===== 티어 정렬 상태 ===== */
+let tierSortState = 0; 
+function tierToNum(t) {
+  if (t === "OP") return 0;
+  const n = parseInt(t);
+  return isNaN(n) ? 999 : n;
+}
+
+/* ====== 시트 로드 ====== */
+fetch(SHEET_URL)
+  .then(res => res.text())
+  .then(text => {
+    const json = JSON.parse(text.substr(47).slice(0, -2));
+    const rows = json.table.rows;
+
+    DATA = rows.map(r => ({
+      name: r.c[0]?.v ?? "",
+      grade: r.c[1]?.v ?? "",
+      tier: r.c[2]?.v ?? "",
+      max: r.c[3]?.v ?? "",
+      items: (r.c[4]?.v ?? "").split(",").map(i => i.trim()),
+      effect: r.c[5]?.v ?? "",
+      extra: r.c[6]?.v ?? ""
+    }));
+
+    renderList();
   });
+
+function isFav(name) { return favoriteList.includes(name); }
+function toggleFav(name) {
+  if (isFav(name)) favoriteList = favoriteList.filter(n => n !== name);
+  else favoriteList.push(name);
+
+  localStorage.setItem("favorites", JSON.stringify(favoriteList));
 }
 
-function renderEnchantList(){
-  const box=document.getElementById("enchList");
-  if(!currentEquip){ box.textContent="장비를 선택해주세요."; return; }
+/* ===== 리스트 렌더링 ===== */
+function renderList() {
+  let list = [...DATA];
 
-  const list=ENCHANTS.filter(e => e.items.includes(currentEquip));
-  box.innerHTML="";
+  /* 즐겨찾기 */
+  if (favOnlyMode) list = list.filter(e => favoriteList.includes(e.name));
 
-  list.forEach(e=>{
-    const card=document.createElement("div");
-    card.className="ench-card";
-    card.innerHTML=`
-      <img src="0002.png" style="width:40px;height:40px;">
-      <div class="ench-info">
-        <div class="ench-name">${e.name}</div>
-        <div class="ench-sub">${e.grade} • 티어 ${e.tier}</div>
-      </div>
-    `;
-    card.onclick=()=>addToSlot(e);
-    box.appendChild(card);
-  });
-}
-
-function addToSlot(e){
-  if(currentSlots.length>=14){ alert("슬롯이 가득 찼습니다 (최대 14)"); return; }
-  currentSlots.push(e);
-  renderSlots();
-}
-
-function renderSlots(){
-  const box=document.getElementById("slots");
-  box.innerHTML="";
-
-  for(let i=0;i<14;i++){
-    const slot=document.createElement("div");
-    slot.className="slot";
-    if(currentSlots[i]){
-      slot.innerHTML=`
-        <span>${currentSlots[i].name}</span>
-        <button class="del-btn">X</button>
-      `;
-      slot.querySelector(".del-btn").onclick=()=>{
-        currentSlots.splice(i,1);
-        renderSlots();
-      };
-    } else{
-      slot.innerHTML=`<span class="slot-empty">빈 슬롯</span>`;
-    }
-    box.appendChild(slot);
+  /* 등급 필터 */
+  if (currentTierFilter !== "전체") {
+    list = list.filter(e => e.grade === currentTierFilter);
   }
-}
 
-function renderSaves(){
-  const list=document.getElementById("saveList");
-  list.innerHTML="";
+  /* 아이템 필터 */
+  if (currentItemFilter !== "전체") {
+    list = list.filter(e => e.items.includes(currentItemFilter));
+  }
 
-  saveSets.forEach((s,i)=>{
-    const div=document.createElement("div");
-    div.className="save-item";
-    div.innerHTML=`
-      <span>${s.name}</span>
-      <button class="del-btn">X</button>
+  /* 티어 정렬 */
+  if (tierSortState === 1) {
+    list.sort((a,b)=> tierToNum(a.tier) - tierToNum(b.tier));
+  } else if (tierSortState === 2) {
+    list.sort((a,b)=> tierToNum(b.tier) - tierToNum(a.tier));
+  }
+
+  const body = document.getElementById("enchList");
+  body.innerHTML = "";
+
+  list.forEach(e => {
+    const tr = document.createElement("tr");
+
+    const favClass = isFav(e.name) ? "on" : "off";
+    const favSymbol = isFav(e.name) ? "★" : "☆";
+
+    const itemChips = e.items
+      .map(i => `<span class="item-chip" data-item="${i}">${i}</span>`)
+      .join("");
+
+    tr.innerHTML = `
+      <td style="display:flex; align-items:center; gap:10px;">
+        <span class="star ${favClass}" data-name="${e.name}">${favSymbol}</span>
+        <img src="0003.png" style="width:32px; height:32px;">
+        <div>
+          <div style="font-weight:600">${e.name}</div>
+          <div style="font-size:12px; color:#888;">${e.name} 인챈트</div>
+        </div>
+      </td>
+
+      <td>
+        <span class="grade-badge grade-${e.grade}" data-grade="${e.grade}">
+          ${e.grade}
+        </span>
+      </td>
+
+      <td>${e.tier}</td>
+      <td>${e.max}</td>
+      <td>${itemChips}</td>
     `;
-    div.onclick=(ev)=>{
-      if(ev.target.classList.contains("del-btn")) return;
-      currentEquip=s.equip;
-      currentSlots=s.slots;
-      renderEquip(); renderSlots(); renderEnchantList();
+
+    /* ===== 별 클릭 ===== */
+    tr.querySelector(".star").onclick = ev => {
+      ev.stopPropagation();
+      toggleFav(e.name);
+      renderList();
     };
-    div.querySelector(".del-btn").onclick=()=>{
-      saveSets.splice(i,1);
-      localStorage.setItem("enchSaves",JSON.stringify(saveSets));
-      renderSaves();
+
+    /* ===== 등급 클릭 → 필터 ===== */
+    tr.querySelector(".grade-badge").onclick = ev => {
+      ev.stopPropagation();
+
+      currentTierFilter = e.grade;
+
+      document.querySelectorAll(".tier-btn").forEach(b => b.classList.remove("active"));
+      document.querySelector(`.tier-btn[data-tier="${e.grade}"]`).classList.add("active");
+
+      renderList();
     };
-    list.appendChild(div);
+
+    /* ===== 아이템칩 클릭 ===== */
+    tr.querySelectorAll(".item-chip").forEach(chip => {
+      chip.onclick = ev => {
+        ev.stopPropagation();
+        currentItemFilter = chip.dataset.item;
+
+        document.querySelectorAll(".item-btn").forEach(b => b.classList.remove("active"));
+        document.querySelector(`.item-btn[data-item="${chip.dataset.item}"]`).classList.add("active");
+
+        renderList();
+      };
+    });
+
+    tr.onclick = () => openModal(e);
+    body.appendChild(tr);
   });
 }
 
-// 저장
-function saveSet(){
-  const name=prompt("세트 이름 입력");
-  if(!name) return;
-  saveSets.push({name,equip:currentEquip,slots:currentSlots});
-  localStorage.setItem("enchSaves",JSON.stringify(saveSets));
-  renderSaves();
+/* ===== 모달 ===== */
+const modal = document.getElementById("modal");
+
+function openModal(e) {
+  document.getElementById("mName").textContent = e.name;
+  document.getElementById("mMeta").innerHTML =
+    `<span class="grade-badge grade-${e.grade}">${e.grade}</span> • 티어: ${e.tier} • 최대 레벨 ${e.max}`;
+
+  document.getElementById("mEffect").textContent = e.effect;
+  document.getElementById("mExtra").textContent = e.extra ? `추가: ${e.extra}` : "";
+
+  const mItems = document.getElementById("mItems");
+  mItems.innerHTML = "적용 아이템: ";
+
+  e.items.forEach(item => {
+    const btn = document.createElement("span");
+    btn.textContent = item;
+    btn.className = "modal-item-btn";
+
+    btn.onclick = ev => {
+      ev.stopPropagation();
+      currentItemFilter = item;
+
+      document.querySelectorAll(".item-btn").forEach(b => b.classList.remove("active"));
+      document.querySelector(`.item-btn[data-item="${item}"]`).classList.add("active");
+
+      renderList();
+    };
+
+    mItems.appendChild(btn);
+  });
+
+  /* ===== 모달 별 ===== */
+  const modalStar = document.getElementById("modalStar");
+  modalStar.className = "modal-star " + (isFav(e.name) ? "on" : "off");
+  modalStar.textContent = isFav(e.name) ? "★" : "☆";
+
+  modalStar.onclick = () => {
+    toggleFav(e.name);
+    renderList();
+
+    modalStar.className = "modal-star " + (isFav(e.name) ? "on" : "off");
+    modalStar.textContent = isFav(e.name) ? "★" : "☆";
+  };
+
+  modal.style.display = "block";
 }
 
-document.getElementById("addSaveBtn").onclick=saveSet;
+document.getElementById("closeModal").onclick = () => (modal.style.display = "none");
+window.onclick = e => { if (e.target === modal) modal.style.display = "none"; };
 
-renderEquip(); renderSlots(); renderSaves();
+/* ===== 검색 ===== */
+document.getElementById("searchBtn").onclick = () => {
+  const key = document.getElementById("searchBar").value.trim();
+  if (!key) return renderList();
+
+  const filtered = DATA.filter(e => e.name.includes(key));
+
+  const body = document.getElementById("enchList");
+  body.innerHTML = "";
+
+  filtered.forEach(e => {
+    // 검색만 따로 렌더링할 필요 없이 openModal은 동일하게 유지
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${e.name}</td>
+      <td>${e.grade}</td>
+      <td>${e.tier}</td>
+      <td>${e.max}</td>
+      <td>${e.items.join(", ")}</td>
+    `;
+    tr.onclick = () => openModal(e);
+    body.appendChild(tr);
+  });
+};
+
+document.getElementById("searchBar").addEventListener("keyup", e => {
+  if (e.key === "Enter") document.getElementById("searchBtn").click();
+});
+
+/* ===== 등급 필터 ===== */
+document.querySelectorAll(".tier-btn").forEach(btn => {
+  btn.onclick = () => {
+    document.querySelectorAll(".tier-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+
+    currentTierFilter = btn.dataset.tier;
+    renderList();
+  };
+});
+
+/* ===== 아이템 필터 ===== */
+document.querySelectorAll(".item-btn").forEach(btn => {
+  btn.onclick = () => {
+    document.querySelectorAll(".item-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+
+    currentItemFilter = btn.dataset.item;
+    renderList();
+  };
+});
+
+/* ===== 즐겨찾기 토글 ===== */
+document.getElementById("favToggle").onclick = () => {
+  favOnlyMode = !favOnlyMode;
+
+  const icon = document.getElementById("favToggleIcon");
+  icon.textContent = favOnlyMode ? "★" : "☆";
+  icon.className = "star " + (favOnlyMode ? "on" : "off");
+
+  document.getElementById("favToggle").classList.toggle("active");
+
+  renderList();
+};
+
+/* ====== 티어 정렬 버튼 ====== */
+document.getElementById("tierSortBtn").onclick = () => {
+  tierSortState = (tierSortState + 1) % 3;
+  renderList();
+};
 </script>
+
 </body>
 </html>
