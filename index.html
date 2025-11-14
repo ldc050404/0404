@@ -73,7 +73,7 @@ body {
   filter: brightness(1.1);
 }
 
-/* ★ active = 검정 테두리 */
+/* ★ active(선택됨) 상태 = 검정 테두리 */
 .item-btn.active,
 .tier-btn.active {
   outline: 3px solid #000;
@@ -109,7 +109,7 @@ body {
   background: #f3fff0;
 }
 
-/* 등급 배지 */
+/* === 등급 배지 === */
 .grade-badge {
   display: inline-block;
   padding: 6px 14px;
@@ -209,7 +209,6 @@ body {
   <button class="item-btn" data-item="활">활</button>
   <button class="item-btn" data-item="쇠뇌">쇠뇌</button>
   <button class="item-btn" data-item="삼지창">삼지창</button>
-  <button class="item-btn" data-item="무기">무기</button>
   <button class="item-btn" data-item="갑옷">갑옷</button>
   <button class="item-btn" data-item="흉갑">흉갑</button>
   <button class="item-btn" data-item="바지">바지</button>
@@ -228,9 +227,9 @@ body {
 
       <!-- ★ 티어 정렬 버튼 추가 -->
       <th>
-        티어 
-        <button id="tierSortBtn" 
-          style="border:none; background:none; cursor:pointer; font-size:16px;">
+        티어
+        <button id="tierSortBtn"
+          style="border:none; background:none; cursor:pointer; font-size:15px; margin-left:4px;">
           ▼
         </button>
       </th>
@@ -247,9 +246,7 @@ body {
   <div class="modal-content">
     <span id="closeModal" class="close">&times;</span>
     <h2 id="mName"></h2>
-
     <div class="meta" id="mMeta"></div>
-
     <p class="desc" id="mEffect"></p>
     <p class="extra" id="mExtra"></p>
     <p class="items" id="mItems"></p>
@@ -258,25 +255,20 @@ body {
 
 <script>
 /* ===========================
-   구글시트 데이터 연동
+   구글 시트 연동
 =========================== */
 
 const SHEET_ID = "13fF_iQfMThiw49QrYSCULF3mT4QVHO4aDsbSDD71DUg";
-const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
+const SHEET_URL =
+  `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
 
 let DATA = [];
+let DEFAULT_DATA = [];   // ★ 기본 정렬 저장
 let currentTierFilter = "전체";
 let currentItemFilter = "전체";
-let tierSortOrder = "asc"; // asc → 오름차순, desc → 내림차순
+let tierSortOrder = "none"; // none → asc → desc
 
-/* 티어 우선순위 숫자로 변환 */
-function tierValue(tier) {
-  if (tier === "OP") return 0;
-  if (!isNaN(Number(tier))) return Number(tier);
-  return 999;
-}
-
-/* ---- 1. 시트 데이터 로드 ---- */
+/* ---- 시트 데이터 로드 ---- */
 fetch(SHEET_URL)
   .then(res => res.text())
   .then(text => {
@@ -293,10 +285,19 @@ fetch(SHEET_URL)
       extra: (r.c[6]?.v ?? "")
     }));
 
+    DEFAULT_DATA = [...DATA]; // ★ 기본 저장
+
     renderList(DATA);
   });
 
-/* ---- 2. 리스트 렌더링 ---- */
+/* ---- 티어 숫자화 ---- */
+function tierValue(tier) {
+  if (tier === "OP") return 0;
+  if (!isNaN(Number(tier))) return Number(tier);
+  return 999;
+}
+
+/* ---- 리스트 렌더링 ---- */
 const listBody = document.getElementById("enchList");
 
 function renderList(list) {
@@ -338,7 +339,7 @@ function renderList(list) {
   });
 }
 
-/* ---- 3. 모달 ---- */
+/* ---- 모달 ---- */
 const modal = document.getElementById("modal");
 const closeModal = document.getElementById("closeModal");
 
@@ -350,10 +351,8 @@ function openModal(e) {
      • 티어: ${e.tier} • 최대 레벨 ${e.max}`;
 
   document.getElementById("mEffect").textContent = e.effect;
-
   document.getElementById("mItems").textContent =
     `적용 아이템: ${e.items.join(", ")}`;
-
   document.getElementById("mExtra").textContent =
     e.extra ? `추가: ${e.extra}` : "";
 
@@ -365,7 +364,7 @@ window.onclick = e => {
   if (e.target === modal) modal.style.display = "none";
 };
 
-/* ---- 4. 검색 ---- */
+/* ---- 검색 ---- */
 document.getElementById("searchBtn").onclick = () => {
   const key = document.getElementById("searchBar").value.trim();
   renderList(DATA.filter(e => e.name.includes(key)));
@@ -375,7 +374,7 @@ document.getElementById("searchBar").addEventListener("keyup", e => {
   if (e.key === "Enter") document.getElementById("searchBtn").click();
 });
 
-/* ---- 5. 등급 필터 ---- */
+/* ---- 등급 필터 ---- */
 document.querySelectorAll(".tier-btn").forEach(btn => {
   btn.addEventListener("click", () => {
     document.querySelectorAll(".tier-btn")
@@ -387,9 +386,10 @@ document.querySelectorAll(".tier-btn").forEach(btn => {
   });
 });
 
-/* ---- 6. 아이템 필터 ---- */
+/* ---- 아이템 필터 ---- */
 document.querySelectorAll(".item-btn").forEach(btn => {
   btn.addEventListener("click", () => {
+
     document.querySelectorAll(".item-btn")
       .forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
@@ -399,23 +399,35 @@ document.querySelectorAll(".item-btn").forEach(btn => {
   });
 });
 
-/* ---- 7. 티어 정렬 버튼 ---- */
+/* ===========================================
+   ★ 티어 정렬 버튼 (오름 → 내림 → 기본)
+=========================================== */
+
 document.getElementById("tierSortBtn").addEventListener("click", () => {
 
-  if (tierSortOrder === "asc") {
+  if (tierSortOrder === "none") {
+    // 오름차순
     DATA.sort((a, b) => tierValue(a.tier) - tierValue(b.tier));
-    tierSortOrder = "desc";
-    document.getElementById("tierSortBtn").textContent = "▲";
-  } else {
-    DATA.sort((a, b) => tierValue(b.tier) - tierValue(a.tier));
     tierSortOrder = "asc";
     document.getElementById("tierSortBtn").textContent = "▼";
+
+  } else if (tierSortOrder === "asc") {
+    // 내림차순
+    DATA.sort((a, b) => tierValue(b.tier) - tierValue(a.tier));
+    tierSortOrder = "desc";
+    document.getElementById("tierSortBtn").textContent = "▲";
+
+  } else {
+    // ★ 기본 정렬 복원
+    DATA = [...DEFAULT_DATA];
+    tierSortOrder = "none";
+    document.getElementById("tierSortBtn").textContent = "●";  // 기본 모드 표시
   }
 
   renderList(DATA);
 });
+
 </script>
 
 </body>
 </html>
-
