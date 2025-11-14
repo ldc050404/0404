@@ -8,52 +8,71 @@
 
 <style>
   body{
-    margin:0; background:#f5f7fa; color:#111; font-family:'Pretendard',sans-serif;
-    display:flex; flex-direction:column; align-items:center; padding:30px;
+    margin:0; background:#f5f7fa; color:#111;
+    font-family:'Pretendard',sans-serif;
+    display:flex; flex-direction:column; align-items:center;
+    padding:30px;
   }
   h1{
-    margin:0 0 25px;
-    font-size:34px; font-weight:800; color:#0f172a; letter-spacing:-1px;
+    margin:0 0 25px; font-size:34px; font-weight:800;
+    color:#0f172a; letter-spacing:-1px;
   }
 
   .layout{
     width:100%; max-width:1500px;
-    display:grid; grid-template-columns:260px 1fr 360px; gap:24px;
+    display:grid; grid-template-columns:260px 1fr 360px;
+    gap:24px;
   }
 
+  /* 좌측 장비 */
   .equip-box{
     background:#ffffff; border-radius:16px; padding:18px;
     box-shadow:0 4px 12px rgba(0,0,0,0.08);
   }
   .equip-item{
-    padding:14px; margin-bottom:10px; background:#f8fafc; border-radius:12px;
-    font-weight:700; text-align:center; cursor:pointer; transition:0.15s;
-    border:1px solid #e5e7eb;
+    padding:14px; margin-bottom:10px;
+    background:#f8fafc; border-radius:12px;
+    font-weight:700; text-align:center;
+    cursor:pointer; border:1px solid #e5e7eb;
+    transition:0.15s;
+  }
+  .equip-item:hover{
+    background:#e8f5e9;
   }
   .equip-item.active{
-    background:#d1fae5; border:2px solid #34d399; font-weight:800;
+    background:#d1fae5;
+    border:2px solid #34d399; font-weight:800;
   }
 
+  /* 인챈트 리스트 */
   .ench-list{
     background:#ffffff; border-radius:16px; padding:20px;
-    box-shadow:0 4px 12px rgba(0,0,0,0.07); min-height:760px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.07);
+    min-height:760px;
   }
   .ench-grid{
-    display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:16px;
+    display:grid;
+    grid-template-columns:repeat(3, minmax(0,1fr));
+    gap:16px;
   }
   .ench-card{
-    display:flex; gap:12px; background:#f9fafb; border-radius:14px;
-    border:1px solid #e5e7eb; padding:14px; cursor:pointer; transition:0.15s;
+    display:flex; gap:12px; padding:14px;
+    background:#f9fafb; border-radius:14px;
+    border:1px solid #e5e7eb;
+    cursor:pointer; transition:0.15s;
   }
   .ench-card:hover{ background:#eef2ff; }
 
   .ench-name{ font-size:18px; font-weight:800; }
   .ench-sub{ font-size:13px; color:#6b7280; }
 
+  /* 등급 */
   .tier-badge{
-    padding:3px 10px; border-radius:6px; font-size:12px; font-weight:700;
-    margin-top:6px; width:max-content; color:#000;
+    padding:3px 10px; border-radius:6px;
+    font-size:12px; font-weight:700;
+    margin-top:6px; color:#000;
     background:#ffffff; border:1px solid #ddd;
+    width:max-content;
   }
   .grade-신화{ background:#FC54FC!important; }
   .grade-전설{ background:#FCA800!important; }
@@ -62,112 +81,352 @@
   .grade-특별{ background:#54FC54!important; }
   .grade-엘리트{ background:#54FCFC!important; }
 
+  /* 슬롯 */
   .slot-box{
-    background:#ffffff; border-radius:16px; padding:20px;
-    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+    background:#ffffff; border-radius:16px;
+    padding:20px; box-shadow:0 4px 12px rgba(0,0,0,0.08);
   }
   .slot{
     display:flex; justify-content:space-between; align-items:center;
-    background:#f9fafb; border-radius:12px; padding:12px;
-    margin-bottom:10px; border:1px solid #e5e7eb;
+    background:#f9fafb; border-radius:12px;
+    padding:12px; margin-bottom:10px;
+    border:1px solid #e5e7eb;
   }
-
   .del-btn{
-    background:#ef4444; color:#fff; border:none; padding:6px 12px;
-    border-radius:8px; cursor:pointer; font-weight:600;
+    background:#ef4444; color:white; border:none;
+    padding:6px 12px; border-radius:8px;
+    font-weight:600; cursor:pointer;
   }
 
+  /* 저장 영역 */
   .save-item{
     background:#f9fafb; border-radius:12px; border:1px solid #e5e7eb;
     padding:10px 12px; margin-bottom:10px;
     display:flex; justify-content:space-between; align-items:center;
   }
   #addSaveBtn{
-    padding:10px 14px; background:#34d399; color:white;
-    border:none; border-radius:10px; cursor:pointer; font-size:14px;
-    font-weight:700; width:100%; margin-top:10px;
+    padding:10px 14px; background:#34d399;
+    border:none; border-radius:10px;
+    cursor:pointer; color:white; font-weight:700;
+    width:100%; margin-top:10px;
   }
 </style>
-</head>
 
+</head>
 <body>
+
+<!-- 돌아가기 버튼 -->
 <a href="index.html" style="position:absolute; left:20px; top:20px;">
   <img src="0003.png" style="width:90px; height:90px; cursor:pointer;">
 </a>
+
 <h1>Simulator</h1>
+
 <div class="layout">
 
+  <!-- 장비 -->
   <div class="equip-box" id="equipBox"></div>
 
+  <!-- 인챈트 리스트 -->
   <div class="ench-list">
     <div class="ench-grid" id="enchList">장비를 선택해주세요.</div>
   </div>
 
+  <!-- 슬롯 & 저장 -->
   <div class="slot-box">
     <h3 style="margin-top:0;">슬롯 (최대 14개)</h3>
     <div id="slots"></div>
 
     <h3 style="margin-top:20px;">저장된 세트</h3>
     <div id="saveList"></div>
+
     <button id="addSaveBtn">+ 새 세트 저장</button>
   </div>
 </div>
 
 <script>
-const EQUIPS=["검","활","쇠뇌","삼지창","도끼","삽","괭이","곡괭이","모자","흉갑","바지","신발"];
-const ARMOR=["모자","흉갑","바지","신발"]; const TOOLS=["삽","도끼","괭이","곡괭이"]; const WEAPONS=["검","활","쇠뇌","삼지창"];
 
+/* 장비 목록 */
+const EQUIPS=["검","활","쇠뇌","삼지창","도끼","삽","괭이","곡괭이","모자","흉갑","바지","신발"];
+const ARMOR=["모자","흉갑","바지","신발"];
+const TOOLS=["삽","도끼","괭이","곡괭이"];
+const WEAPONS=["검","활","쇠뇌","삼지창"];
+
+/* 시트 연동 */
 const SHEET_ID="13fF_iQfMThiw49QrYSCULF3mT4QVHO4aDsbSDD71DUg";
 const SHEET_URL=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
-let ENCHANTS=[];
 
+let ENCHANTS=[];
+let currentEquip=null;
+let currentSlots=[];
+let saveSets=JSON.parse(localStorage.getItem("enchSaves")||"[]");
+
+/* 시트 로드 */
 fetch(SHEET_URL)
   .then(r=>r.text())
   .then(text=>{
     const json=JSON.parse(text.substr(47).slice(0,-2));
+
     ENCHANTS=json.table.rows.map(r=>({
-      name:r.c[0]?.v??"", grade:r.c[1]?.v??"", tier:r.c[2]?.v??"",
-      max:r.c[3]?.v??"", items:(r.c[4]?.v??"").split(',').map(i=>i.trim()),
-      effect:r.c[5]?.v??"", extra:r.c[6]?.v??""
+      name:r.c[0]?.v??"",
+      grade:r.c[1]?.v??"",
+      tier:r.c[2]?.v??"",
+      max:r.c[3]?.v??"",
+      items:(r.c[4]?.v??"").split(',').map(i=>i.trim()),
+      effect:r.c[5]?.v??"",
+      extra:r.c[6]?.v??""
     }));
+
+    renderEquip();
     renderEnchantList();
+    renderSlots();
+    renderSaves();
   });
 
-let currentEquip=null; let currentSlots=[];
-let saveSets=JSON.parse(localStorage.getItem("enchSaves")||"[]");
-
+/* -------------------------
+   장비 박스 렌더링
+-------------------------*/
 function renderEquip(){
-  const box=document.getElementById("equipBox"); box.innerHTML="";
+  const box=document.getElementById("equipBox");
+  box.innerHTML="";
+
   EQUIPS.forEach(eq=>{
     const div=document.createElement("div");
     div.className="equip-item"+(currentEquip===eq?" active":"");
     div.textContent=eq;
-    div.onclick=()=>{ currentEquip=eq; renderEquip(); renderEnchantList(); };
+
+    div.onclick=()=>{
+      currentEquip=eq;
+      renderEquip();
+      renderEnchantList();
+    };
+
     box.appendChild(div);
   });
 }
+
+/* 장비 대분류 (무기/도구/갑옷) */
 function getCategory(equip){
-  if(ARMOR.includes(equip))return"갑옷";
-  if(TOOLS.includes(equip))return"도구";
-  if(WEAPONS.includes(equip))return"무기";
+  if(ARMOR.includes(equip)) return "갑옷";
+  if(TOOLS.includes(equip)) return "도구";
+  if(WEAPONS.includes(equip)) return "무기";
   return null;
 }
 
+/* -------------------------
+    인챈트 카드 렌더링
+-------------------------*/
 function renderEnchantList(){
   const box=document.getElementById("enchList");
-  if(!currentEquip){ box.textContent="장비를 선택해주세요."; return; }
+
+  if(!currentEquip){
+    box.textContent="장비를 선택해주세요.";
+    return;
+  }
+
   box.innerHTML="";
   const category=getCategory(currentEquip);
-  const filtered=ENCHANTS.filter(e=>e.items.includes(currentEquip)||(category&&e.items.includes(category)));
+
+  const filtered=ENCHANTS.filter(e =>
+    e.items.includes(currentEquip) ||
+    (category && e.items.includes(category))
+  );
 
   filtered.forEach(e=>{
-    const card=document.createElement("div"); card.className="ench-card";
+    const card=document.createElement("div");
+    card.className="ench-card";
+
     card.innerHTML=`
       <img src="0003.png" style="width:40px;height:40px;">
       <div>
         <div class="ench-name">${e.name}</div>
         <div class="ench-sub">${e.grade}</div>
         <div class="tier-badge grade-${e.grade}">티어 ${e.tier}</div>
-      </div>`;
+      </div>
+    `;
+
     card.onclick=()=>addToSlot(e);
-    box.append
+    box.appendChild(card);
+  });
+}
+
+/* -------------------------
+    슬롯 관리
+-------------------------*/
+function addToSlot(e){
+  /* 중복 방지 */
+  if(currentSlots.find(s => s.name === e.name)){
+    alert("이미 적용된 인챈트입니다.");
+    return;
+  }
+
+  if(currentSlots.length >= 14){
+    alert("슬롯이 가득 찼습니다.");
+    return;
+  }
+
+  currentSlots.push(e);
+  renderSlots();
+}
+
+function renderSlots(){
+  const box=document.getElementById("slots");
+  box.innerHTML="";
+
+  for(let i=0;i<14;i++){
+    const slot=document.createElement("div");
+    slot.className="slot";
+
+    if(currentSlots[i]){
+      slot.innerHTML=`
+        <span>${currentSlots[i].name}</span>
+        <button class="del-btn">X</button>
+      `;
+      slot.querySelector(".del-btn").onclick=()=>{
+        currentSlots.splice(i,1);
+        renderSlots();
+      };
+    } else {
+      slot.innerHTML=`<span style="color:#888">빈 슬롯</span>`;
+    }
+
+    box.appendChild(slot);
+  }
+}
+
+/* -------------------------
+    세트 미리보기 모달
+-------------------------*/
+function openSetPreview(slots){
+  const modal=document.createElement("div");
+  modal.style.position="fixed";
+  modal.style.left="0";
+  modal.style.top="0";
+  modal.style.width="100%";
+  modal.style.height="100%";
+  modal.style.background="rgba(0,0,0,0.55)";
+  modal.style.zIndex="99999";
+  modal.style.display="flex";
+  modal.style.justifyContent="center";
+  modal.style.alignItems="center";
+
+  const box=document.createElement("div");
+  box.style.width="420px";
+  box.style.maxHeight="600px";
+  box.style.overflowY="auto";
+  box.style.background="#fff";
+  box.style.borderRadius="14px";
+  box.style.padding="20px";
+  box.style.boxShadow="0 10px 30px rgba(0,0,0,0.25)";
+
+  box.innerHTML=`<h2 style="margin-top:0; font-size:22px; font-weight:800;">세트 구성</h2>`;
+
+  slots.forEach(s=>{
+    const row=document.createElement("div");
+    row.style.display="flex";
+    row.style.alignItems="center";
+    row.style.gap="12px";
+    row.style.padding="10px 0";
+    row.style.borderBottom="1px solid #eee";
+
+    row.innerHTML=`
+      <img src="0003.png" style="width:40px;height:40px;">
+      <div>
+        <div style="font-weight:700; font-size:16px;">${s.name}</div>
+        <div style="font-size:13px; color:#666;">티어 ${s.tier} • ${s.grade}</div>
+      </div>
+    `;
+
+    box.appendChild(row);
+  });
+
+  const close=document.createElement("button");
+  close.textContent="닫기";
+  close.style.marginTop="15px";
+  close.style.width="100%";
+  close.style.padding="10px 0";
+  close.style.background="#34d399";
+  close.style.color="#fff";
+  close.style.border="none";
+  close.style.fontSize="15px";
+  close.style.borderRadius="10px";
+  close.style.cursor="pointer";
+
+  close.onclick=()=>document.body.removeChild(modal);
+
+  box.appendChild(close);
+  modal.appendChild(box);
+  document.body.appendChild(modal);
+}
+
+/* -------------------------
+    세트 저장 / 불러오기
+-------------------------*/
+function renderSaves(){
+  const box=document.getElementById("saveList");
+  box.innerHTML="";
+
+  saveSets.forEach((s,i)=>{
+    const div=document.createElement("div");
+    div.className="save-item";
+
+    div.innerHTML=`
+      <span>${s.name}</span>
+      <button class="del-btn">X</button>
+    `;
+
+    div.onclick=(ev)=>{
+      if(ev.target.classList.contains("del-btn")) return;
+
+      /* 세트 미리보기 */
+      openSetPreview(s.slots);
+
+      /* 불러오기 */
+      currentEquip=s.equip;
+      currentSlots=[...s.slots];
+      renderEquip();
+      renderSlots();
+      renderEnchantList();
+    };
+
+    /* 삭제 */
+    div.querySelector(".del-btn").onclick=(ev)=>{
+      ev.stopPropagation();
+      saveSets.splice(i,1);
+      localStorage.setItem("enchSaves",JSON.stringify(saveSets));
+      renderSaves();
+    };
+
+    box.appendChild(div);
+  });
+}
+
+function saveSet(){
+  if(!currentEquip){
+    alert("장비를 먼저 선택하세요.");
+    return;
+  }
+
+  const name=prompt("세트 이름을 입력하세요");
+  if(!name) return;
+
+  saveSets.push({
+    name,
+    equip:currentEquip,
+    slots:[...currentSlots]
+  });
+
+  localStorage.setItem("enchSaves",JSON.stringify(saveSets));
+  renderSaves();
+}
+
+document.getElementById("addSaveBtn").onclick = saveSet;
+
+/* 초기 렌더링 */
+renderEquip();
+renderSlots();
+renderSaves();
+
+</script>
+</body>
+</html>
